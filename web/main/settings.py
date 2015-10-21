@@ -1,3 +1,7 @@
+import os
+gettext = lambda s: s
+DATA_DIR = os.path.dirname(os.path.dirname(__file__))
+
 """
 Django settings for main project.
 
@@ -36,6 +40,16 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
+    'templated_email',
+    'oauth2_provider',
+    'rest_framework_swagger',
+    'social.apps.django_app.default',
+    'rest_framework_social_oauth2',
+    'django_extensions',
+    'rest_framework',
+    'djcelery',
+    'hoodpub',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,3 +95,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
+STATIC_ROOT = os.path.join(DATA_DIR, 'static')
+
+
+BROKER_URL = 'amqp://guest:guest@berlin-dev.hoodpub.com:5672//'
+CELERY_RESULT_BACKEND = "amqp"
+
+try:
+    from settings_local import *
+except ImportError:
+    pass

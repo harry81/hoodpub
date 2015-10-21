@@ -5,6 +5,7 @@ postgres:
     - data
   ports:
     - "5432:5432"
+  env_file: .env
  
 data:
   restart: no
@@ -36,5 +37,7 @@ web:
     - "8000"
   volumes:
     - /var/www/static:/usr/src/app/static
+    - ./web:/usr/src/app
   links:
     - postgres:postgres 
+  env_file: .env

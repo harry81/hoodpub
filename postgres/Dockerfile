@@ -17,7 +17,7 @@ RUN service postgresql start;\
     /bin/su postgres -c "createuser -d -s -r -l root";\
     /bin/su postgres -c "psql postgres -c \"CREATE DATABASE root\"";\
     /bin/su postgres -c "createuser -d -s -r -l hoodpubuser ";\
-    /bin/su postgres -c "psql postgres -c \"ALTER USER mycms_user WITH PASSWORD 'hoodpubpass' \"";\
+    /bin/su postgres -c "psql postgres -c \"ALTER USER hoodpubuser WITH PASSWORD 'hoodpubpass' \"";\
     /bin/su postgres -c "psql postgres -c \"CREATE DATABASE hoodpubdb WITH OWNER = hoodpubuser\"";\
 
     service postgresql stop

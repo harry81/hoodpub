@@ -1,5 +1,5 @@
 *.pyc
 project.db
 *fixture*
-web/mycms/settings_local.py
+*settings_local.py
 *TAGS*
