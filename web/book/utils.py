@@ -20,7 +20,6 @@ def save_books(items):
         item['pub_nm'] = strip_tags(parser.unescape(item['pub_nm']))
         item['author'] = strip_tags(parser.unescape(item['author']))
         item['author_t'] = strip_tags(parser.unescape(item['author_t']))
-        print item['title'], item['isbn'], item['isbn13']
         Books.objects.update_or_create(isbn=item['isbn'], defaults=item)
 
 

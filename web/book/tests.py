@@ -10,6 +10,8 @@ from .utils import search_via_book_api
 
 class BookTestCase(TestCase):
 
+    fixtures = ['book']
+
     def setUp(self):
         self.client = APIClient()
         self.client_without_csrf = APIClient()
@@ -23,6 +25,13 @@ class BookTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_search_via_book_api(self):
-        # self.skipTest(True)
+        self.skipTest(True)
         res = search_via_book_api(title=u'한국사')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_api_list(self):
+        res = self.client.get('/api-book/',
+                              {'search': u'삼국지'}, format='json')
+        data = json.loads(res.content)
+        self.assertTrue(Books.objects.all().count() > 10)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
