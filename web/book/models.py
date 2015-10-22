@@ -2,11 +2,11 @@ from datetime import datetime
 from django.db import models
 
 
-class Book(models.Model):
+class Books(models.Model):
     category = models.CharField(max_length=168)
     sale_yn = models.CharField(max_length=16)
     barcode = models.CharField(max_length=168)
-    isbn = models.CharField(max_length=168)
+    isbn = models.CharField(max_length=168, primary_key=True)
     isbn13 = models.CharField(max_length=168)
     cover_s_url = models.CharField(max_length=512)
     author = models.CharField(max_length=168)
@@ -25,4 +25,4 @@ class Book(models.Model):
     description = models.TextField()
 
     def __unicode__(self):
-        return u'%d %s' % (self.pk, self.title)
+        return u'%s %s' % (self.pk, self.title)

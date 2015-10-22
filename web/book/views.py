@@ -11,12 +11,12 @@ from rest_framework.response import Response
 
 from .serializers import  BookSerializer
 
-from .models import Book
+from .models import Books
 from .utils import search_via_book_api
 from .tasks import async_search_via_book_api
 
 class BookAPIView(viewsets.ModelViewSet):
-    queryset = Book.objects.all().order_by('-cover_l_url')
+    queryset = Books.objects.all().order_by('-cover_l_url')
     serializer_class = BookSerializer
     search_fields = ('title', 'description', 'author', 'pub_nm')
     filter_backends = (filters.SearchFilter,)
