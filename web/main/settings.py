@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'rest_framework',
     'djcelery',
+    'book',
     'hoodpub',
 )
 
@@ -102,6 +103,9 @@ STATIC_ROOT = os.path.join(DATA_DIR, 'static')
 
 BROKER_URL = 'amqp://guest:guest@berlin-dev.hoodpub.com:5672//'
 CELERY_RESULT_BACKEND = "amqp"
+
+import djcelery
+djcelery.setup_loader()
 
 try:
     from settings_local import *
