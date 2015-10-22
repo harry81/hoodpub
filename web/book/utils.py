@@ -6,7 +6,7 @@ from datetime import datetime
 from django.conf import settings
 import HTMLParser
 from django.utils.html import strip_tags
-from .models import Book
+from .models import Books
 
 
 def save_books(items):
@@ -20,8 +20,8 @@ def save_books(items):
         item['pub_nm'] = strip_tags(parser.unescape(item['pub_nm']))
         item['author'] = strip_tags(parser.unescape(item['author']))
         item['author_t'] = strip_tags(parser.unescape(item['author_t']))
-
-        Book.objects.create(**item)
+        print item['title'], item['isbn'], item['isbn13']
+        Books.objects.update_or_create(isbn=item['isbn'], defaults=item)
 
 
 def search_via_book_api(url='https://apis.daum.net/search/book',
