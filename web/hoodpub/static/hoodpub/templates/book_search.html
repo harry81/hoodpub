@@ -1,0 +1,39 @@
+<div class="container" infinite-scroll="get_next()" infinite-scroll-distance="0">
+  <form class="form" role="search">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search"
+             ng-model="keyword">
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit" ng-click="search()"><i class="glyphicon glyphicon-search"></i></button>
+      </div>
+    </div>
+  </form>
+  <hr/>
+
+  <div class="panel panel-default" ng-repeat="item in items">
+    <div class="panel-body" >
+      <div class="row">
+        <div class="col-xs-3 col-md-3">
+          <a href="{{ item.link}}" target="_blank">
+            <img ng-src={{item.cover_s_url}} class="img-rounded img-responsive center-block">
+          </a>
+        </div>
+        <div class="col-xs-9 col-md-9">
+          <p><b>{{ item.title }}</b> {{ item.category }} </p>
+          <p>{{ item.pub_nm }} </p>
+          <p>{{ item.sale_price | currency:'Won ':0}} </p>
+          <p>{{ item.author }} </p>
+          <p>
+            <button type="button" class="btn btn-default"
+                    ng-click="book_detail(item.id)">
+              요청하기</span>
+            </button>
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div ng-hide="items.length">No items found</div>
+</div>
