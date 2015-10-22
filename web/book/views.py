@@ -1,19 +1,14 @@
-from django.shortcuts import render
-from django.conf import settings
-from django.http import HttpResponse
 from django.http import JsonResponse
 
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.decorators import list_route
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
-from .serializers import  BookSerializer
-
+from .serializers import BookSerializer
 from .models import Books
 from .utils import search_via_book_api
 from .tasks import async_search_via_book_api
+
 
 class BookAPIView(viewsets.ModelViewSet):
     queryset = Books.objects.all().order_by('-cover_l_url')
