@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'djcelery',
     'book',
     'hoodpub',
+    'hoodpub_auth',
 )
 
 MIDDLEWARE_CLASSES = (
