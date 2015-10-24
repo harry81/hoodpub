@@ -44,8 +44,7 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav" >
-          <li ng-show="!user.username"><a href="https://www.facebook.com/dialog/oauth?client_id=732574183517551&redirect_uri=http://localhost:8000/hoodpub-auth/register_by_access_token/facebook/">Login</a></li>
-
+          <li ng-show="!user.username"><a href="/hoodpub-auth/facebook">Login</a></li>
           <li ng-show="!user.username"><a href="/account/signup/">Signup</a></li>
           <li ng-show="user.username"><a href="javascript:void(0);" ng-click="logout()">Logout</a></li>
           <li ng-show="user.username"><a href="#/my">{{ user.username }}</a></li>

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import requests
 import urlparse
-
 from django.contrib.auth import login
 from django.template import RequestContext, loader
 from django.http import HttpResponse
 from django.conf import settings
+from django.shortcuts import redirect
 
 from social.apps.django_app.utils import psa
 from .utils import get_access_token
@@ -44,3 +44,11 @@ def register_by_access_token(request, backend):
 
     else:
         return HttpResponse("error")
+
+def auth_facebook(request):
+    url_dict = {'client_id': settings.SOCIAL_AUTH_FACEBOOK_KEY,
+                'redirect_uri': settings.SOCIAL_AUTH_FACEBOOK_REDIRECT,
+                'scope': ','.join(settings.SOCIAL_AUTH_FACEBOOK_SCOPE),
+    }
+    url = 'https://www.facebook.com/dialog/oauth?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}'.format(**url_dict)
+    return redirect(url)
