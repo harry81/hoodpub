@@ -18,14 +18,14 @@
             <img ng-src={{item.cover_s_url}} class="img-rounded img-responsive center-block">
           </a>
         </div>
-        <div class="col-xs-9 col-md-9">{{item}}
+        <div class="col-xs-9 col-md-9">
           <p><b>{{ item.title }}</b> {{ item.category }} </p>
           <p>{{ item.pub_nm }} </p>
           <p>{{ item.sale_price | currency:'Won ':0}} </p>
           <p>{{ item.author }} </p>
           <p>
             <button type="button" class="btn btn-default"
-                    ng-click="book_detail(item.id)">
+                    ng-click="book_detail(item.isbn)">
               요청하기</span>
             </button>
           </p>

@@ -8,7 +8,7 @@ angular.module('hoodpubServices', []).
     factory('Books', [
         '$resource', function($resource){
             return $resource('/api-book/:id/', {}, {
-                get: {method:'GET', params:{id:'id'}},
+                get: {method:'GET', params:{id:'isbn'}},
                 query: {method:'GET'}
             });
     }])
