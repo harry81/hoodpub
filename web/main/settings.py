@@ -94,7 +94,12 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ),
 }
 
 
