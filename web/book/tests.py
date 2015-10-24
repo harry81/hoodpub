@@ -4,7 +4,7 @@ import json
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
-from .models import Books
+from .models import Book
 from .utils import search_via_book_api
 
 
@@ -21,7 +21,7 @@ class BookTestCase(TestCase):
         res = self.client.get('/api-book/load/',
                               {'title': u'삼국지'}, format='json')
         res = json.loads(res.content)
-        self.assertTrue(Books.objects.all().count() > 10)
+        self.assertTrue(Book.objects.all().count() > 10)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_search_via_book_api(self):
@@ -33,5 +33,5 @@ class BookTestCase(TestCase):
         res = self.client.get('/api-book/',
                               {'search': u'삼국지'}, format='json')
         data = json.loads(res.content)
-        self.assertTrue(Books.objects.all().count() > 10)
+        self.assertTrue(Book.objects.all().count() > 10)
         self.assertEqual(res.status_code, status.HTTP_200_OK)

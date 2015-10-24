@@ -2,7 +2,7 @@ from datetime import datetime
 from django.db import models
 
 
-class Books(models.Model):
+class Book(models.Model):
     category = models.CharField(max_length=168)
     sale_yn = models.CharField(max_length=16)
     barcode = models.CharField(max_length=168)

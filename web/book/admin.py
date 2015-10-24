@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Books
+from .models import Book
 
 
-class BooksAdmin(admin.ModelAdmin):
+class BookAdmin(admin.ModelAdmin):
 
     def show_cover_s_url(self):
         return u"<img src='%s'>" % self.cover_s_url
@@ -30,4 +30,4 @@ class BooksAdmin(admin.ModelAdmin):
         )
 
 
-admin.site.register(Books, BooksAdmin)
+admin.site.register(Book, BookAdmin)

@@ -5,13 +5,13 @@ from rest_framework import filters
 from rest_framework.decorators import list_route
 
 from .serializers import BookSerializer
-from .models import Books
+from .models import Book
 from .utils import search_via_book_api
 from .tasks import async_search_via_book_api
 
 
 class BookAPIView(viewsets.ModelViewSet):
-    queryset = Books.objects.all().order_by('-cover_l_url')
+    queryset = Book.objects.all().order_by('-cover_l_url')
     serializer_class = BookSerializer
     search_fields = ('title', 'description', 'author', 'pub_nm')
     filter_backends = (filters.SearchFilter,)
