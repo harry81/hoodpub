@@ -7,6 +7,8 @@ from django.db import models
 class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
     profile_picture = models.ImageField(upload_to='thumbpath', blank=True)
+    facebook_access_token = models.CharField(max_length=128)
+
 
     def __unicode__(self):
         return u'Profile of user: %s' % self.user.username
