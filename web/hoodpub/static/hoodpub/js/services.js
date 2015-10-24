@@ -1,10 +1,4 @@
 angular.module('hoodpubServices', []).
-    factory('Auth', [
-        '$resource', function($resource){
-            return $resource('/api-token-auth/', {
-                query: {method:'POST'}
-            });
-    }]).
     factory('Users', [
         '$resource', function($resource){
             return $resource('/api-user/', {}, {

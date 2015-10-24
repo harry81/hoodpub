@@ -3,10 +3,11 @@ import requests
 import urlparse
 
 from django.contrib.auth import login
-from social.apps.django_app.utils import psa
-
+from django.template import RequestContext, loader
 from django.http import HttpResponse
 from django.conf import settings
+
+from social.apps.django_app.utils import psa
 from .utils import get_access_token
 
 
@@ -33,7 +34,7 @@ def register_by_access_token(request, backend):
     if user:
         login(request, user)
         token = get_access_token(user)
-        template = loader.get_template('berlinreport/gateway.html')
+        template = loader.get_template('hoodpub_auth/gateway.html')
         context = RequestContext(request, {
             'objects': token.content,
         })

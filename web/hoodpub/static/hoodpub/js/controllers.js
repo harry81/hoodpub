@@ -1,42 +1,9 @@
 angular.module('hoodpubControllers', []).
-    controller('hoodpubControllers',  ['$scope', '$http', 'Items',  function ($scope, $http, Items) {
-        next = ''
-        function init(){
-            Items.query({'keyword':''}).$promise.then(function(res) {
-                $scope.items = res['results'];
-                next = res['next'];
-            });
-        }
-
-        $scope.search = function(keyword){
-            Items.query({'keyword':$scope.keyword}).$promise.then(function(res) {
-                $scope.items = res['results'];
-                next = res['next'];
-            });
-        }
-
-        $scope.get_next = function(){
-            if (next.length  == 0){
-                return ;
-            }
-
-            $http.get(next)
-                .success(function(res) {
-                    items = res['results'];
-
-                    for (var i = 0, len = items.length; i < len; i++) {
-                        $scope.items.push(items[i]);
-                    }
-                    // $scope.items.add();
-                    next = res['next'];
-                });
-        }
-
-        init();
+    controller('hoodpubControllers',  ['$scope', '$http', function ($scope, $http) {
     }]).
 
-    controller('authControllers', ['$scope', '$http', '$window', 'Auth', 'Users',
-                                   function ($scope, $http, $window, Auth, Users) {
+    controller('authControllers', ['$scope', '$http', '$window', 'Users',
+                                   function ($scope, $http, $window, Users) {
 
         function try_facebook_auth() {
             localStorage.setItem('id_token', $scope.token_objects.access_token);
@@ -96,7 +63,6 @@ angular.module('hoodpubControllers', []).
         function($scope, $window, $routeParams, $http, Books){
             // scope functions
             $scope.search = function(keyword) {
-                // TODO change : 자전거, $scope.keyword
                 if ($scope.keyword)
                     keyword = $scope.keyword;
                 Books.query({'search': keyword }).$promise.then(function(res) {

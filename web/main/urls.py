@@ -7,12 +7,14 @@ from hoodpub import views as hoodpub_views
 
 router = routers.SimpleRouter()
 router.register(r'api-book', book_views.BookAPIView, base_name="api-book")
+router.register(r'api-user', hoodpub_views.UserProfileAPIView, base_name="user-book")
 
 
 urlpatterns = patterns('',
      url(r'^$', hoodpub_views.index),
      url(r'^', include(router.urls)),
-     url(r'^auth/', include('hoodpub_auth.urls')),
+     url(r'^hoodpub-auth/', include('hoodpub_auth.urls')),
+     url(r"^auth/", include('rest_framework_social_oauth2.urls')),
      url(r'^admin/', include(admin.site.urls)),
      url(r'^docs/', include('rest_framework_swagger.urls')),
-)
+ )

@@ -30,7 +30,7 @@ def get_access_token(user):
     """
 
     # our oauth2 app
-    app = Application.objects.get(name="berlin.com")
+    app = Application.objects.all()[0]
 
     # We delete the old access_token and refresh_token
     try:
