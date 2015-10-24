@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-
-from oauth2_provider.settings import oauth2_settings
 from oauthlib.common import generate_token
 from django.http import JsonResponse
-from oauth2_provider.models import AccessToken, Application, RefreshToken
 from django.utils.timezone import now, timedelta
+from oauth2_provider.models import AccessToken, Application, RefreshToken
+from oauth2_provider.settings import oauth2_settings
+from rest_framework_jwt.settings import api_settings
 
 
 def get_token_json(access_token):
@@ -45,7 +45,6 @@ def get_access_token(user):
         old_access_token.delete()
         old_refresh_token.delete()
 
-    from rest_framework_jwt.settings import api_settings
     jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
     jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
