@@ -22,19 +22,19 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                     }).
                     when('/books', {
                         templateUrl: '/static/hoodpub/templates/books.html',
-                        controller: 'bookControllers'
+                        controller: 'hoodpubControllers'
                     }).
                     when('/book_search', {
                         templateUrl: '/static/hoodpub/templates/book_search.html',
-                        controller: 'bookControllers'
+                        controller: 'hoodpubControllers'
                     }).
                     when('/book_detail', {
                         templateUrl: '/static/hoodpub/templates/book_detail.html',
-                        controller: 'bookControllers'
+                        controller: 'hoodpubControllers'
                     }).
                     when('/order_complete', {
                         templateUrl: '/static/hoodpub/templates/order_complete.html',
-                        controller: 'bookControllers'
+                        controller: 'hoodpubControllers'
                     }).
                     otherwise({redirectTo: '/books'});
 

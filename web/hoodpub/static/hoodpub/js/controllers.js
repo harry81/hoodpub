@@ -1,7 +1,4 @@
 angular.module('hoodpubControllers', []).
-    controller('hoodpubControllers',  ['$scope', '$http', function ($scope, $http) {
-    }]).
-
     controller('authControllers', ['$scope', '$http', '$window', 'Users',
                                    function ($scope, $http, $window, Users) {
 
@@ -58,7 +55,7 @@ angular.module('hoodpubControllers', []).
             }
             init();
         }])
-    .controller('bookControllers', [
+    .controller('hoodpubControllers', [
         '$scope', '$window', '$routeParams' ,'$http', 'Books',
         function($scope, $window, $routeParams, $http, Books){
             // scope functions
@@ -66,6 +63,8 @@ angular.module('hoodpubControllers', []).
                 if ($scope.keyword)
                     keyword = $scope.keyword;
                 Books.query({'search': keyword }).$promise.then(function(res) {
+                    console.log(res);
+
                     $scope.items = res.results;
                     next = res['next'];
                 });
