@@ -30,6 +30,8 @@ def register_by_access_token(request, backend):
 
     token = urlparse.parse_qs(res.content)['access_token'][0]
     user = request.backend.do_auth(token)
+    profile = profile = user.userprofile_set.all()[0]
+    profile.set_access_token(token)
 
     if user:
         login(request, user)
