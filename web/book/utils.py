@@ -31,7 +31,7 @@ def search_via_book_api(url='https://apis.daum.net/search/book',
     if title is None:
         return None
 
-    if pageno > 10:
+    if pageno > MAX_PAGE_NUM_OF_DAUM:
         return None
 
     params = {
