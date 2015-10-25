@@ -32,6 +32,5 @@ class BookTestCase(TestCase):
     def test_api_list(self):
         res = self.client.get('/api-book/',
                               {'search': u'삼국지'}, format='json')
-        data = json.loads(res.content)
         self.assertTrue(Book.objects.all().count() > 10)
         self.assertEqual(res.status_code, status.HTTP_200_OK)

@@ -45,10 +45,12 @@ def register_by_access_token(request, backend):
     else:
         return HttpResponse("error")
 
+
 def auth_facebook(request):
-    url_dict = {'client_id': settings.SOCIAL_AUTH_FACEBOOK_KEY,
-                'redirect_uri': settings.SOCIAL_AUTH_FACEBOOK_REDIRECT,
-                'scope': ','.join(settings.SOCIAL_AUTH_FACEBOOK_SCOPE),
+    url_dict = {
+        'client_id': settings.SOCIAL_AUTH_FACEBOOK_KEY,
+        'redirect_uri': settings.SOCIAL_AUTH_FACEBOOK_REDIRECT,
+        'scope': ','.join(settings.SOCIAL_AUTH_FACEBOOK_SCOPE),
     }
     url = 'https://www.facebook.com/dialog/oauth?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}'.format(**url_dict)
     return redirect(url)

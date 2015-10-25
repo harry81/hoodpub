@@ -48,7 +48,6 @@ def parse(input_filename, output_filename):
     else:
         input_fh = open(input_filename)
 
-
     output.write("-- Converted by db_converter\n")
     output.write("START TRANSACTION;\n")
     output.write("SET standard_conforming_strings=off;\n")

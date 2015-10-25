@@ -2,9 +2,10 @@
 
 import requests
 import json
-from datetime import datetime
-from django.conf import settings
 import HTMLParser
+from datetime import datetime
+
+from django.conf import settings
 from django.utils.html import strip_tags
 from .models import Book
 

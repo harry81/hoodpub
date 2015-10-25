@@ -7,7 +7,10 @@ from hoodpub import views as hoodpub_views
 
 router = routers.SimpleRouter()
 router.register(r'api-book', book_views.BookAPIView, base_name="api-book")
-router.register(r'api-user', hoodpub_views.UserProfileAPIView, base_name="user-book")
+router.register(r'api-user', hoodpub_views.UserProfileAPIView,
+                base_name="api-user")
+router.register(r'api-hoodpub', hoodpub_views.HoodpubAPIView,
+                base_name="api-hoodpub")
 
 
 urlpatterns = patterns('',
