@@ -30,11 +30,12 @@ def register_by_access_token(request, backend):
 
     token = urlparse.parse_qs(res.content)['access_token'][0]
     user = request.backend.do_auth(token)
-    profile = profile = user.userprofile_set.all()[0]
-    profile.set_access_token(token)
 
     if user:
         login(request, user)
+        profile = user.userprofile_set.all()[0]
+        profile.set_facebook_profile(request, token=token)
+
         token = get_access_token(user)
         template = loader.get_template('hoodpub_auth/gateway.html')
         context = RequestContext(request, {
@@ -52,5 +53,6 @@ def auth_facebook(request):
         'redirect_uri': settings.SOCIAL_AUTH_FACEBOOK_REDIRECT,
         'scope': ','.join(settings.SOCIAL_AUTH_FACEBOOK_SCOPE),
     }
-    url = 'https://www.facebook.com/dialog/oauth?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}'.format(**url_dict)
+    url = 'https://www.facebook.com/dialog/oauth?client_id={client_id}&\
+           redirect_uri={redirect_uri}&scope={scope}'.format(**url_dict)
     return redirect(url)

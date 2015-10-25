@@ -36,5 +36,9 @@ class HoodpubTestCase(TestCase):
 
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': u'8995843543'}, format='json')
+
+        res = self.client.post('/api-hoodpub/read/',
+                               {'isbn': u'0306810964'}, format='json')
+
         self.assertIn('id', res.data.text)
         self.assertTrue(Read.objects.all().count() >= 1)

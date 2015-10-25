@@ -1,10 +1,32 @@
 # -*- coding: utf-8 -*-
 
-import requests
+import requests, json
 from urlparse import urljoin
 from django.conf import settings
 from book.models import Book
 
+def facebook_set_profile(request, *args, **kwargs):
+
+    access_token = kwargs['token']
+    userprofile = request.user.userprofile_set.all()[0]
+
+    url_dict = {
+        'access_token': access_token,
+    }
+    url = 'https://graph.facebook.com'
+    action = 'me'
+    url = urljoin(url, action)
+    res = requests.get(url, params=url_dict)
+    data = json.loads(res.content)
+
+    userprofile.facebook_access_token = access_token
+    userprofile.email = data['email']
+    userprofile.gender = data['gender']
+    userprofile.locale = data['locale']
+    userprofile.sns_id= data['id']
+    
+    userprofile.save(update_fields=['email', 'gender', 'locale', 'sns_id'])
+    
 
 def facebook_action_read(request):
     isbn = request.data['isbn']

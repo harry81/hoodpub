@@ -81,6 +81,23 @@ angular.module('hoodpubControllers', []).
                 });
             }
 
+            $scope.read_book = function(isbn){
+                var req = {
+                    method: 'POST',
+                    url: '/api-hoodpub/read/',
+                    data: { 'isbn': isbn }
+                }
+                $http(req).then(function()
+                                {
+                                    console.log('sucess');
+                                },
+                                function()
+                                {
+                                    console.log('fail');
+                                });
+
+            }
+
             $scope.get_next = function(){
                 if (typeof next == 'undefined'){
                     return ;
