@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 gettext = lambda s: s
 DATA_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -91,7 +92,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
     'PAGE_SIZE': 10,
@@ -119,6 +119,13 @@ AUTHENTICATION_BACKENDS = (
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=3000),
+    }
+
 PROPRIETARY_BACKEND_NAME = 'Facebook'
 
 BROKER_URL = 'amqp://guest:guest@berlin-dev.hoodpub.com:5672//'

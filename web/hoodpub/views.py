@@ -9,8 +9,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .serializers import UserProfileSerializer
-
 from .utils import facebook_action_read
+
+from book.serializers import BookSerializer
 
 
 def index(request):
@@ -34,9 +35,13 @@ class UserProfileAPIView(viewsets.ModelViewSet):
 
 
 class HoodpubAPIView(viewsets.ModelViewSet):
+    serializer_class = BookSerializer
 
     @permission_classes((IsAuthenticated, ))
     @list_route(methods=['post'])
     def read(self, request, *args, **kwargs):
+        user_profile = self.request.user.userprofile_set.all()[0]
+        user_profile.set_read(request, *args, **kwargs)
+
         res = facebook_action_read(request)
         return Response(res)
