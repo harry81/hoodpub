@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-
 import requests, json
 from urlparse import urljoin
 from django.conf import settings
 from book.models import Book
+
 
 def facebook_set_profile(request, *args, **kwargs):
 
@@ -23,24 +23,24 @@ def facebook_set_profile(request, *args, **kwargs):
     userprofile.email = data['email']
     userprofile.gender = data['gender']
     userprofile.locale = data['locale']
-    userprofile.sns_id= data['id']
-    
+    userprofile.sns_id = data['id']
+
     userprofile.save(update_fields=['email', 'gender', 'locale', 'sns_id'])
-    
+
 
 def facebook_action_read(request):
     isbn = request.data['isbn']
 
     try:
         book = Book.objects.get(isbn=isbn)
-    except self.DoesNotExist:
+    except Book.DoesNotExist:
         return None
 
     url_dict = {
         'access_token': 'CAAKaRbf67W8BAPwbVrLJ7twVaRQbxzF8BnKFBhytyUZBJX9e8gsHMYFU77O2bJWN1ZBBvZBaAu4euAewzp422cIk4jRIH7facChyBFCMV98AWlMYz3uXkxSGjZCbN5LCFhaXglRZBLNyqnfZAdPLtZCBXJE0VO0rV7svn3lPVOWPnLsacWemmjF2ICxKGA7OnEZD',
         'mothod': 'POST',
     }
-    
+
     data_dict = {
         "object":
         {
