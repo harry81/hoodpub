@@ -12,8 +12,8 @@ from .tasks import async_search_via_book_api
 
 
 class BookAPIView(viewsets.ModelViewSet):
-    queryset = Book.objects.all().order_by(
-        '-cover_l_url').annotate(total_read=Count('read'))
+    queryset = Book.objects.all().annotate(
+        total_count=Count('read')).order_by('-total_count')
     serializer_class = BookSerializer
     search_fields = ('title', 'description', 'author', 'pub_nm')
     filter_backends = (filters.SearchFilter,)

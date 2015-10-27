@@ -10,7 +10,7 @@ from .utils import search_via_book_api
 
 class BookTestCase(TestCase):
 
-    fixtures = ['book']
+    fixtures = ['auth', 'book', 'reads']
 
     def setUp(self):
         self.client = APIClient()
@@ -31,10 +31,12 @@ class BookTestCase(TestCase):
 
     def test_api_list(self):
         res = self.client.get('/api-book/',
-                              {'search': u'삼국지'}, format='json')
+                              {'search': u'수학'}, format='json')
         data = json.loads(res.content)
 
         self.assertIn('total_read',
                       data['results'][0].keys())
+        self.assertIn('sns_id',
+                      data['results'][0]['reads'][0]['user'][0])
         self.assertTrue(Book.objects.all().count() > 10)
         self.assertEqual(res.status_code, status.HTTP_200_OK)

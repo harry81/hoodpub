@@ -9,7 +9,6 @@
     </div>
   </form>
   <hr/>
-
   <div class="panel panel-default" ng-repeat="item in items">
     <div class="panel-body" >
       <div class="row">
@@ -23,6 +22,7 @@
           <p>{{ item.pub_nm }} </p>
           <p>{{ item.sale_price | currency:'Won ':0}} </p>
           <p>{{ item.author }} </p>
+          <p>{{ item.total_read }} </p>
           <p>
             <button type="button" class="btn btn-default"
                     ng-click="read_book(item.isbn)">
