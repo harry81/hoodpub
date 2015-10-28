@@ -41,8 +41,16 @@ class UserProfile(models.Model):
         facebook_set_profile(request, *args, **kwargs)
 
     def set_read(self, request, *args, **kwargs):
-        book = Book.objects.get(isbn=request.data['isbn'])
-        self.read.add(Read.objects.create(book=book))
+        isbn = isbn=request.data['isbn']
+        if not self.read.filter(book__isbn=isbn).exists():
+            book = Book.objects.get(isbn=isbn)
+            self.read.add(Read.objects.create(book=book))
+            return {
+                'success' : True,
+                'book' : book.isbn
+            }
+        else:
+            return {'success': False }
 
 
 def create_user_profile(sender, instance, created, **kwargs):
