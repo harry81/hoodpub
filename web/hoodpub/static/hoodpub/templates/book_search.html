@@ -16,6 +16,13 @@
           <a href="{{ item.link}}" target="_blank">
             <img ng-src={{item.cover_s_url}} class="img-rounded img-responsive center-block">
           </a>
+          <div ng-repeat="read in item.reads">
+            <a href="">
+              <img src="https://graph.facebook.com/{{read.user[0].sns_id}}/picture?type=small" class="img-circle">
+              {{read.user[0].first_name}}
+            </a>
+          </div>
+
         </div>
         <div class="col-xs-9 col-md-9">
           <p><b>{{ item.title }}</b> {{ item.category }} </p>
