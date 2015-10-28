@@ -121,6 +121,6 @@ angular.module('hoodpubControllers', []).
             if ($window.location.hash.indexOf('book_detail') > -1){
                 $scope.get_book_detail($routeParams.id);
             }
-
+            $scope.search();
         }])
 ;
