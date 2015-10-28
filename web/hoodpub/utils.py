@@ -25,7 +25,8 @@ def facebook_set_profile(request, *args, **kwargs):
     userprofile.locale = data['locale']
     userprofile.sns_id = data['id']
 
-    userprofile.save(update_fields=['email', 'gender', 'locale', 'sns_id'])
+    userprofile.save(update_fields=['email', 'gender',
+                                    'locale', 'sns_id', 'facebook_access_token'])
 
 
 def facebook_action_read(request):

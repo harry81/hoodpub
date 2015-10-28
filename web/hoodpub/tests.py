@@ -35,10 +35,10 @@ class HoodpubTestCase(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
         res = self.client.post('/api-hoodpub/read/',
-                               {'isbn': u'8995843543'}, format='json')
+                               {'isbn': u'8914018261'}, format='json')
 
         res = self.client.post('/api-hoodpub/read/',
-                               {'isbn': u'0306810964'}, format='json')
+                               {'isbn': u'8936430440'}, format='json')
 
         self.assertIn('id', res.data.text)
         self.assertTrue(Read.objects.all().count() >= 1)
