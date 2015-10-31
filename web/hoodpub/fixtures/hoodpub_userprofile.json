@@ -1,0 +1,48 @@
+[
+  {
+    "pk": 3,
+    "model": "hoodpub.userprofile",
+    "fields": {
+      "email": "hoodpub_jgnxkzd_tester@tfbnw.net",
+      "timezone": 0,
+      "sns_id": "138855966468046",
+      "user": 3,
+      "link": "",
+      "profile_picture": "",
+      "read": [
+        906
+      ],
+      "updated_at": "2015-10-28T17:13:19.047Z",
+      "birthday": "2015-10-28",
+      "first_name": "",
+      "gender": "female",
+      "locale": "en_US",
+      "name": "",
+      "verified": null,
+      "last_name": "",
+      "facebook_access_token": "CAAKaRbf67W8BAGwJplXJyUO57hnc4qQNOVDR9E7KxUOO99IP7vFgbSJuzjkdhTHFmP5LhPYTlHDOua5fjQYnR8yO5C2HLMvObOLBZCZB0Qs8VC0ZAVMbRdCW1GjL0m6B576ZCqxXaWZBr3UaG15LvUZCdGZBEt5VyI2Q6spVhVq6ZARXg4LiZCvxC"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "hoodpub.userprofile",
+    "fields": {
+      "email": "",
+      "timezone": 0,
+      "sns_id": "",
+      "user": 1,
+      "link": "",
+      "profile_picture": "",
+      "read": [],
+      "updated_at": "2015-10-28T18:54:29.460Z",
+      "birthday": "2015-10-28",
+      "first_name": "",
+      "gender": "",
+      "locale": "",
+      "name": "",
+      "verified": null,
+      "last_name": "",
+      "facebook_access_token": ""
+    }
+  }
+]

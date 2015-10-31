@@ -1,5 +1,4 @@
 *.pyc
 project.db
-*fixture*
 *settings_local.py
 *TAGS*

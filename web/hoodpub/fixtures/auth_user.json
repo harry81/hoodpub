@@ -1,0 +1,38 @@
+[
+    {
+        "fields": {
+            "date_joined": "2012-07-31T03:11:21Z",
+            "email": "",
+            "first_name": "",
+            "groups": [],
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false,
+            "last_login": "2012-07-31T03:11:21Z",
+            "last_name": "",
+            "password": "",
+            "user_permissions": [],
+            "username": "AnonymousUser"
+        },
+        "model": "auth.user",
+        "pk": -1
+    },
+    {
+        "fields": {
+            "date_joined": "2012-05-24T01:01:34Z",
+            "email": "web@web.com",
+            "first_name": "",
+            "groups": [],
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "last_login": "2012-11-08T15:25:01Z",
+            "last_name": "",
+            "password": "pbkdf2_sha256$10000$SCG1fclgmQ8x$gskmsyDw4rxrOb/gpNEhQR292pKtM2dxuznKF7q5fQw=",
+            "user_permissions": [],
+            "username": "web"
+        },
+        "model": "auth.user",
+        "pk": 1
+    }
+]
