@@ -11,11 +11,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-
         with open('hoodpub/fixtures/books_read.csv', 'rb') as f:
             reader = csv.reader(f)
             read_list = list(reader)
 
+        cnt = 0
         for read in read_list:
             obj = {}
             obj['user_id'] = read[0]
@@ -24,8 +24,10 @@ class Command(BaseCommand):
             obj['isbn13'] = read[3]
             obj['title'] = read[4]
             obj['date'] = read[5]
-            print obj['user_id'], obj['facebook_id'], obj['isbn13'], obj['title'], obj['date']
+            print obj['user_id'], obj['facebook_id'],
+            obj['isbn13'], obj['title'], obj['date']
 
+            cnt = cnt + 1
             if obj['date'] is '':
                 print 'No date'
                 continue
@@ -49,4 +51,4 @@ class Command(BaseCommand):
             if book.exists():
                 book = book[0]
                 profile.set_read(isbn=book.isbn, created_at=obj['date'])
-                print '%s read %s on %s', profile.username, book.title, obj['date']
+                print 'Success [%5d]: %s read %s on %s' % (cnt, profile.user.username, book.title, obj['date'])

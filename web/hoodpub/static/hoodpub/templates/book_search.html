@@ -18,7 +18,7 @@
           </a>
           <div ng-repeat="read in item.reads">
             <a href="">
-              <img src="https://graph.facebook.com/{{read.user[0].sns_id}}/picture?type=small" class="img-circle">
+              <img src="https://graph.facebook.com/{{read.user[0].sns_id}}/picture?type=small" class="img-circle">{{read.user[0].sns_id}}
               {{read.user[0].first_name}}
             </a>
           </div>
@@ -30,6 +30,7 @@
           <p>{{ item.sale_price | currency:'Won ':0}} </p>
           <p>{{ item.author }} </p>
           <p>{{ item.total_read }} </p>
+          <p>{{ item.is_read }} </p>
           <p>
             <button type="button" class="btn btn-default"
                     ng-click="read_book(item.isbn)">

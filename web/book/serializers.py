@@ -28,5 +28,17 @@ class BookSerializer(serializers.ModelSerializer):
         source='read_set.count',
         read_only=True)
 
+    is_read = serializers.SerializerMethodField('is_read_by_user')
+
+    def is_read_by_user(self, obj):
+        request = self.context.get('request', None)
+        if request is not None or request.user.is_anonymous():
+            return False
+        else:
+            profile = request.user.userprofile_set.all()[0]
+            if profile.read.filter(book__isbn=obj.isbn).exists():
+                return True
+        return False
+
     class Meta:
         model = Book

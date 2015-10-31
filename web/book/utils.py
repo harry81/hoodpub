@@ -46,6 +46,10 @@ def search_via_book_api(url='https://apis.daum.net/search/book',
     }
 
     res = requests.get(url, params=params)
+    if res.status_code == 429:
+        return {'reponse': 'Too many request',
+                'msg': res.content
+                }
     json_output = json.loads(res.content)
 
     save_books(json_output['channel']['item'])
