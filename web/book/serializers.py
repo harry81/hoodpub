@@ -32,7 +32,7 @@ class BookSerializer(serializers.ModelSerializer):
 
     def is_read_by_user(self, obj):
         request = self.context.get('request', None)
-        if request is not None or request.user.is_anonymous():
+        if request is None or request.user.is_anonymous():
             return False
         else:
             profile = request.user.userprofile_set.all()[0]

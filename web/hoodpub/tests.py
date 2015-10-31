@@ -24,7 +24,6 @@ class HoodpubTestCase(TestCase):
         self.book1 = Book.objects.all()[1]
         self.book2 = Book.objects.all()[2]
 
-    def test_facebook_action_read(self):
         # login
         post_data = {
             'username': u'hoodpub',
@@ -36,12 +35,13 @@ class HoodpubTestCase(TestCase):
         token = json.loads(res.content)['token']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
+    def test_facebook_action_read(self):
+
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book1.isbn}, format='json')
 
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book2.isbn}, format='json')
-        import ipdb; ipdb.set_trace()
 
         self.assertTrue(res.data['hoodpub']['success'])
         self.assertTrue(Read.objects.all().count() >= 1)
@@ -49,3 +49,11 @@ class HoodpubTestCase(TestCase):
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book2.isbn}, format='json')
         self.assertFalse(res.data['hoodpub']['success'])
+
+    def test_is_read_by_user(self):
+        res = self.client.post('/api-hoodpub/read/',
+                               {'isbn': self.book1.isbn}, format='json')
+        res = self.client.get('/api-book/',
+                              {'title': self.book1.title}, format='json')
+        data = json.loads(res.content)
+        self.assertTrue(data['results'][0]['is_read'])
