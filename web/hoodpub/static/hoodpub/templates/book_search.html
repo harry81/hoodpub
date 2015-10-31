@@ -33,7 +33,7 @@
         </div>
         <div class="col-xs-9 col-md-4">
           <div ng-repeat="read in item.reads" class="col-md-3">
-            <a href="">
+            <a href="" ng-click="search_users(read.user[0].sns_id)">
               <img src="https://graph.facebook.com/{{read.user[0].sns_id}}/picture?width=38&height=38" class="img-circle">{{read.user[0].last_name}}
               {{read.user[0].first_name}}
             </a>

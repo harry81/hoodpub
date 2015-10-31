@@ -20,6 +20,9 @@ class HoodpubTestCase(TestCase):
         self.usr = User.objects.create_user(username='hoodpub',
                                             password='password',
                                             email='hoodpub@hoodpub.com')
+        self.profile = self.usr.userprofile_set.all()[0]
+        self.profile.sns_id = '213232'
+        self.profile.save(update_fields=['sns_id'])
 
         self.book1 = Book.objects.all()[1]
         self.book2 = Book.objects.all()[2]
@@ -57,3 +60,11 @@ class HoodpubTestCase(TestCase):
                               {'title': self.book1.title}, format='json')
         data = json.loads(res.content)
         self.assertTrue(data['results'][0]['is_read'])
+
+    def test_users(self):
+        res = self.client.post('/api-hoodpub/read/',
+                               {'isbn': self.book1.isbn}, format='json')
+
+        res = self.client.get('/api-hoodpub/%s/users/' % self.profile.sns_id)
+        data = json.loads(res.content)
+        self.assertEqual(1, data['count'])

@@ -5,6 +5,12 @@ angular.module('hoodpubServices', []).
                 query: {method:'GET'}
             });
     }]).
+    factory('UserBooks', [
+        '$resource', function($resource){
+            return $resource('/api-hoodpub/:sns_id/users/', {}, {
+                query: {method:'GET', params:{sns_id:'sns_id'}},
+            });
+    }]).
     factory('Books', [
         '$resource', function($resource){
             return $resource('/api-book/:id/', {}, {
