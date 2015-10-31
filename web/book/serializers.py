@@ -6,7 +6,7 @@ from hoodpub.models import Read, UserProfile
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('sns_id', )
+        fields = ('sns_id', 'first_name', 'last_name', 'name')
 
 
 class ReadSerializer(serializers.ModelSerializer):
