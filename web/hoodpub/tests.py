@@ -19,8 +19,6 @@ class HoodpubTestCase(TestCase):
         usr = User.objects.create_user(username='hoodpub',
                                        password='password',
                                        email='hoodpub@hoodpub.com')
-        profile = usr.userprofile_set.all()[0]
-
 
     def test_facebook_action_read(self):
         # login
@@ -41,10 +39,8 @@ class HoodpubTestCase(TestCase):
                                {'isbn': u'8936430440'}, format='json')
 
         self.assertTrue(res.data['hoodpub']['success'])
-        self.assertIn('book', res.data['hoodpub'])
         self.assertTrue(Read.objects.all().count() >= 1)
 
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': u'8936430440'}, format='json')
         self.assertFalse(res.data['hoodpub']['success'])
-

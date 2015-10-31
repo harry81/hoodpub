@@ -41,11 +41,11 @@ class HoodpubAPIView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         return super(HoodpubAPIView, self).list(request, *args, **kwargs)
 
-
     @permission_classes((IsAuthenticated, ))
     @list_route(methods=['post'])
     def read(self, request, *args, **kwargs):
         user_profile = self.request.user.userprofile_set.all()[0]
+        kwargs['isbn'] = request.data['isbn']
         res_hoodpub = user_profile.set_read(request, *args, **kwargs)
         res_facebook = facebook_action_read(request)
         resp = {

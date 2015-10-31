@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import requests, json
+import requests
+import json
 from urlparse import urljoin
 from django.conf import settings
 from book.models import Book
@@ -25,8 +26,9 @@ def facebook_set_profile(request, *args, **kwargs):
     userprofile.locale = data['locale']
     userprofile.sns_id = data['id']
 
-    userprofile.save(update_fields=['email', 'gender',
-                                    'locale', 'sns_id', 'facebook_access_token'])
+    userprofile.save(
+        update_fields=['email', 'gender', 'locale', 'sns_id',
+                       'facebook_access_token'])
 
 
 def facebook_action_read(request):

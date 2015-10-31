@@ -40,17 +40,27 @@ class UserProfile(models.Model):
     def set_facebook_profile(self, request, *args, **kwargs):
         facebook_set_profile(request, *args, **kwargs)
 
-    def set_read(self, request, *args, **kwargs):
-        isbn = isbn=request.data['isbn']
+    def set_read(self, request=None, *args, **kwargs):
+        if request is not None:
+            isbn = request.data['isbn']
+        elif 'isbn' in kwargs:
+            isbn = kwargs['isbn']
+        else:
+            return {'success': False,
+                    'msg': 'No isbn'}
+
         if not self.read.filter(book__isbn=isbn).exists():
             book = Book.objects.get(isbn=isbn)
-            self.read.add(Read.objects.create(book=book))
+            kwargs.pop('isbn')
+            self.read.add(Read.objects.create(book=book, **kwargs))
             return {
-                'success' : True,
-                'book' : book.isbn
+                'success': True,
+                'msg': book.isbn
             }
         else:
-            return {'success': False }
+            return {'success': False,
+                    'msg': 'Already read with %s' % isbn
+                    }
 
 
 def create_user_profile(sender, instance, created, **kwargs):
