@@ -17,14 +17,16 @@ angular.module('hoodpubControllers', []).
     }]).
 
     controller('userControllers', [
-        '$scope', '$http', '$window',
-        function($scope, $http, $window){
+        '$rootScope', '$scope', '$http', '$window',
+        function($rootScope, $scope, $http, $window){
 
             function init(){
                 $http.get('/api-user/').
                     then(function(res) {
                         $scope.user = res.data.user;
-                        console.log('after init: ', $scope.user);
+                        $rootScope.user = res.data.user;
+                        console.log('$rootScope is set', $rootScope);
+
                     }, function(res) {
                         console.log('fail');
                     });
@@ -53,11 +55,12 @@ angular.module('hoodpubControllers', []).
                 delete $scope.user;
                 console.log('logout');
             }
+            init();
 
         }])
     .controller('hoodpubControllers', [
-        '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks',
-        function($scope, $window, $routeParams, $http, Books, UserBooks){
+        '$rootScope', '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks',
+        function($rootScope, $scope, $window, $routeParams, $http, Books, UserBooks){
             // scope functions
             $scope.search = function(keyword) {
                 if ($scope.keyword)
@@ -92,7 +95,7 @@ angular.module('hoodpubControllers', []).
 
             $scope.read_book = function(isbn){
                 if (typeof $scope.user == 'undefined'){
-                    console.log('please login');
+                    console.log('please login', $rootScope.user);
                     return ;
                 }
                 var req = {
