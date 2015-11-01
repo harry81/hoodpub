@@ -23,22 +23,20 @@ angular.module('hoodpubControllers', []).
             function init(){
                 $http.get('/api-user/').
                     then(function(res) {
-                        $scope.user = res.data.user;
-                        $rootScope.user = res.data.user;
-                        console.log('$rootScope is set', $rootScope);
-
+                        $rootScope.userprofile = res.data;
+                        console.log('$rootScope is set', $rootScope.userprofile);
                     }, function(res) {
-                        console.log('fail');
+                        console.log('api-user fail');
                     });
             }
 
             $scope.try_auth = function() {
-                $http.post('/api-token-auth/', {"username":$scope.username, "password":$scope.password}).
+                $http.post('/api-token-auth/', {"username":$scope.userprofile.username, "password":$scope.userprofile.password}).
                     then(function(res) {
                         localStorage.setItem('id_token', res.data.token);
                         console.log('save new authenticated',  localStorage.getItem('id_token'));
 
-                        $scope.user = res.data.user;
+                        $rootScope.userprofile = res.data;
                         $window.location.href = '/#/list';
                         init();
 
@@ -52,7 +50,7 @@ angular.module('hoodpubControllers', []).
 
             $scope.logout = function (){
                 localStorage.removeItem('id_token');
-                delete $scope.user;
+                delete $rootScope.userprofile;
                 console.log('logout');
             }
             init();
@@ -93,11 +91,12 @@ angular.module('hoodpubControllers', []).
                 });
             }
 
-            $scope.read_book = function(isbn){
-                if (typeof $scope.user == 'undefined'){
-                    console.log('please login', $rootScope.user);
+            $scope.read_book = function(item){
+                if (typeof $rootScope.userprofile == 'undefined'){
+                    console.log('please login', $rootScope.userprofile);
                     return ;
                 }
+                isbn = item.isbn;
                 var req = {
                     method: 'POST',
                     url: '/api-hoodpub/read/',
@@ -106,6 +105,11 @@ angular.module('hoodpubControllers', []).
                 $http(req).then(function()
                                 {
                                     console.log('sucess');
+                                    item.is_read = true;
+                                    item.total_read++;
+                                    item.reads.push([
+                                        {'sns_id': $rootScope.userprofile.sns_id,
+                                         'name': $rootScope.userprofile.name}]);
                                 },
                                 function()
                                 {

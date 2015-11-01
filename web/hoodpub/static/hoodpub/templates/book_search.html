@@ -18,8 +18,10 @@
           </a>
           <br>
           <p>
-            <button type="button" class="btn btn-default center-block" ng-show="!item.is_read" ng-click="read_book(item.isbn)">
+            <button type="button" class="btn btn-success center-block" ng-show="!item.is_read" ng-click="read_book(item)">
               읽기</button>
+            <button type="button" class="btn btn-default center-block" ng-show="item.is_read" ng-click="read_book(item)">
+              읽음</button>
           </p>
 
         </div>

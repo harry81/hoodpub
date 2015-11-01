@@ -44,10 +44,9 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav" >
-          <li ng-show="!user.username"><a href="/hoodpub-auth/facebook">Login</a></li>
-          <li ng-show="!user.username"><a href="/account/signup/">Signup</a></li>
-          <li ng-show="user.username"><a href="javascript:void(0);" ng-click="logout()">Logout</a></li>
-          <li ng-show="user.username"><a href="#/my">{{ user.username }}</a></li>
+          <li ng-show="!$root.userprofile"><a href="/hoodpub-auth/facebook">Login</a></li>
+          <li ng-show="$root.userprofile"><a href="javascript:void(0);" ng-click="logout()">Logout</a></li>
+          <li ng-show="$root.userprofile"><a href="#/my">{{ $root.userprofile.user.username }}</a></li>
           <li ><a href="#/books">Books</a></li>
         </ul>
       </div>
