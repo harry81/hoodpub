@@ -30,7 +30,10 @@ RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
 DEBUG = RUNNING_DEVSERVER
 DEBUG =  False
 ADMINS = (('John', 'chharry@gmail.com'),)
-ALLOWED_HOSTS = [u'.dev.hoodpub.com', ]
+ALLOWED_HOSTS = [u'.dev.hoodpub.com',
+'.hoodpub.com',
+'hoodpub.com',
+]
 
 
 TEMPLATE_DEBUG = True
