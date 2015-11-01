@@ -36,7 +36,7 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                         templateUrl: '/static/hoodpub/templates/order_complete.html',
                         controller: 'hoodpubControllers'
                     }).
-                    otherwise({redirectTo: '/books'});
+                    otherwise({redirectTo: '/book_search'});
 
                 $httpProvider.defaults.xsrfCookieName = 'csrftoken';
                 $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';

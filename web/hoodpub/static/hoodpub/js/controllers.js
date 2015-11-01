@@ -6,7 +6,7 @@ angular.module('hoodpubControllers', []).
             localStorage.setItem('id_token', $scope.token_objects.access_token);
 
             Users.query().$promise.then(function(res) {
-                $window.location.href = '/#/books';
+                $window.location.href = '/#';
             });
         }
 
@@ -37,7 +37,7 @@ angular.module('hoodpubControllers', []).
                         console.log('save new authenticated',  localStorage.getItem('id_token'));
 
                         $rootScope.userprofile = res.data;
-                        $window.location.href = '/#/list';
+                        $window.location.href = '/#/';
                         init();
 
                     }, function(res) {
@@ -51,6 +51,7 @@ angular.module('hoodpubControllers', []).
             $scope.logout = function (){
                 localStorage.removeItem('id_token');
                 delete $rootScope.userprofile;
+                $window.location.href = '/#/';
                 console.log('logout');
             }
             init();
@@ -135,7 +136,7 @@ angular.module('hoodpubControllers', []).
             }
 
             $scope.goto_list = function(id){
-                $window.location.href = '/#/books';
+                $window.location.href = '/#/';
             }
 
             if ($window.location.hash.indexOf('book_detail') > -1){
