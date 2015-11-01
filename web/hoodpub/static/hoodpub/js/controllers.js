@@ -53,7 +53,7 @@ angular.module('hoodpubControllers', []).
                 delete $scope.user;
                 console.log('logout');
             }
-            init();
+
         }])
     .controller('hoodpubControllers', [
         '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks',
