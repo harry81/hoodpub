@@ -10,20 +10,20 @@ def host_type():
 
 
 def deploy():
-    put('web/mycms/settings_local.py',
-        'work/mycms/web/mycms/')
-    with prefix('source /home/hoodpub/.virt_env/berlin/bin/activate'):
-        with cd('/home/hoodpub/work/mycms/web'):
+    put('web/main/settings_local.py',
+        'work/hoodpub/web/main/')
+    with prefix('source /home/hoodpub/.virt_env/hoodpub2/bin/activate'):
+        with cd('/home/hoodpub/work/hoodpub/web'):
             run('git pull')
             run('pip install -r requirements.txt')
-            with shell_env(DB_NAME='mycms',
+            with shell_env(DB_NAME='hoodpub',
                            DB_USER='mycms_user',
                            DB_PASS='mycms_pass',
                            DB_SERVICE='postgres',
                            DB_PORT='5432'):
                 run('python manage.py migrate')
                 run('python manage.py collectstatic   --noinput')
-                run('sudo /etc/init.d/berlin-uwsgi stop')
-                run('rm -rf ../run/uwsgi-49701.pid')
-                run('sudo /etc/init.d/berlin-uwsgi start')
-    local('curl http://berlin.hoodpub.com/ > /dev/null ')
+                run('sudo /etc/init.d/hoodpub2-uwsgi stop')
+                run('rm -rf ../run/*')
+                run('sudo /etc/init.d/hoodpub2-uwsgi start')
+    local('curl http://dev.hoodpub.com/ > /dev/null ')
