@@ -14,7 +14,7 @@ def deploy():
         'work/hoodpub/web/main/')
     with prefix('source /home/hoodpub/.virt_env/hoodpub2/bin/activate'):
         with cd('/home/hoodpub/work/hoodpub/web'):
-            run('git pull')
+            run('git pull origin master')
             run('pip install -r requirements.txt')
             with shell_env(DB_NAME='hoodpub',
                            DB_USER='mycms_user',

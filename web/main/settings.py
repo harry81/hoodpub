@@ -24,8 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5na+q+@*3v8^8&vm1iv=z^vod=1+=dz_ntrnk74x^b8vktgw*s'
 
+import sys
+RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = RUNNING_DEVSERVER
 
 TEMPLATE_DEBUG = True
 
