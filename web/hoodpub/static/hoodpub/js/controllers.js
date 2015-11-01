@@ -91,6 +91,10 @@ angular.module('hoodpubControllers', []).
             }
 
             $scope.read_book = function(isbn){
+                if (typeof $scope.user == 'undefined'){
+                    console.log('please login');
+                    return ;
+                }
                 var req = {
                     method: 'POST',
                     url: '/api-hoodpub/read/',
