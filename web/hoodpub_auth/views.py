@@ -6,8 +6,10 @@ from django.template import RequestContext, loader
 from django.http import HttpResponse
 from django.conf import settings
 from django.shortcuts import redirect
+from django.contrib.auth.models import User
 
 from social.apps.django_app.utils import psa
+from social.apps.django_app.default.models import Association, Code, Nonce, UserSocialAuth
 from .utils import get_access_token
 
 
@@ -41,6 +43,11 @@ def register_by_access_token(request, backend):
         context = RequestContext(request, {
             'objects': token.content,
         })
+        if User.objects.filter(email=user.email).count() > 1:
+            social = UserSocialAuth.objects.get(uid=profile.sns_id)
+            social.user = User.objects.filter(email=user.email)[0]
+            social.save()
+
         return HttpResponse(template.render(context))
 
     else:
