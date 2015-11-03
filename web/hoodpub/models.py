@@ -11,6 +11,9 @@ class Read(models.Model):
     book = models.ForeignKey(Book)
     created_at = models.DateTimeField(default=datetime.now, blank=True)
 
+    class Meta:
+        ordering = ('created_at',)
+
     def __unicode__(self):
         return u'%s %s' % (
             self.book.title, self.book.isbn)

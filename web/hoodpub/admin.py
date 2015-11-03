@@ -22,7 +22,13 @@ admin.site.register(User, UserAdmin)
 
 
 class ReadAdmin(admin.ModelAdmin):
-    pass
+    def userprofile(self, obj):
+        if obj.userprofile_set.all().exists():
+            return obj.userprofile_set.all()[0]
+        return ''
+
+    list_display = ('book', 'userprofile', 'created_at')
+
 
 admin.site.register(Read, ReadAdmin)
 
