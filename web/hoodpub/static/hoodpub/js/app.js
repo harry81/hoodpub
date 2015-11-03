@@ -2,9 +2,9 @@
 
 angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                        'relativeDate',
-                       'infinite-scroll', 'hoodpubServices', 'hoodpubControllers']).
-    config(['$routeProvider', '$httpProvider', 'jwtInterceptorProvider', '$resourceProvider',
-            function($routeProvider, $httpProvider, jwtInterceptorProvider, $resourceProvider) {
+                       'infinite-scroll', 'hoodpubServices', 'hoodpubControllers', 'angular-google-analytics']).
+    config(['$routeProvider', '$httpProvider', 'jwtInterceptorProvider', '$resourceProvider', 'AnalyticsProvider',
+            function($routeProvider, $httpProvider, jwtInterceptorProvider, $resourceProvider, AnalyticsProvider) {
                 $resourceProvider.defaults.stripTrailingSlashes = false;
 
                 $routeProvider.
@@ -55,6 +55,11 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                 }];
                 $httpProvider.interceptors.push('jwtInterceptor');
 
+                AnalyticsProvider.setAccount('UA-60843143-1');
+
+                AnalyticsProvider
+                    .logAllCalls(true)
+                    .startOffline(true);
             }])
 ;
 
