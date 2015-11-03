@@ -2,7 +2,7 @@
 
 angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                        'relativeDate',
-                       'infinite-scroll', 'hoodpubServices', 'hoodpubControllers', 'angular-google-analytics']).
+                       'infinite-scroll', 'hoodpubServices', 'hoodpubControllers', 'angular-google-analytics', 'ui.bootstrap']).
     config(['$routeProvider', '$httpProvider', 'jwtInterceptorProvider', '$resourceProvider', 'AnalyticsProvider',
             function($routeProvider, $httpProvider, jwtInterceptorProvider, $resourceProvider, AnalyticsProvider) {
                 $resourceProvider.defaults.stripTrailingSlashes = false;
@@ -72,7 +72,7 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
 
                 // URL prefix (default is empty).
                 // Helpful when the app doesn't run in the root directory.
-                AnalyticsProvider.trackPrefix('my-application');
+                AnalyticsProvider.trackPrefix('hoodpub-web');
 
                 // Change the default page event name.
                 // Helpful when using ui-router, which fires $stateChangeSuccess instead of $routeChangeSuccess.

@@ -58,8 +58,8 @@ angular.module('hoodpubControllers', []).
 
         }])
     .controller('hoodpubControllers', [
-        '$rootScope', '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks',
-        function($rootScope, $scope, $window, $routeParams, $http, Books, UserBooks){
+        '$rootScope', '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks', 'Analytics', '$uibModal',
+        function($rootScope, $scope, $window, $routeParams, $http, Books, UserBooks, Analytics, $uibModal){
             // scope functions
             $scope.search = function(keyword) {
                 if ($scope.keyword)
@@ -69,6 +69,7 @@ angular.module('hoodpubControllers', []).
                     delete $scope.items;
                     $scope.items = res.results;
                     next = res['next'];
+                    Analytics.trackEvent('search', 'keyword', $scope.keyword);
                 });
             }
 
@@ -93,7 +94,19 @@ angular.module('hoodpubControllers', []).
             }
 
             $scope.read_book = function(item){
+
                 if (typeof $rootScope.userprofile == 'undefined'){
+
+                    var modalInstance = $uibModal.open({
+                        animation: $scope.animationsEnabled,
+                        templateUrl: "myModalContent.html",
+                        resolve: {
+                            items: function () {
+                                return $scope.items;
+                            }
+                        }
+                    });
+
                     console.log('please login', $rootScope.userprofile);
                     return ;
                 }

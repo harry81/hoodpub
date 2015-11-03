@@ -23,7 +23,7 @@ def deploy():
                            DB_PORT='5432'):
                 run('python manage.py migrate')
                 run('python manage.py collectstatic   --noinput')
-                run('sudo /etc/init.d/hoodpub2-uwsgi stop')
+                run('/etc/init.d/hoodpub2-uwsgi stop')
                 run('rm -rf ../run/*')
-                run('sudo /etc/init.d/hoodpub2-uwsgi start')
+                run('/etc/init.d/hoodpub2-uwsgi start')
     local('curl http://dev.hoodpub.com/ > /dev/null ')
