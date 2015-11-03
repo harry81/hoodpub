@@ -38,15 +38,16 @@ def register_by_access_token(request, backend):
         profile = user.userprofile_set.all()[0]
         profile.set_facebook_profile(request, token=token)
 
+        if User.objects.filter(email=user.email).count() > 1:
+            social = UserSocialAuth.objects.get(uid=profile.sns_id)
+            social.user = User.objects.filter(email=user.email)[0]
+            social.save()
+
         token = get_access_token(user)
         template = loader.get_template('hoodpub_auth/gateway.html')
         context = RequestContext(request, {
             'objects': token.content,
         })
-        if User.objects.filter(email=user.email).count() > 1:
-            social = UserSocialAuth.objects.get(uid=profile.sns_id)
-            social.user = User.objects.filter(email=user.email)[0]
-            social.save()
 
         return HttpResponse(template.render(context))
 

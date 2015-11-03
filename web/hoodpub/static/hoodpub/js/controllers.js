@@ -66,7 +66,7 @@ angular.module('hoodpubControllers', []).
                     keyword = $scope.keyword;
                 Books.query({'search': keyword }).$promise.then(function(res) {
                     console.log(res);
-
+                    delete $scope.items;
                     $scope.items = res.results;
                     next = res['next'];
                 });

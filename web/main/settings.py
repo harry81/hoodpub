@@ -28,7 +28,6 @@ import sys
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = RUNNING_DEVSERVER
-DEBUG =  False
 ADMINS = (('John', 'chharry@gmail.com'),)
 ALLOWED_HOSTS = [u'.dev.hoodpub.com',
 '.hoodpub.com',
