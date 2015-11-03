@@ -12,7 +12,7 @@ class Read(models.Model):
     created_at = models.DateTimeField(default=datetime.now, blank=True)
 
     class Meta:
-        ordering = ('created_at',)
+        ordering = ('-created_at',)
 
     def __unicode__(self):
         return u'%s %s' % (
