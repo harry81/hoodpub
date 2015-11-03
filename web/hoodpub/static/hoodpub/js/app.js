@@ -56,10 +56,27 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                 $httpProvider.interceptors.push('jwtInterceptor');
 
                 AnalyticsProvider.setAccount('UA-60843143-1');
-
                 AnalyticsProvider
                     .logAllCalls(true)
                     .startOffline(true);
+
+                // Track all routes (default is true).
+                AnalyticsProvider.trackPages(true);
+
+                // Track all URL query params (default is false).
+                AnalyticsProvider.trackUrlParams(true);
+
+                // Ignore first page view (default is false).
+                // Helpful when using hashes and whenever your bounce rate looks obscenely low.
+                AnalyticsProvider.ignoreFirstPageLoad(true);
+
+                // URL prefix (default is empty).
+                // Helpful when the app doesn't run in the root directory.
+                AnalyticsProvider.trackPrefix('my-application');
+
+                // Change the default page event name.
+                // Helpful when using ui-router, which fires $stateChangeSuccess instead of $routeChangeSuccess.
+                AnalyticsProvider.setPageEvent('$stateChangeSuccess');
             }])
 ;
 
