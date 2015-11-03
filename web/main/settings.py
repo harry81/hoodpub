@@ -36,8 +36,6 @@ ALLOWED_HOSTS = [u'.dev.hoodpub.com',
 
 
 TEMPLATE_DEBUG = True
-
-
 # Application definition
 
 INSTALLED_APPS = (
