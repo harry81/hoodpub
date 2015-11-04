@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import json
+from mock import MagicMock, patch, Mock
 
 from django.test import TestCase
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework import status
-from django.contrib.auth.models import User
 from .models import Book
 from .utils import search_via_book_api
-
 
 class BookTestCase(TestCase):
 
@@ -36,19 +37,27 @@ class BookTestCase(TestCase):
         token = json.loads(res.content)['token']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
-        self.book1 = Book.objects.all()[1]
+        self.book1 = Book.objects.all()[100]
         self.book2 = Book.objects.all()[2]
 
-    def test_api_book_load(self):
-        self.skipTest(True)
+    @patch('requests.get')
+    def test_api_book_load(self, mock_requests):
+        book_response = open('book/fixtures/book_response_from_daum.mock', 'rt').read()
+        mock_requests.return_value = HttpResponse(book_response)
+        mock_requests.status_code = 200
+
         res = self.client.get('/api-book/load/',
                               {'title': self.book1.title}, format='json')
-        res = json.loads(res.content)
+        content = json.loads(res.content)
         self.assertTrue(Book.objects.all().count() > 10)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_search_via_book_api(self):
-        self.skipTest(True)
+    @patch('requests.get')
+    def test_search_via_book_api(self, mock_requests):
+        book_response = open('book/fixtures/book_response_from_daum.mock', 'rt').read()
+        mock_requests.return_value = HttpResponse(book_response)
+        mock_requests.status_code = 200
+
         res = search_via_book_api(title=self.book1.title)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 

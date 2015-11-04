@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [u'.dev.hoodpub.com',
 'hoodpub.com',
 ]
 
+DEBUG_TOOLBAR_PATCH_SETTINGS = True
 
 TEMPLATE_DEBUG = True
 # Application definition
@@ -53,6 +54,7 @@ INSTALLED_APPS = (
     'rest_framework_social_oauth2',
     'django_extensions',
     'rest_framework',
+    'debug_toolbar',
     'djcelery',
     'book',
     'hoodpub',
