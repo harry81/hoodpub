@@ -51,4 +51,5 @@ class Command(BaseCommand):
             if book.exists():
                 book = book[0]
                 profile.set_read(isbn=book.isbn, created_at=obj['date'])
-                print 'Success [%5d]: %s read %s on %s' % (cnt, profile.user.username, book.title, obj['date'])
+                print 'Success [%5d]: %s read %s on %s' % (
+                    cnt, profile.user.username, book.title, obj['date'])

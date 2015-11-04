@@ -4,7 +4,8 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets
-from rest_framework.decorators import list_route, detail_route, permission_classes
+from rest_framework.decorators import (list_route,
+                                       detail_route, permission_classes)
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
@@ -47,7 +48,8 @@ class HoodpubAPIView(viewsets.ModelViewSet):
     @detail_route(methods=['get'])
     def users(self, request, *args, **kwargs):
         self.queryset = self.get_queryset().filter(
-            read__userprofile__sns_id=kwargs['pk']).order_by('-read__created_at')
+            read__userprofile__sns_id=kwargs['pk']).order_by(
+                '-read__created_at')
 
         return super(HoodpubAPIView, self).list(request, *args, **kwargs)
 

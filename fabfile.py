@@ -10,6 +10,10 @@ def host_type():
 
 
 def deploy():
+
+    local('cd web; flake8 hoodpub book')
+    local('cd web; REUSE_DB=1 python manage.py test -v3 book hoodpub')
+
     put('web/main/settings_local.py',
         'work/hoodpub/web/main/')
     with prefix('source /home/hoodpub/.virt_env/hoodpub2/bin/activate'):
