@@ -36,4 +36,3 @@ class Book(models.Model):
                 self.save()
                 return True
         return False
-

@@ -91,4 +91,3 @@ class BookTestCase(TestCase):
         mock_requests.status_code = 200
         self.book1.rename_cover_url()
         self.assertIn('https', self.book1.cover_s_url)
-
