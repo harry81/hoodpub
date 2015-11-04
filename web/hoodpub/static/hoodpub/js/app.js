@@ -57,8 +57,7 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
 
                 AnalyticsProvider.setAccount('UA-35673137-1');
                 AnalyticsProvider
-                    .logAllCalls(true)
-                    .startOffline(true);
+                    .logAllCalls(true);
 
                 // Track all routes (default is true).
                 AnalyticsProvider.trackPages(true);

@@ -3,7 +3,8 @@ from django.db.models import Count
 
 from rest_framework import viewsets
 from rest_framework import filters
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, permission_classes
+from rest_framework.permissions import AllowAny
 
 from .serializers import BookSerializer
 from .models import Book
@@ -27,6 +28,7 @@ class BookAPIView(viewsets.ModelViewSet):
         res = search_via_book_api(title=request.GET['title'])
         return JsonResponse({'content': res.content})
 
+    @permission_classes((AllowAny, ))
     def list(self, request, *args, **kwargs):
         if 'search' in request.GET:
             async_search_via_book_api.delay(
