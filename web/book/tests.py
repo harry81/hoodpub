@@ -83,3 +83,12 @@ class BookTestCase(TestCase):
         data = json.loads(res.content)
         self.assertIn('sns_id', str(
                       data['results'][0]['reads']))
+
+    @patch('requests.get')
+    def test_rename_cover_url_into_https(self, mock_requests):
+        self.assertIn('http', self.book1.cover_s_url)
+        self.assertNotIn('https', self.book1.cover_s_url)
+        mock_requests.status_code = 200
+        self.book1.rename_cover_url()
+        self.assertIn('https', self.book1.cover_s_url)
+

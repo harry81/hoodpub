@@ -1,3 +1,4 @@
+import requests
 from datetime import datetime
 from django.db import models
 
@@ -26,3 +27,13 @@ class Book(models.Model):
 
     def __unicode__(self):
         return u'%s %s' % (self.pk, self.title)
+
+    def rename_cover_url(self):
+        if 'https' not in self.cover_s_url[0:5]:
+            self.cover_s_url = self.cover_s_url.replace('http', 'https')
+            resp = requests.get(self.cover_s_url)
+            if resp.status_code == 200:
+                self.save()
+                return True
+        return False
+
