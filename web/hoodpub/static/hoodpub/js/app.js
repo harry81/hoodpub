@@ -55,7 +55,7 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                 }];
                 $httpProvider.interceptors.push('jwtInterceptor');
 
-                AnalyticsProvider.setAccount('UA-60843143-1');
+                AnalyticsProvider.setAccount('UA-35673137-1');
                 AnalyticsProvider
                     .logAllCalls(true)
                     .startOffline(true);
