@@ -22,7 +22,10 @@ def save_books(items):
         item['author'] = strip_tags(parser.unescape(item['author']))
         item['author_t'] = strip_tags(parser.unescape(item['author_t']))
         item['isbn13'] = strip_tags(parser.unescape(item['isbn13']))
-        Book.objects.update_or_create(isbn=item['isbn'], defaults=item)
+        book, created = Book.objects.update_or_create(
+            isbn=item['isbn'], defaults=item)
+        if created:
+            book.rename_cover_url()
 
 
 def search_via_book_api(url='https://apis.daum.net/search/book',
