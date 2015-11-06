@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from mock import patch
+from requests import exceptions
 
 from django.test import TestCase
 from django.http import HttpResponse
@@ -91,3 +92,13 @@ class BookTestCase(TestCase):
         mock_requests.status_code = 200
         self.book1.rename_cover_url()
         self.assertIn('https', self.book1.cover_s_url)
+
+    @patch('requests.get')
+    def test_rename_cover_url_into_https_with_empty_url(self, mock_requests):
+        self.book1.cover_s_url = ''
+        self.book1.save()
+        e = exceptions.MissingSchema(
+            "Invalid URL '': No schema supplied. Perhaps you meant http://?")
+        mock_requests.side_effect = e
+        res = self.book1.rename_cover_url()
+        self.assertFalse(res)

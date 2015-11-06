@@ -8,8 +8,8 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 
+from social.apps.django_app.default.models import UserSocialAuth
 from social.apps.django_app.utils import psa
-from social.apps.django_app.default.models import Association, Code, Nonce, UserSocialAuth
 from .utils import get_access_token
 
 

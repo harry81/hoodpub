@@ -1,4 +1,5 @@
 import requests
+from requests import exceptions
 from datetime import datetime
 from django.db import models
 
@@ -31,7 +32,10 @@ class Book(models.Model):
     def rename_cover_url(self):
         if 'https' not in self.cover_s_url[0:5]:
             self.cover_s_url = self.cover_s_url.replace('http', 'https')
-            resp = requests.get(self.cover_s_url)
+            try:
+                resp = requests.get(self.cover_s_url)
+            except exceptions.MissingSchema:
+                return False
             if resp.status_code == 200:
                 self.save()
                 return True
