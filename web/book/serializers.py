@@ -35,8 +35,6 @@ class BookSerializer(serializers.ModelSerializer):
         if request is None or request.user.is_anonymous():
             return False
         else:
-            if 'isbn' in obj:
-                return False
             profile = request.user.userprofile_set.all()[0]
             if profile.read.filter(book__isbn=obj.isbn).exists():
                 return True
@@ -44,6 +42,3 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ('author', 'title', 'link', 'pub_nm', 'author',
-                  'cover_s_url', 'isbn', 'sale_price', 'reads',
-                  'total_read', 'is_read')
