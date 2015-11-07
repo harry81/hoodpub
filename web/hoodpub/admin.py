@@ -12,7 +12,8 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'profile'
-    fields = ['sns_id', 'name', 'link', 'gender']
+    fields = ['sns_id', 'name', 'link', 'gender',
+              'facebook_access_token']
 
 
 class UserAdmin(UserAdmin):
