@@ -60,8 +60,8 @@ angular.module('hoodpubControllers', []).
 
         }])
     .controller('hoodpubControllers', [
-        '$rootScope', '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks', 'Analytics', '$uibModal',
-        function($rootScope, $scope, $window, $routeParams, $http, Books, UserBooks, Analytics, $uibModal){
+        '$rootScope', '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks', 'Analytics', '$uibModal', '$location', 
+        function($rootScope, $scope, $window, $routeParams, $http, Books, UserBooks, Analytics, $uibModal, $location){
             // scope functions
             $scope.search = function(keyword) {
                 if ($scope.keyword)
@@ -71,6 +71,7 @@ angular.module('hoodpubControllers', []).
                     delete $scope.items;
                     $scope.items = res.results;
                     next = res['next'];
+
                     Analytics.trackEvent('search', 'keyword', $scope.keyword);
                 });
             }
@@ -81,6 +82,9 @@ angular.module('hoodpubControllers', []).
 
                     $scope.items = res.results;
                     next = res['next'];
+                    console.log('user api');
+                    $location.path('/books', false);
+
                 });
             }
 
