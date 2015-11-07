@@ -37,10 +37,10 @@ def register_by_access_token(request, backend):
         login(request, user)
         profile = user.userprofile_set.all()[0]
         profile.set_facebook_profile(request, token=token)
-
         if User.objects.filter(email=user.email).count() > 1:
             social = UserSocialAuth.objects.get(uid=profile.sns_id)
-            social.user = User.objects.filter(email=user.email)[0]
+            social.user = User.objects.filter(
+                email=user.email).order_by('date_joined')[0]
             social.save()
 
         token = get_access_token(user)
