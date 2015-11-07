@@ -1,0 +1,43 @@
+<div class="container" >
+  <div class="panel-body" >
+    <div class="row">
+      <div class="col-md-8">
+        <div class="col-md-4 text-center">
+          <p>
+            <a href="{{ item.link}}" target="_blank">
+              <img ng-src={{item.cover_s_url}} class="img-rounded img-responsive center-block bg-warning">
+            </a>
+          </p>
+          <p><b>{{ item.title }}</b>{{ item.category }} </p>
+          <p>{{ item.pub_nm }} </p>
+          <p>{{ item.author }}</p>
+        </div>
+
+        <div class="col-md-8 text-left">
+          <p class="col-md-12 text-center">{{ item.description }}</p><br/>
+          <hr/>
+
+          <div class="col-md-8">
+            <div ng-repeat="read in item.reads" class="col-md-3">
+              <a href="" ng-click="search_users(read.user[0].sns_id)" title="{{read.user[0].first_name}}" >
+                <img src="https://graph.facebook.com/{{read.user[0].sns_id}}/picture?width=38&height=38" class="img-circle" >
+              </a>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+      <div class="row  text-center">
+      <hr/>
+        <div
+           class="fb-like"
+           data-share="true"
+           data-width="450"
+           data-show-faces="true">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

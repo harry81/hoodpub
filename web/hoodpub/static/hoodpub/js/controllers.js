@@ -78,24 +78,24 @@ angular.module('hoodpubControllers', []).
 
             $scope.search_users = function(sns_id) {
                 UserBooks.query({'sns_id': sns_id }).$promise.then(function(res) {
-                    console.log(res);
-
+                    delete $scope.items;
                     $scope.items = res.results;
                     next = res['next'];
-                    console.log('user api');
-                    $location.path('/books', false);
-
+                    console.log('user api', $scope.items);
+                    $location.path('/user/'+ sns_id, true);
                 });
             }
 
-            $scope.book_detail = function(id){
-                $window.location.href = '/#/book_detail?id='+id;
+            $scope.book = function(id){
+                $window.location.href = '/#/book?id='+id;
             }
 
-            $scope.get_book_detail = function(id){
+            $scope.get_book = function(id){
                 Books.get({'id': id}).$promise.then(function(res){
-                    console.log('detail : ',  res);
+                    console.log('detail in get_book: ',  res);
+                    delete $scope.item;
                     $scope.item = res;
+                    $location.path('/book/'+ id, true);
                 });
             }
 
@@ -158,9 +158,17 @@ angular.module('hoodpubControllers', []).
                 $window.location.href = '/#/';
             }
 
-            if ($window.location.hash.indexOf('book_detail') > -1){
-                $scope.get_book_detail($routeParams.id);
+
+            if ($window.location.hash.indexOf('book') > -1){
+                console.log('before detail in get_book: ');
+                $scope.get_book($routeParams.book_id);
             }
-            $scope.search();
+            else if ($window.location.hash.indexOf('user') > -1){
+                $scope.search_users($routeParams.user_id);
+            }
+            else if ($window.location.hash.indexOf('/') > -1){
+                $scope.search();
+            }
+
         }])
 ;

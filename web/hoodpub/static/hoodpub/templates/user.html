@@ -1,0 +1,32 @@
+
+<div class="container" >
+  <div class="panel-body" >
+    <div class="row">
+      <div class="col-xs-3 col-md-3">
+        <a href="{{ item.link}}" target="_blank">
+          <img ng-src={{item.cover_s_url}} class="img-rounded img-responsive center-block">
+        </a>
+        <br>
+        <p>
+          <button type="button" class="btn btn-success center-block" ng-show="!item.is_read" ng-click="read_book(item)">
+            읽기</button>
+        </p>
+
+      </div>
+      <div class="col-xs-9 col-md-5">
+        <p><b>{{ item.title }}</b> {{ item.category }} </p>
+        <p>{{ item.pub_nm }} </p>
+        <p>{{ item.sale_price | currency:'Won ':0}} </p>
+        <p>{{ item.author }} </p>
+        <p>{{ item.total_read }} </p>
+      </div>
+      <div class="col-xs-9 col-md-4">
+        <div ng-repeat="read in item.reads" class="col-md-3">
+          <a href="" ng-click="search_users(read.user[0].sns_id)" title="{{read.user[0].first_name}}" >
+            <img src="https://graph.facebook.com/{{read.user[0].sns_id}}/picture?width=38&height=38" class="img-circle" >
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

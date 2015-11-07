@@ -24,19 +24,23 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                         templateUrl: '/static/hoodpub/templates/books.html',
                         controller: 'hoodpubControllers'
                     }).
-                    when('/book_search', {
+                    when('/', {
                         templateUrl: '/static/hoodpub/templates/book_search.html',
                         controller: 'hoodpubControllers'
                     }).
-                    when('/book_detail', {
-                        templateUrl: '/static/hoodpub/templates/book_detail.html',
+                    when('/book/:book_id', {
+                        templateUrl: '/static/hoodpub/templates/book.html',
+                        controller: 'hoodpubControllers'
+                    }).
+                    when('/user/:user_id', {
+                        templateUrl: '/static/hoodpub/templates/book_search.html',
                         controller: 'hoodpubControllers'
                     }).
                     when('/order_complete', {
                         templateUrl: '/static/hoodpub/templates/order_complete.html',
                         controller: 'hoodpubControllers'
                     }).
-                    otherwise({redirectTo: '/book_search'});
+                    otherwise({redirectTo: '/'});
 
                 $httpProvider.defaults.xsrfCookieName = 'csrftoken';
                 $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -77,7 +81,7 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                 // Helpful when using ui-router, which fires $stateChangeSuccess instead of $routeChangeSuccess.
                 AnalyticsProvider.setPageEvent('$stateChangeSuccess');
             }]).
-        app.run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {
+       run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {
         var original = $location.path;
         $location.path = function (path, reload) {
             if (reload === false) {
