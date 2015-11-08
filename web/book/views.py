@@ -32,11 +32,9 @@ class BookAPIView(viewsets.ModelViewSet):
         if 'search' in request.GET:
             async_search_via_book_api.delay(
                 request.GET['search'].encode('utf-8'))
+        else:
+            self.queryset = self.get_queryset().annotate(
+                total_count=Count('read')).order_by(
+                    '-total_count', '-read__created_at')
 
         return super(BookAPIView, self).list(request, *args, **kwargs)
-
-    def get_queryset(self):
-        queryset = self.queryset.annotate(
-            total_count=Count('read')).order_by(
-                '-total_count', '-read__created_at')
-        return queryset
