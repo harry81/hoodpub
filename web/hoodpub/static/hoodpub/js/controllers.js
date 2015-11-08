@@ -27,7 +27,7 @@ angular.module('hoodpubControllers', []).
                         console.log('$rootScope is set', $rootScope.userprofile);
                     }, function(res) {
                         console.log('api-user fail', res.status, res);
-                        $window.location.href = '/hoodpub-auth/facebook';
+                        // $window.location.href = '/hoodpub-auth/facebook';
 
                     });
             }
