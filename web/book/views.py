@@ -13,9 +13,7 @@ from .tasks import async_search_via_book_api
 
 
 class BookAPIView(viewsets.ModelViewSet):
-    queryset = Book.objects.all().annotate(
-        total_count=Count('read')).order_by(
-            '-total_count')
+    queryset = Book.objects.all()
     serializer_class = BookSerializer
     search_fields = ('title', 'description', 'author', 'pub_nm')
     filter_backends = (filters.SearchFilter,)
@@ -30,7 +28,15 @@ class BookAPIView(viewsets.ModelViewSet):
 
     @permission_classes((AllowAny, ))
     def list(self, request, *args, **kwargs):
+
         if 'search' in request.GET:
             async_search_via_book_api.delay(
                 request.GET['search'].encode('utf-8'))
+
         return super(BookAPIView, self).list(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = self.queryset.annotate(
+            total_count=Count('read')).order_by(
+                '-total_count', '-read__created_at')
+        return queryset

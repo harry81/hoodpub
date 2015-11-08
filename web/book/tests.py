@@ -75,7 +75,7 @@ class BookTestCase(TestCase):
         self.assertTrue(Book.objects.all().count() > 10)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_sns_is_exist(self):
+    def test_sns_id_exist(self):
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book1.isbn}, format='json')
 

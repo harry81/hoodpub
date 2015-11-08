@@ -14,7 +14,7 @@ class Book(models.Model):
     author = models.CharField(max_length=168)
     author_t = models.CharField(max_length=168)
     sale_price = models.CharField(max_length=168)
-    title = models.CharField(max_length=168)
+    title = models.CharField(db_index=True, max_length=168)
     translator = models.CharField(max_length=168)
     link = models.CharField(max_length=168)
     etc_author = models.CharField(max_length=128)

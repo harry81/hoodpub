@@ -9,7 +9,8 @@ from .utils import facebook_set_profile
 
 class Read(models.Model):
     book = models.ForeignKey(Book)
-    created_at = models.DateTimeField(default=datetime.now, blank=True)
+    created_at = models.DateTimeField(db_index=True,
+                                      default=datetime.now, blank=True)
 
     class Meta:
         ordering = ('-created_at',)
