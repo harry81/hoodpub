@@ -45,7 +45,6 @@ class BookAPIView(viewsets.ModelViewSet):
 
 def book(request, book_id):
     template = loader.get_template('hoodpub/book.html')
-    objects = None
     book = Book.objects.get(isbn=book_id)
     context = RequestContext(request, {
         'book': book,
