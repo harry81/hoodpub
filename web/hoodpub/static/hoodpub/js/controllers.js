@@ -82,7 +82,7 @@ angular.module('hoodpubControllers', []).
                     $scope.items = res.results;
                     next = res['next'];
                     console.log('user api', $scope.items);
-                    $location.path('/user/'+ sns_id, true);
+                    $location.path('/user/'+ sns_id, false);
                 });
             }
 
@@ -95,7 +95,7 @@ angular.module('hoodpubControllers', []).
                     console.log('detail in get_book: ',  res);
                     delete $scope.item;
                     $scope.item = res;
-                    $location.path('/book/'+ id, true);
+                    $location.path('/book/'+ id);
                 });
             }
 
