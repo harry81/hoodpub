@@ -16,6 +16,7 @@ router.register(r'api-hoodpub', hoodpub_views.HoodpubAPIView,
 
 urlpatterns = patterns('',
      url(r'^$', hoodpub_views.index),
+     url(r'^book/(?P<book_id>[0-9]+)/$', book_views.book),
      url(r'^', include(router.urls)),
      url(r'^hoodpub-auth/', include('hoodpub_auth.urls')),
      url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),

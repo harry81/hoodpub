@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from django.template import RequestContext, loader
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.db.models import Count
 
@@ -38,3 +41,13 @@ class BookAPIView(viewsets.ModelViewSet):
                     '-total_count', '-read__created_at')
 
         return super(BookAPIView, self).list(request, *args, **kwargs)
+
+
+def book(request, book_id):
+    template = loader.get_template('hoodpub/book.html')
+    objects = None
+    book = Book.objects.get(isbn=book_id)
+    context = RequestContext(request, {
+        'book': book,
+    })
+    return HttpResponse(template.render(context))

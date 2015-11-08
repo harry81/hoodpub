@@ -1,73 +1,81 @@
+{% extends "hoodpub/index.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html ng-app="app">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hoodpub</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script>
-      window.fbAsyncInit = function() {
-      FB.init({
-      appId      : '732574183517551',
-      xfbml      : true,
-      version    : 'v2.4'
-      });
-      };
 
-      (function(d, s, id){
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-    </script>
+{% block meta %}
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# hoodpub: http://ogp.me/ns/fb/hoodpub#">
+<meta property="fb:app_id" content="254645177977123" />
+<meta property="og:type"   content="hoodpub:book" />
+<meta property="og:url"    content="http://{{ request.META.HTTP_HOST }}{{  request.path }}" />
+<meta property="og:title"  content="{{ book.title }}" />
 
-  </head>
-  <body class="ng-cloak">
-    {% block content %}
-    {% verbatim %}
+<meta property="og:image" content="{{book.cover_l_url}}" />
 
-    <nav class="navbar navbar-default" role="navigation" ng-controller="userControllers">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/#/">Hoodpub</a>
+
+<meta property="og:site_name" content="HoodPub" />
+<meta property="og:description" content="{% autoescape off %}
+{{ book.description }}
+{% endautoescape %}
+" />
+<meta property="fb:admins" content="100003181778636" />
+
+<meta property="book:author - {{ book.author }}" />
+<meta property="book:isbn - string - {{ book.isbn }}" />
+<meta property="book:release_date - datetime - {{ book.pubDate }}" />
+<meta property="book:tag - string array - {{ book.isbn }}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="book_info">
+    <div class="book_picture">
+      <a href="{{ book.link }}">  <img src="{{ book.cover_l_url }}"></a>
+      <p class="book-author">{{ book.author }}</p>
+      <div class="read_color_container" style="max-width:100px" id="book_{{book.book_id}}" >
+        <div id="book_color_me"   class="read_color {% if book.read_my  %} read_me {% endif %}"> </div>
+        <div id="book_color_friend"  title="See more friends" class="read_color {% if book.read_friend  %} read_friend {% endif %}"   >   </div>
+        <div id="book_color_other" class="read_color {% if book.read_other   %} read_other {% endif %}"   > </div>
       </div>
+    </div>
+    <div class="book_description">
+      <p class="book-title">{{ book.title }}</p>
+      <p class="book-description">
+        {% autoescape off  %}
+        {{ book.description }}
+        {% endautoescape %}
+      </p>
+      <p class="book-isbn">{{ book.isbn }}</p>
+      <p class="book-categoryName">{{ book.categoryName }} </p>
+      <p class="book-publisher">{{ book.publisher }}</p>
+    </div>
 
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav" >
-          <li ng-show="!$root.userprofile"><a href="/hoodpub-auth/facebook">Login</a></li>
-          <li ng-show="$root.userprofile"><a href="javascript:void(0);" ng-click="logout()">Logout</a></li>
-          <li ng-show="$root.userprofile"><a href="#">{{ $root.userprofile.user.username }}</a></li>
+  </div>
+  <hr style="float:right;"/>
+
+  <div class="clearboth social_info">
+    <div class="social_friends">
+      <div style="float:bottom; border: 0px solid #999;">
+        <h3>People who read this book</h3><br/>
+        <ul>
+          {% for friend in friends %}
+          <li>
+            <a href =http://www.hoodpub.com/listbooks?user={{ friend.user_facebook_id }}>
+              <img src = 'https://graph.facebook.com/{{ friend.user_facebook_id }}/picture' title="{{ friend.user_name }}"/></a>
+          </li>
+          {% endfor%}
         </ul>
       </div>
-    </nav>
-
-    <div class="view-animate-container">
-      <div ng-view class="view-animate"></div>
     </div>
-    {% endverbatim %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-resource.js"></script>
-    <script src="https://code.angularjs.org/1.4.3/angular-route.js"></script>
-    <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.js"></script>
-    <script src="{% static 'hoodpub/js/bower_components/angular-google-analytics/dist/angular-google-analytics.js' %}"></script>
-    <script src="{% static 'hoodpub/js/ng-infinite-scroll.js' %}"></script>
-    <script src="{% static 'hoodpub/js/angular-relative-date.js' %}"></script>
-    <script src="{% static 'hoodpub/js/ui-bootstrap-custom-build/ui-bootstrap-custom-tpls-0.14.3.js' %}"></script>
-    <script src="{% static 'hoodpub/js/services.js' %}"></script>
-    <script src="{% static 'hoodpub/js/controllers.js' %}"></script>
-    <script src="{% static 'hoodpub/js/app.js' %}"></script>
-    {% endblock  %}
-  </body>
-</html>
 
+    <div class="social_sns">
+      <div>  <fb:like send="False" width="300" show_faces="true" font="verdana"></fb:like>  </div>
+      <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{{  request.path }}" data-num-posts="2" ></div>
+    </div>
+  </div>
+
+  <hr style="float:right;"/>
+
+  <div class="clearboth navi">
+    <button class="btn" onclick="location.href='{{request.META.HTTP_REFERER}}'">Go back</button>
+  </div>
+</div>
+{% endblock %}
