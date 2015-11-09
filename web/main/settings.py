@@ -131,7 +131,7 @@ AUTHENTICATION_BACKENDS = (
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_EXPIRATION_DELTA': timedelta(seconds=3000),
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=2592000),
     }
 
 PROPRIETARY_BACKEND_NAME = 'Facebook'
