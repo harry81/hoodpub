@@ -45,7 +45,10 @@ class BookAPIView(viewsets.ModelViewSet):
 
 def book(request, book_id):
     template = loader.get_template('hoodpub/book.html')
-    book = Book.objects.get(isbn=book_id)
+    try:
+        book = Book.objects.get(isbn=book_id)
+    except Book.DoesNotExist:
+        book = None
     context = RequestContext(request, {
         'book': book,
     })
