@@ -35,7 +35,7 @@ def facebook_set_profile(request, *args, **kwargs):
     if 'email' in data:
         userprofile.email = data['email']
     else:
-        fb_fields.pop('email')
+        fb_fields.pop(fb_fields.index('email'))
 
     userprofile.save(
         update_fields=fb_fields)
