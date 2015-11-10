@@ -76,14 +76,12 @@ class BookTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_sns_id_exist(self):
-        res = self.client.post('/api-hoodpub/read/',
-                               {'isbn': self.book1.isbn}, format='json')
+        self.client.post('/api-hoodpub/read/',
+                         {'isbn': self.book1.isbn}, format='json')
 
-        res = self.client.get('/api-book/',
-                              {'title': self.book1.title}, format='json')
-        data = json.loads(res.content)
-        self.assertIn('sns_id', str(
-                      data['results'][0]['reads']))
+        self.assertEqual(self.book1.read_set.all()[0]
+                         .userprofile_set.all()[0].sns_id,
+                         u'213232')
 
     @patch('requests.get')
     def test_rename_cover_url_into_https(self, mock_requests):

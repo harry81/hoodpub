@@ -142,6 +142,16 @@ CELERY_RESULT_BACKEND = "amqp"
 import djcelery
 djcelery.setup_loader()
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 try:
     from settings_local import *
 except ImportError:

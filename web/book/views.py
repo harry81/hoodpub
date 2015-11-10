@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.db.models import Count
 
+from django.core.cache import cache
+
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.decorators import list_route, permission_classes
@@ -11,6 +13,7 @@ from rest_framework.permissions import AllowAny
 
 from .serializers import BookSerializer
 from .models import Book
+from hoodpub.models import Read
 from .utils import search_via_book_api
 from .tasks import async_search_via_book_api
 
@@ -36,9 +39,18 @@ class BookAPIView(viewsets.ModelViewSet):
             async_search_via_book_api.delay(
                 request.GET['search'].encode('utf-8'))
         else:
-            self.queryset = self.get_queryset().annotate(
-                total_count=Count('read')).order_by(
-                    '-total_count', '-read__created_at')
+            books_for_anonoymous = cache.get('books_for_anonoymous')
+            if not book_for_anonoymous:
+                books_for_anonoymous = list(Read.objects.values_list(
+                    'book', flat=True).annotate(
+                        total_count=Count('book')).order_by(
+                            '-total_count')[:100])
+
+                cache.set('user_anonymous', book_for_anonoymous, 60 * 60 * 6)
+            self.queryset = self.get_queryset().filter(
+                isbn__in=books_for_anonoymous).annotate(
+                    total_count=Count('read')).order_by(
+                        '-total_count', '-read__created_at')
 
         return super(BookAPIView, self).list(request, *args, **kwargs)
 
