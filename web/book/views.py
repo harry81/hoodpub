@@ -40,13 +40,13 @@ class BookAPIView(viewsets.ModelViewSet):
                 request.GET['search'].encode('utf-8'))
         else:
             books_for_anonoymous = cache.get('books_for_anonoymous')
-            if not book_for_anonoymous:
+            if not books_for_anonoymous:
                 books_for_anonoymous = list(Read.objects.values_list(
                     'book', flat=True).annotate(
                         total_count=Count('book')).order_by(
                             '-total_count')[:100])
 
-                cache.set('user_anonymous', book_for_anonoymous, 60 * 60 * 6)
+                cache.set('user_anonymous', books_for_anonoymous, 60 * 60 * 6)
             self.queryset = self.get_queryset().filter(
                 isbn__in=books_for_anonoymous).annotate(
                     total_count=Count('read')).order_by(
