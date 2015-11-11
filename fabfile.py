@@ -30,4 +30,4 @@ def deploy():
                 run('/etc/init.d/hoodpub2-uwsgi stop')
                 run('rm -rf ../run/*')
                 run('/etc/init.d/hoodpub2-uwsgi start')
-    local('curl http://dev.hoodpub.com/ > /dev/null ')
+    run('curl http://www.hoodpub.com/ -H \"Host: www.hoodpub.com\"> /dev/null')

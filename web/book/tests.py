@@ -39,7 +39,7 @@ class BookTestCase(TestCase):
         token = json.loads(res.content)['token']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
-        self.book1 = Book.objects.all()[100]
+        self.book1 = Book.objects.all()[1]
         self.book2 = Book.objects.all()[2]
 
     @patch('requests.get')
@@ -72,7 +72,7 @@ class BookTestCase(TestCase):
 
         self.assertIn('total_read',
                       data['results'][0].keys())
-        self.assertTrue(Book.objects.all().count() > 10)
+        self.assertTrue(Book.objects.all().count() > 4)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_sns_id_exist(self):
