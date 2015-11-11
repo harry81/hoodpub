@@ -48,7 +48,7 @@ class BookAPIView(viewsets.ModelViewSet):
 
                 cache.set('user_anonymous', books_for_anonoymous, 60 * 60 * 6)
             self.queryset = self.get_queryset().filter(
-                isbn__in=books_for_anonoymous).annotate(
+                isbn__in=set(books_for_anonoymous)).annotate(
                     total_count=Count('read')).order_by(
                         '-total_count', '-read__created_at')
 
