@@ -30,7 +30,7 @@
     <div class="panel-heading">
       <h3>{{ book.title }}</h3>
     </div>
-    <div class="col-xs-12 panel-body">
+    <div class="panel-body">
       <div class="col-xs-12 col-md-3">
         <a href="{{ book.link }}">  <img src="{{ book.cover_l_url }}"></a>
       </div>
@@ -46,27 +46,33 @@
         {% endautoescape %}
       </div>
 
-      <table class="col-xs-6 cols-md-12 table">
-        {% for read in book.read_set.all %}
-        <tr>
-          {% for userprofile in read.userprofile_set.all %}
-          {{ userprofile.user.sns_id }}
-          <td>
-            <a href="/#/user/{{ userprofile.sns_id }}" ng-click="search_users({{ userprofile.sns_id }})" title="{{ userprofile.user.username }}" >
-              <img src="https://graph.facebook.com/{{userprofile.sns_id}}/picture?width=25&height=25" class="img-circle" >
-            </a>
-          </td>
-          <td>
-            {{ userprofile.user.username }}
-          </td>
-          <td>{{ read.created_at |date:"Y-M-d" }}
-          </td>
+      <div class="col-xs-12 cols-md-12">
+        <table class="table">
+          {% for read in book.read_set.all %}
+          <tr>
+            {% for userprofile in read.userprofile_set.all %}
+            {{ userprofile.user.sns_id }}
+            <td>
+              <a href="/#/user/{{ userprofile.sns_id }}" ng-click="search_users({{ userprofile.sns_id }})" title="{{ userprofile.user.username }}" >
+                <img src="https://graph.facebook.com/{{userprofile.sns_id}}/picture?width=25&height=25" class="img-circle" >
+              </a>
+            </td>
+            <td>
+              {{ userprofile.user.username }}
+            </td>
+            <td>{{ read.created_at |date:"Y-M-d" }}
+            </td>
+            {% endfor%}
+          </tr>
           {% endfor%}
-        </tr>
-        {% endfor%}
-      </table>
-    
+        </table>
+      </div>
+    </div>
+
+    <div class="panel-footer center-block">
+      <button type="button" onclick="location.href='http://google.com';" class="btn btn-default">목록보기</button>
+    </div>
   </div>
-  <hr style="float:right;"/>
+</div>
 
 {% endblock %}

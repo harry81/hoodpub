@@ -11,10 +11,9 @@ from .models import Book
 
 
 def save_books(items):
+    parser = HTMLParser.HTMLParser()
 
     for item in items:
-        parser = HTMLParser.HTMLParser()
-
         item['pub_date'] = datetime.strptime(item['pub_date'], '%Y%m%d')
         item['title'] = strip_tags(parser.unescape(item['title']))
         item['description'] = strip_tags(parser.unescape(item['description']))
