@@ -25,42 +25,48 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="book_picture">
-      <a href="{{ book.link }}">  <img src="{{ book.cover_l_url }}"></a>
-      <p class="book-author">{{ book.author }}</p>
-      <div class="read_color_container" style="max-width:100px" id="book_{{book.book_id}}" >
-        <div id="book_color_me"   class="read_color {% if book.read_my  %} read_me {% endif %}"> </div>
-        <div id="book_color_friend"  title="See more friends" class="read_color {% if book.read_friend  %} read_friend {% endif %}"   >   </div>
-        <div id="book_color_other" class="read_color {% if book.read_other   %} read_other {% endif %}"   > </div>
-      </div>
+<div class="col-xs-12 col-md-4 col-md-offset-4">
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <h3>{{ book.title }}</h3>
     </div>
-    <div class="book_description">
-      <p class="book-title">{{ book.title }}</p>
-      <p class="book-description">
+    <div class="col-xs-12 panel-body">
+      <div class="col-xs-12 col-md-3">
+        <a href="{{ book.link }}">  <img src="{{ book.cover_l_url }}"></a>
+      </div>
+      <div class="col-xs-12 col-md-9">
+        <p class="book-categoryName">{{ book.category }} </p>
+        <p class="book-author">{{ book.author }}</p>
+        <p class="book-publisher">{{ book.pub_nm }}</p>
+        <p class="">{{ book.list_price }}</p>
+        <p class="">{{ book.pub_date |date:"Y-M-d"}}</p>
+
         {% autoescape off  %}
         {{ book.description }}
         {% endautoescape %}
-      </p>
-      <p class="book-isbn">{{ book.isbn }}</p>
-      <p class="book-categoryName">{{ book.categoryName }} </p>
-      <p class="book-publisher">{{ book.publisher }}</p>
-    </div>
+      </div>
 
-  </div>
-<hr style="float:right;"/>
-
-        <div class="col-xs-12 col-md-4">
-          <div ng-repeat="read in book.reads" class="col-md-3 col-xs-3 pull-right">
-            {% for read in book.read_set.all %}
-            {% for userprofile in read.userprofile_set.all %}
-            {{ userprofile.user.username }}
-            {{ userprofile.user.sns_id }}
-            <a href="" ng-click="search_users({{ userprofile.sns_id }})" title="title" >
-              <img src="https://graph.facebook.com/{{userprofile.sns_id}}/picture?width=38&height=38" class="img-circle" >
+      <table class="col-xs-6 cols-md-12 table">
+        {% for read in book.read_set.all %}
+        <tr>
+          {% for userprofile in read.userprofile_set.all %}
+          {{ userprofile.user.sns_id }}
+          <td>
+            <a href="/#/user/{{ userprofile.sns_id }}" ng-click="search_users({{ userprofile.sns_id }})" title="{{ userprofile.user.username }}" >
+              <img src="https://graph.facebook.com/{{userprofile.sns_id}}/picture?width=25&height=25" class="img-circle" >
             </a>
-            {% endfor%}
-            {% endfor%}
-          </div>
-        </div>
+          </td>
+          <td>
+            {{ userprofile.user.username }}
+          </td>
+          <td>{{ read.created_at |date:"Y-M-d" }}
+          </td>
+          {% endfor%}
+        </tr>
+        {% endfor%}
+      </table>
+    
+  </div>
+  <hr style="float:right;"/>
+
 {% endblock %}
