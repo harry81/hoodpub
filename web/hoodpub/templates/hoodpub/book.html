@@ -28,26 +28,30 @@
 <div class="col-xs-12 col-md-4 col-md-offset-4">
   <div class="panel panel-warning">
     <div class="panel-heading">
-      <h3>{{ book.title }}</h3>
+      <center><h3>{{ book.title }}</h3></center>
     </div>
     <div class="panel-body">
-      <div class="col-xs-12 col-md-3">
+      <div class="col-xs-6 col-md-3">
         <a href="{{ book.link }}">  <img src="{{ book.cover_l_url }}"></a>
       </div>
-      <div class="col-xs-12 col-md-9">
-        <p class="book-categoryName">{{ book.category }} </p>
-        <p class="book-author">{{ book.author }}</p>
-        <p class="book-publisher">{{ book.pub_nm }}</p>
+      <div class="col-xs-6 col-md-9">
+        <p >{{ book.category }} </p>
+        <p >{{ book.author }}</p>
+        <p >{{ book.pub_nm }}</p>
         <p class="">{{ book.list_price }}</p>
         <p class="">{{ book.pub_date |date:"Y-M-d"}}</p>
 
+      </div>
+      <div class="col-xs-12 col-md-9">
+        <hr/>
         {% autoescape off  %}
         {{ book.description }}
         {% endautoescape %}
       </div>
 
       <div class="col-xs-12 cols-md-12">
-        <table class="table">
+        <hr/>
+        <table class="table table-condensed">
           {% for read in book.read_set.all %}
           <tr>
             {% for userprofile in read.userprofile_set.all %}
@@ -70,7 +74,7 @@
     </div>
 
     <div class="panel-footer center-block">
-      <button type="button" onclick="location.href='http://google.com';" class="btn btn-default">목록보기</button>
+      <center><button type="button" onclick="history.go(-1);" class="btn btn-default">목록보기</button></center>
     </div>
   </div>
 </div>
