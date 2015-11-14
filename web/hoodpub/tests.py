@@ -68,3 +68,6 @@ class HoodpubTestCase(TestCase):
         res = self.client.get('/api-hoodpub/%s/users/' % self.profile.sns_id)
         data = json.loads(res.content)
         self.assertEqual(1, data['count'])
+
+    # def test_trim_isbn(self):
+    #     import ipdb; ipdb.set_trace()

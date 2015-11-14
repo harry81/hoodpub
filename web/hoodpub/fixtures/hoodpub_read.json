@@ -1,26 +1,34 @@
 [
-  {
-    "pk": 121,
-    "model": "hoodpub.read",
-    "fields": {
-      "book": "8959194514",
-      "created_at": "2012-06-13T07:07:09Z"
+    {
+        "pk": 121,
+        "model": "hoodpub.read",
+        "fields": {
+            "book": "8959194514",
+            "created_at": "2012-06-13T07:07:09Z"
+        }
+    },
+    {
+        "pk": 122,
+        "model": "hoodpub.read",
+        "fields": {
+            "book": "8959062154",
+            "created_at": "2012-06-13T07:10:03Z"
+        }
+    },
+    {
+        "pk": 124,
+        "model": "hoodpub.read",
+        "fields": {
+            "book": "8997227432",
+            "created_at": "2012-06-12T06:20:02Z"
+        }
+    },
+    {
+        "pk": 125,
+        "model": "hoodpub.read",
+        "fields": {
+            "book": "&lt;b&gt;8972882437&lt;/b&gt;",
+            "created_at": "2014-06-12T06:20:02Z"
+        }
     }
-  },
-  {
-    "pk": 122,
-    "model": "hoodpub.read",
-    "fields": {
-      "book": "8959062154",
-      "created_at": "2012-06-13T07:10:03Z"
-    }
-  },
-  {
-    "pk": 124,
-    "model": "hoodpub.read",
-    "fields": {
-      "book": "8997227432",
-      "created_at": "2012-06-12T06:20:02Z"
-    }
-  }
 ]
