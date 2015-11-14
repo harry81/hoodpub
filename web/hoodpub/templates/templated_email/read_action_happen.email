@@ -1,0 +1,15 @@
+
+{% block html %}
+{% block subject %} {{full_name}} 독서 {% endblock %}
+{{ userprofile.last_name}}님께서 {{book}}을 읽었습니다.
+
+{{book.cover_s_url}}
+
+<img src="https://graph.facebook.com/{{userprofile.sns_id}}/picture?width=38&height=38" class="img-circle" >
+
+<a href="http://hoodpub.com/#/user/{{userprofile.sns_id}}">
+  <img src="{{book.cover_l_url}}" class="img-rounded img-responsive center-block">
+</a>
+
+
+{% endblock %}

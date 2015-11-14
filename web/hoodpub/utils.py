@@ -4,8 +4,30 @@ import json
 from urlparse import urljoin
 from django.utils.html import strip_tags
 import HTMLParser
+from templated_email import send_templated_mail
 
 from book.models import Book
+
+
+def _send_email_after_read(request):
+
+    if 'isbn' in request.DATA:
+        isbn = request.DATA['isbn']
+
+    try:
+        book = Book.objects.get(isbn=isbn)
+    except Book.DoesNotExist:
+        return None
+
+    send_templated_mail(
+        template_name='read_action_happen',
+        from_email='hoodpub@hoodpub.com',
+        recipient_list=['chharry@gmail.com'],
+        context={
+            'userprofile': request.user.userprofile_set.all()[0],
+            'book': book
+        },
+    )
 
 
 def delete_reads(book):
@@ -94,5 +116,6 @@ def facebook_action_read(request):
     action = 'me/hoodpub:read'
     url = urljoin(url, action)
     res = requests.post(url, params=url_dict)
+    _send_email_after_read(request)
 
     return res

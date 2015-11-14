@@ -71,6 +71,10 @@ class HoodpubTestCase(TestCase):
         json_output = json.loads(res.content)
         self.assertIn('msg',  json_output['hoodpub'].keys())
 
+        from django.core.mail import outbox
+        mail = outbox.pop()
+        self.assertIsNotNone(mail.body)
+
     def test_is_read_by_user(self):
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book1.isbn}, format='json')
