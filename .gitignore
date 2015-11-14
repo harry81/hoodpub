@@ -2,3 +2,4 @@
 project.db
 *settings_local.py
 *TAGS*
+web/db*

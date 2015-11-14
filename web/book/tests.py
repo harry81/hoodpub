@@ -65,6 +65,25 @@ class BookTestCase(TestCase):
         res = search_via_book_api(title=self.book1.title)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
+    @patch('requests.get')
+    def test_search_via_book_api_with_none_isbn(self, mock_requests):
+        book_response = open('book/fixtures/book_response_'
+                             'from_daum_with_none_isbn.mock',
+                             'rt').read()
+        mock_requests.return_value = HttpResponse(book_response)
+        mock_requests.status_code = 200
+
+        book_cnt_before = Book.objects.count()
+
+        json_output = json.loads(book_response)
+        isbn_cnt = len(json_output['channel']['item'])
+
+        res = search_via_book_api(title=self.book1.title)
+        book_cnt_after = Book.objects.count()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(book_cnt_after, book_cnt_before + isbn_cnt - 1)
+
     def test_api_list(self):
         res = self.client.get('/api-book/',
                               {'search': self.book1.title}, format='json')

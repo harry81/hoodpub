@@ -16,6 +16,7 @@ class BookAdmin(admin.ModelAdmin):
     list_display = ('isbn', show_cover_l_url, 'title', 'author', 'author_t',
                     view_link_url, 'pub_nm', 'sale_price')
     list_display_links = ('title',)
+    search_fields = ['title']
 
     fieldsets = (
         (None, {

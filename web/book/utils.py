@@ -9,23 +9,32 @@ from django.conf import settings
 from django.utils.html import strip_tags
 from .models import Book
 
+parser = HTMLParser.HTMLParser()
+
 
 def save_books(items):
-    parser = HTMLParser.HTMLParser()
-
     for item in items:
+        item['isbn'] = _trim_text(item['isbn'])
+        if len(item['isbn']) == 0:
+            continue
+
         item['pub_date'] = datetime.strptime(item['pub_date'], '%Y%m%d')
-        item['title'] = strip_tags(parser.unescape(item['title']))
-        item['description'] = strip_tags(parser.unescape(item['description']))
-        item['pub_nm'] = strip_tags(parser.unescape(item['pub_nm']))
-        item['author'] = strip_tags(parser.unescape(item['author']))
-        item['author_t'] = strip_tags(parser.unescape(item['author_t']))
-        item['isbn13'] = strip_tags(parser.unescape(item['isbn13']))
-        item['isbn'] = strip_tags(parser.unescape(item['isbn']))
+        item['title'] = _trim_text(item['title'])
+        item['description'] = _trim_text(item['description'])
+        item['pub_nm'] = _trim_text(item['pub_nm'])
+        item['author'] = _trim_text(item['author'])
+        item['author_t'] = _trim_text(item['author_t'])
+        item['isbn13'] = _trim_text(item['isbn13'])
         book, created = Book.objects.update_or_create(
             isbn=item['isbn'], defaults=item)
         if created:
             book.rename_cover_url()
+
+    return True
+
+
+def _trim_text(data):
+    return strip_tags(parser.unescape(data))
 
 
 def search_via_book_api(url='https://apis.daum.net/search/book',
