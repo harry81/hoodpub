@@ -15,6 +15,10 @@ def db_backup():
     run('pg_dump hoodpub  -h localhost -U mycms_user  > /tmp/%s' % name)
     get('/tmp/%s' % name, 'db/%s' % name)
 
+def db_recreate():
+    local('psql postgres -h postgres -U mycms_user -c "drop database hoodpub"')
+    local('psql postgres -h postgres -U mycms_user -c "create database hoodpub"')
+    local('psql hoodpub -U mycms_user  -h postgres < ../db/hoodpub_db_2015-11-13.sql')
 
 def deploy():
 

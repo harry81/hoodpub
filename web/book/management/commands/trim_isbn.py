@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand
-from django.utils.html import strip_tags
 import HTMLParser
 
 from book.models import Book
+from hoodpub.models import Read
+from hoodpub.utils import move_read_new_book
 
 
 class Command(BaseCommand):
@@ -10,60 +11,32 @@ class Command(BaseCommand):
     parser = HTMLParser.HTMLParser()
 
     def handle(self, *args, **options):
+        book_long_isbn_before = Book.objects.filter(
+            isbn__iregex=r'^.{11,}$').count()
+
+        total_book_before = Book.objects.count()
+        total_read_bofore = Read.objects.count()
+        cnt_created = 0
+
         for old_book in Book.objects.filter(
                 isbn__iregex=r'^.{11,}$'):
-            isbn = strip_tags(self.parser.unescape(old_book.isbn))
+            new_book, created = move_read_new_book(old_book)
 
-            new_book_dict = old_book.__dict__.copy()
-            for key in ['_state', 'isbn']:
-                if key in new_book_dict:
-                    new_book_dict.pop(key)
-
-            new_book, created = Book.objects.get_or_create(
-                isbn=isbn, defaults=new_book_dict)
             if created:
-                self.stdout.write("%s created from %s\n" % (
-                    new_book, old_book), ending='')
+                cnt_created = cnt_created + 1
+                self.stdout.write("new book %s\n" % (
+                    new_book), ending='')
 
-            if old_book.read_set.all().count() > 1:
-                for read in old_book.read_set.all():
-                    self.stdout.write("%s will point %s from %s \n" % (
-                        read, new_book, old_book), ending='')
+        book_long_isbn_after = Book.objects.filter(
+            isbn__iregex=r'^.{11,}$').count()
+        total_book_after = Book.objects.count()
+        total_read_after = Read.objects.count()
 
-                    read.book = new_book
-                    read.save()
-
-        for old_book in Book.objects.filter(
-                isbn__iregex=r'^.{11,}$'):
-            old_book.delete()
-            
-        
-        # for book in Book.objects.all():
-        #     if len(book.isbn) > 11:
-        #         if book.read_set.all().count() > 1:
-        #             old_book = book
-        #             isbn = strip_tags(self.parser.unescape(book.isbn))
-        #             try:
-        #                 new_book = Book.objects.get(isbn=isbn)
-        #             except Book.DoesNotExist:
-        #                 continue
-
-        #             for read in old_book.read_set.all():
-        #                 self.stdout.write("OLD %14s-%14s\n" % (
-        #                     book.isbn, read), ending='')
-
-        #             for read in new_book.read_set.all():
-        #                 self.stdout.write("NEW %14s - %14s %d\n" % (
-        #                     book.isbn, read, read.id), ending='')
-
-        #             for read in old_book.read_set.all():
-        #                 read.book = new_book
-        #                 read.save()
-
-        #             for read in old_book.read_set.all():
-        #                 self.stdout.write("OLD %14s - %14s %d\n" % (
-        #                     book.isbn, read, read.id), ending='')
-
-        #             for read in new_book.read_set.all():
-        #                 self.stdout.write("NEW %14s - %14s %d\n" % (
-        #                     book.isbn, read, read.id), ending='')
+        self.stdout.write("BOFORE total books [%d], total reads [%d], "
+                          "long_isbn [%d]\n" %
+                          (total_book_before, total_read_bofore,
+                           book_long_isbn_before), ending='')
+        self.stdout.write("AFTER  total books [%d], total reads [%d], "
+                          "long_isbn [%d], created [%d]\n"
+                          % (total_book_after, total_read_after,
+                             book_long_isbn_after, cnt_created), ending='')

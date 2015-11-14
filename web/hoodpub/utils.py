@@ -3,8 +3,33 @@ import requests
 import json
 from urlparse import urljoin
 from django.conf import settings
+from django.utils.html import strip_tags
+import HTMLParser
+
 from book.models import Book
 
+
+def move_read_new_book(old_book):
+    parser = HTMLParser.HTMLParser()
+
+    isbn = strip_tags(parser.unescape(old_book.isbn))
+
+    new_book_dict = old_book.__dict__.copy()
+    for key in ['_state', 'isbn']:
+        if key in new_book_dict:
+            new_book_dict.pop(key)
+
+    new_book, created = Book.objects.get_or_create(
+        isbn=isbn, defaults=new_book_dict)
+
+    if old_book.read_set.all().count() > 0:
+        for read in old_book.read_set.all():
+            read.book = new_book
+            read.save()
+
+    if created or Book.objects.filter(isbn__contains=isbn).count > 2:
+        old_book.delete()
+    return new_book, created
 
 def facebook_set_profile(request, *args, **kwargs):
 

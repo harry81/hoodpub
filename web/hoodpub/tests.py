@@ -7,6 +7,7 @@ from rest_framework import status
 
 from .models import Read
 from book.models import Book
+from .utils import move_read_new_book
 
 
 class HoodpubTestCase(TestCase):
@@ -69,5 +70,23 @@ class HoodpubTestCase(TestCase):
         data = json.loads(res.content)
         self.assertEqual(1, data['count'])
 
-    # def test_trim_isbn(self):
-    #     import ipdb; ipdb.set_trace()
+    def test_trim_isbn(self):
+        # setup
+        for book in Book.objects.filter(isbn__contains='gt'):
+            self.profile.set_read(isbn=book.isbn)
+        self.assertTrue(self.profile.read.count(), 4)
+
+        # start
+        total_books = Book.objects.count()
+        total_reads = Read.objects.count()
+
+        for old_book in Book.objects.filter(isbn__iregex=r'^.{11,}$'):
+            book_cnt = old_book.read_set.count()
+            new_book = move_read_new_book(old_book)
+
+            self.assertEqual(old_book.read_set.all().count(), 0)
+            self.assertEqual(new_book.read_set.all().count(), book_cnt)
+            old_book.delete()
+
+        self.assertTrue(Book.objects.count(), total_books)
+        self.assertTrue(Read.objects.count(), total_reads)
