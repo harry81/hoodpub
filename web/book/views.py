@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.template import RequestContext, loader
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
 from django.http import JsonResponse
 from django.db.models import Count
 
@@ -51,7 +50,7 @@ class BookAPIView(viewsets.ModelViewSet):
             self.queryset = self.get_queryset().filter(
                 isbn__in=set(books_for_anonoymous)).annotate(
                     total_count=Count('read')).order_by(
-                        '-total_count', '-read__created_at')
+                        '-total_count')
 
         return super(BookAPIView, self).list(request, *args, **kwargs)
 

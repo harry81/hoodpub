@@ -31,6 +31,7 @@ def move_read_new_book(old_book):
         old_book.delete()
     return new_book, created
 
+
 def facebook_set_profile(request, *args, **kwargs):
 
     access_token = kwargs['token']

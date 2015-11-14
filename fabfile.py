@@ -9,6 +9,12 @@ env.use_ssh_config = True
 def host_type():
     run('uname -s')
 
+def flake8():
+    local('cd web; flake8 hoodpub book')
+
+def tests():
+    local('cd web; REUSE_DB=1 python manage.py test -v3 book hoodpub')
+
 
 def db_backup():
     name = 'hoodpub_db_%s.sql' % time.strftime("%Y-%m-%d")
@@ -22,8 +28,8 @@ def db_recreate():
 
 def deploy():
 
-    local('cd web; flake8 hoodpub book')
-    local('cd web; REUSE_DB=1 python manage.py test -v3 book hoodpub')
+    flake8()
+    tests()
 
     put('web/main/settings_local.py',
         'work/hoodpub/web/main/')
