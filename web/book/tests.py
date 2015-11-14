@@ -39,7 +39,7 @@ class BookTestCase(TestCase):
         token = json.loads(res.content)['token']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
-        self.book1 = Book.objects.all()[1]
+        self.book1 = Book.objects.exclude(cover_s_url__exact='')[1]
         self.book2 = Book.objects.all()[2]
 
     @patch('requests.get')

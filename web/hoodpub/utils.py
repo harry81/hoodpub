@@ -2,7 +2,6 @@
 import requests
 import json
 from urlparse import urljoin
-from django.conf import settings
 from django.utils.html import strip_tags
 import HTMLParser
 
@@ -74,38 +73,26 @@ def facebook_set_profile(request, *args, **kwargs):
 
 
 def facebook_action_read(request):
-    isbn = request.data['isbn']
+
+    if 'isbn' in request.DATA:
+        isbn = request.DATA['isbn']
 
     try:
-        book = Book.objects.get(isbn=isbn)
+        Book.objects.get(isbn=isbn)
     except Book.DoesNotExist:
         return None
 
-    url_dict = {
-        'access_token': 'CAAKaRbf67W8BAPwbVrLJ7twVaRQbxzF8BnKFBhytyUZBJX9e8gsHM\
-        YFU77O2bJWN1ZBBvZBaAu4euAewzp422cIk4jRIH7facChyBFCMV98AWlMYz3uXkxSGjZCb\
-        N5LCFhaXglRZBLNyqnfZAdPLtZCBXJE0VO0rV7svn3lPVOWPnLsacWemmjF2ICxKGA7\
-        OnEZD',
-        'mothod': 'POST',
-    }
+    userprofile = request.user.userprofile_set.all()[0]
 
-    data_dict = {
-        "object":
-        {
-            "books:author": "http://samples.ogp.me/344562145628374",
-            "books:isbn": book.isbn,
-            "fb:app_id": settings.SOCIAL_AUTH_FACEBOOK_KEY,
-            "og:description": book.description,
-            "og:image": book.cover_s_url,
-            "og:type": "books.book",
-            "og:title": "Snow Crash",
-            "og:url": "http://localhost:8000/#/book_detail?id=8997969145",
-        }
+    url_dict = {
+        'access_token': '%s' % userprofile.facebook_access_token,
+        'mothod': 'POST',
+        'book': 'http://hoodpub.com/book/%s/' % isbn
     }
 
     url = 'https://graph.facebook.com/'
-    action = 'me/objects/books.book'
+    action = 'me/hoodpub:read'
     url = urljoin(url, action)
-    res = requests.post(url, params=url_dict, json=data_dict)
+    res = requests.post(url, params=url_dict)
 
     return res

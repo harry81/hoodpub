@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
+from mock import patch
+
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
@@ -22,8 +24,12 @@ class HoodpubTestCase(TestCase):
                                             password='password',
                                             email='hoodpub@hoodpub.com')
         self.profile = self.usr.userprofile_set.all()[0]
-        self.profile.sns_id = '213232'
-        self.profile.save(update_fields=['sns_id'])
+        self.profile.sns_id = '1032010'
+        self.profile.facebook_access_token = 'CAADnmTNgiSMBAPWASU2FOjXocA4uj'
+        'xFBkCUTVyqMMXZCaHzEPtwCS5m2LyGP3RAJsmXB9ZC0ZA2CkOZCwdll5CSRyaAIpb0NL'
+        'uaWME6sRZAXBg8ZAfGHffzvEnZCusbqj2sX8NEzk4g0ArRHKwCwZCSgZA9Ca8qaD4V25'
+        'XZAiHyknpIpZAYQZB6eekkD20dBqI4EUzkZD'
+        self.profile.save(update_fields=['sns_id', 'facebook_access_token', ])
 
         self.book1 = Book.objects.all()[1]
         self.book2 = Book.objects.all()[2]
@@ -39,7 +45,7 @@ class HoodpubTestCase(TestCase):
         token = json.loads(res.content)['token']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
-    def test_facebook_action_read(self):
+    def test_read_action(self):
 
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book1.isbn}, format='json')
@@ -53,6 +59,17 @@ class HoodpubTestCase(TestCase):
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book2.isbn}, format='json')
         self.assertFalse(res.data['hoodpub']['success'])
+
+    @patch('requests.get')
+    def test_facebook_read_action(self, mock_requests):
+        mock_requests.return_value = '{"id":"641729025968976"}'
+        mock_requests.status_code = 200
+
+        res = self.client.post('/api-hoodpub/read/',
+                               {'isbn': self.book1.isbn}, format='json')
+
+        json_output = json.loads(res.content)
+        self.assertIn('msg',  json_output['hoodpub'].keys())
 
     def test_is_read_by_user(self):
         res = self.client.post('/api-hoodpub/read/',

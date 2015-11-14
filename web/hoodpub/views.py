@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from .serializers import UserProfileSerializer
-from .utils import facebook_action_read
+from .tasks import async_facebook_action_read
 
 from book.serializers import BookSerializer
 from book.models import Book
@@ -59,9 +59,10 @@ class HoodpubAPIView(viewsets.ModelViewSet):
         user_profile = self.request.user.userprofile_set.all()[0]
         kwargs['isbn'] = request.data['isbn']
         res_hoodpub = user_profile.set_read(request, *args, **kwargs)
-        res_facebook = facebook_action_read(request)
+        # res_facebook = facebook_action_read(request)
+        async_facebook_action_read.delay(request)
+
         resp = {
-            'hoodpub': res_hoodpub,
-            'facebook': res_facebook
+            'hoodpub': res_hoodpub
         }
         return Response(resp)
