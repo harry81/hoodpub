@@ -1,4 +1,5 @@
 from fabric.api import *
+import time
 
 env.user = 'hoodpub'
 env.hosts = ['www.hoodpub.com']
@@ -7,6 +8,12 @@ env.use_ssh_config = True
 
 def host_type():
     run('uname -s')
+
+
+def db_backup():
+    name = 'hoodpub_db_%s.sql' % time.strftime("%Y-%m-%d")
+    run('pg_dump hoodpub  -h localhost -U mycms_user  > /tmp/%s' % name)
+    get('/tmp/%s' % name, 'db/%s' % name)
 
 
 def deploy():

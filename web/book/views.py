@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.template import RequestContext, loader
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from django.http import JsonResponse
 from django.db.models import Count
 
