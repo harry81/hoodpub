@@ -9,6 +9,12 @@ import HTMLParser
 from book.models import Book
 
 
+def delete_reads(book):
+    for read in book.read_set.all():
+        read.delete()
+        print '%s deleted' % book
+
+
 def move_read_new_book(old_book):
     parser = HTMLParser.HTMLParser()
 

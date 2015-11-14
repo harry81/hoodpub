@@ -7,7 +7,7 @@ from rest_framework import status
 
 from .models import Read
 from book.models import Book
-from .utils import move_read_new_book
+from .utils import move_read_new_book, delete_reads
 
 
 class HoodpubTestCase(TestCase):
@@ -89,3 +89,19 @@ class HoodpubTestCase(TestCase):
 
         self.assertTrue(Book.objects.count(), total_books)
         self.assertTrue(Read.objects.count(), total_reads)
+
+    def test_delete_read_in_book(self):
+        # setup
+        for book in Book.objects.filter(isbn__contains='gt'):
+            self.profile.set_read(isbn=book.isbn)
+        self.assertTrue(self.profile.read.count(), 4)
+
+        book = Book.objects.get(isbn__icontains='8972882437')
+        book_read = book.read_set.count()
+        total_read = Read.objects.count()
+
+        self.assertEqual(book_read, 2)
+
+        delete_reads(book)
+        self.assertEqual(book.read_set.count(), 0)
+        self.assertEqual(Read.objects.count(), total_read - book_read)
