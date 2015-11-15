@@ -59,8 +59,7 @@ class HoodpubAPIView(viewsets.ModelViewSet):
         user_profile = self.request.user.userprofile_set.all()[0]
         kwargs['isbn'] = request.data['isbn']
         res_hoodpub = user_profile.set_read(request, *args, **kwargs)
-        # res_facebook = facebook_action_read(request)
-        async_facebook_action_read.delay(request)
+        async_facebook_action_read.delay(user_profile.sns_id, kwargs['isbn'])
 
         resp = {
             'hoodpub': res_hoodpub

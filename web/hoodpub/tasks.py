@@ -6,5 +6,5 @@ from .utils import facebook_action_read
 
 
 @shared_task
-def async_facebook_action_read(request):
-    return facebook_action_read(request)
+def async_facebook_action_read(sns_id, isbn):
+    return facebook_action_read(sns_id, isbn)

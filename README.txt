@@ -10,3 +10,7 @@ python manage.py celery worker --loglevel=DEBUG
 
 ### nginx ssl setting
 http://stackoverflow.com/questions/6783268/django-uwsgi-nginx-ssl/14893209#14893209
+
+### debug for celery tasks
+from celery.contrib import rdb; rdb.set_trace()
+

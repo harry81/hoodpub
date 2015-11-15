@@ -7,24 +7,16 @@ import HTMLParser
 from templated_email import send_templated_mail
 
 from book.models import Book
+from hoodpub.models import User
 
 
-def _send_email_after_read(request):
-
-    if 'isbn' in request.DATA:
-        isbn = request.DATA['isbn']
-
-    try:
-        book = Book.objects.get(isbn=isbn)
-    except Book.DoesNotExist:
-        return None
-
+def _send_email_after_read(user, book):
     send_templated_mail(
         template_name='read_action_happen',
         from_email='hoodpub@hoodpub.com',
         recipient_list=['chharry@gmail.com'],
         context={
-            'userprofile': request.user.userprofile_set.all()[0],
+            'userprofile': user.userprofile_set.all()[0],
             'book': book
         },
     )
@@ -94,28 +86,21 @@ def facebook_set_profile(request, *args, **kwargs):
         update_fields=fb_fields)
 
 
-def facebook_action_read(request):
-
-    if 'isbn' in request.DATA:
-        isbn = request.DATA['isbn']
-
-    try:
-        Book.objects.get(isbn=isbn)
-    except Book.DoesNotExist:
-        return None
-
-    userprofile = request.user.userprofile_set.all()[0]
+def facebook_action_read(sns_id, isbn):
+    user = User.objects.get(userprofile__sns_id=sns_id)
+    book = Book.objects.get(isbn=isbn)
 
     url_dict = {
-        'access_token': '%s' % userprofile.facebook_access_token,
+        'access_token': '%s' %
+        user.userprofile_set.all()[0].facebook_access_token,
         'mothod': 'POST',
-        'book': 'http://hoodpub.com/book/%s/' % isbn
+        'book': 'https://hoodpub.com/book/%s/' % isbn
     }
 
     url = 'https://graph.facebook.com/'
     action = 'me/hoodpub:read'
     url = urljoin(url, action)
     res = requests.post(url, params=url_dict)
-    _send_email_after_read(request)
+    _send_email_after_read(user, book)
 
     return res
