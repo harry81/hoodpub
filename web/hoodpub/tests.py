@@ -76,12 +76,15 @@ class HoodpubTestCase(TestCase):
         self.assertIsNotNone(mail.body)
 
     def test_is_read_by_user(self):
+        usp = self.usr.userprofile_set.all()[0]
+        self.assertNotIn(self.book1.isbn, usp.read.values_list(
+            'book_id', flat=True))
         res = self.client.post('/api-hoodpub/read/',
-                               {'isbn': self.book1.isbn}, format='json')
-        res = self.client.get('/api-book/',
-                              {'title': self.book1.title}, format='json')
-        data = json.loads(res.content)
-        self.assertTrue(data['results'][0]['is_read'])
+                               {'isbn': self.book1.isbn},
+                               format='json')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn(self.book1.isbn, usp.read.values_list(
+            'book_id', flat=True))
 
     def test_users(self):
         res = self.client.post('/api-hoodpub/read/',
