@@ -87,7 +87,7 @@ def facebook_set_profile(request, *args, **kwargs):
 
 
 def facebook_action_read(sns_id, isbn):
-    user = User.objects.get(userprofile__sns_id=sns_id)
+    user = User.objects.filter(userprofile__sns_id=sns_id).order_by('id')[0]
     book = Book.objects.get(isbn=isbn)
 
     url_dict = {
