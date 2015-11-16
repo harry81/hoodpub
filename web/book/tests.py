@@ -3,6 +3,8 @@ import json
 from mock import patch
 from requests import exceptions
 
+from django.core.cache import cache
+
 from django.test import TestCase
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -119,3 +121,18 @@ class BookTestCase(TestCase):
         mock_requests.side_effect = e
         res = self.book1.rename_cover_url()
         self.assertFalse(res)
+
+    def test_search_keyword_cache(self):
+        res1 = self.client.get('/api-book/',
+                              {'search': u'검색어'}, format='json')
+
+        search_keyword = cache.get('search_keyword')
+        self.assertTrue(search_keyword[0], u'검색어')
+
+        res2 = self.client.get('/api-book/',
+                               {'search': u'검색어'}, format='json')
+        data1 = json.loads(res1.content)
+        data2 = json.loads(res2.content)
+
+        self.assertTrue(data1, data2)
+

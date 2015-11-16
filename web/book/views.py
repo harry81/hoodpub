@@ -36,8 +36,16 @@ class BookAPIView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
 
         if 'search' in request.GET:
-            async_search_via_book_api.delay(
-                request.GET['search'].encode('utf-8'))
+            keyword = request.GET['search'].encode('utf-8')
+            search_keyword = cache.get('search_keyword')
+
+            if not search_keyword:
+                search_keyword=[]
+            if keyword not in search_keyword:
+                search_keyword.append(keyword)
+                async_search_via_book_api.delay(keyword)
+                cache.set('search_keyword', search_keyword, 60 * 60 * 24)
+
         else:
             books_for_anonoymous = cache.get('books_for_anonoymous')
             if not books_for_anonoymous:
