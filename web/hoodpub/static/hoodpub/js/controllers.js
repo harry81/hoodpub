@@ -68,6 +68,7 @@ angular.module('hoodpubControllers', []).
         '$rootScope', '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks', 'Analytics', '$uibModal', '$location', 
         function($rootScope, $scope, $window, $routeParams, $http, Books, UserBooks, Analytics, $uibModal, $location){
             // scope functions
+
             $scope.search = function(keyword) {
                 if ($scope.keyword)
                     keyword = $scope.keyword;
@@ -88,6 +89,7 @@ angular.module('hoodpubControllers', []).
                     next = res['next'];
                     console.log('user api', $scope.items);
                     $location.path('/user/'+ sns_id, false);
+                    Analytics.trackEvent('user', 'sns_id', sns_id);
                 });
             }
 
@@ -96,6 +98,7 @@ angular.module('hoodpubControllers', []).
             }
 
             $scope.get_book = function(id){
+                Analytics.trackEvent('book', 'isbn', id);
                 Books.get({'id': id}).$promise.then(function(res){
                     console.log('detail in get_book: ',  res);
                     delete $scope.item;
@@ -129,12 +132,12 @@ angular.module('hoodpubControllers', []).
                 }
                 $http(req).then(function()
                                 {
-                                    console.log('sucess');
                                     item.is_read = true;
                                     item.total_read++;
                                     item.reads.push([
                                         {'sns_id': $rootScope.userprofile.sns_id,
                                          'name': $rootScope.userprofile.name}]);
+                                    Analytics.trackEvent('read', 'isbn', isbn);
                                 },
                                 function()
                                 {
@@ -174,6 +177,5 @@ angular.module('hoodpubControllers', []).
             else if ($window.location.hash.indexOf('/') > -1){
                 $scope.search();
             }
-
         }])
 ;

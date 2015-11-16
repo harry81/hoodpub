@@ -23,9 +23,11 @@
 <meta property="book:release_date - datetime - {{ book.pubDate }}" />
 <meta property="book:tag - string array - {{ book.isbn }}" />
 {% endblock %}
+<title>{% block title %}{{ book.title }}{% endblock %}</title>
 
 {% block content %}
-<div class="col-xs-12 col-md-4 col-md-offset-4">
+
+<div class="col-xs-12 col-md-4 col-md-offset-4" ng-controller="hoodpubControllers">
   <div class="panel panel-warning">
     <div class="panel-heading">
       <center><h3>{{ book.title }}</h3></center>
