@@ -124,7 +124,7 @@ class BookTestCase(TestCase):
 
     def test_search_keyword_cache(self):
         res1 = self.client.get('/api-book/',
-                              {'search': u'검색어'}, format='json')
+                               {'search': u'검색어'}, format='json')
 
         search_keyword = cache.get('search_keyword')
         self.assertTrue(search_keyword[0], u'검색어')
@@ -135,4 +135,3 @@ class BookTestCase(TestCase):
         data2 = json.loads(res2.content)
 
         self.assertTrue(data1, data2)
-

@@ -40,7 +40,7 @@ class BookAPIView(viewsets.ModelViewSet):
             search_keyword = cache.get('search_keyword')
 
             if not search_keyword:
-                search_keyword=[]
+                search_keyword = []
             if keyword not in search_keyword:
                 search_keyword.append(keyword)
                 async_search_via_book_api.delay(keyword)
