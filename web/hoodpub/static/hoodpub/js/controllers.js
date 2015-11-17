@@ -173,7 +173,6 @@ angular.module('hoodpubControllers', []).
                 else{
                     $scope.goto_list();
                 }
-
             }
 
             if ($window.location.hash.indexOf('book') > -1){

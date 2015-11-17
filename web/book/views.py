@@ -44,7 +44,7 @@ class BookAPIView(viewsets.ModelViewSet):
             if keyword not in search_keyword:
                 search_keyword.append(keyword)
                 async_search_via_book_api.delay(keyword)
-                cache.set('search_keyword', search_keyword, 60 * 60 * 24)
+                cache.set('search_keyword', search_keyword, 60 * 60)
 
         else:
             books_for_anonoymous = cache.get('books_for_anonoymous')
@@ -53,8 +53,8 @@ class BookAPIView(viewsets.ModelViewSet):
                     'book', flat=True).annotate(
                         total_count=Count('book')).order_by(
                             '-total_count')[:300])
-
-                cache.set('user_anonymous', books_for_anonoymous, 60 * 60 * 6)
+                cache.set('books_for_anonoymous', books_for_anonoymous,
+                          60 * 60 * 6)
             self.queryset = self.get_queryset().filter(
                 isbn__in=set(books_for_anonoymous)).annotate(
                     total_count=Count('read')).order_by(

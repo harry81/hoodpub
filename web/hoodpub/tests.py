@@ -69,7 +69,7 @@ class HoodpubTestCase(TestCase):
                                {'isbn': self.book1.isbn}, format='json')
 
         json_output = json.loads(res.content)
-        self.assertIn('msg',  json_output['hoodpub'].keys())
+        self.assertIn('msg', json_output['hoodpub'].keys())
 
         from django.core.mail import outbox
         mail = outbox.pop()

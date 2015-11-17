@@ -20,15 +20,17 @@ class BookAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'link', 'pub_nm', 'sale_price')
-            }), ('Advanced options', {
-                'fields': (
-                    ('author', 'author_t'),
-                    ('isbn', 'isbn13'),
-                    ('description'),
-                    )
-                }),
-        )
+            'fields': (
+                'title', 'link', 'pub_nm', 'sale_price')
+        }),
+        ('Advanced options', {
+            'fields': (
+                ('author', 'author_t'),
+                ('isbn', 'isbn13'),
+                ('description'),
+            )
+        })
+    )
 
 
 admin.site.register(Book, BookAdmin)

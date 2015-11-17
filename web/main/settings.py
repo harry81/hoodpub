@@ -24,8 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5na+q+@*3v8^8&vm1iv=z^vod=1+=dz_ntrnk74x^b8vktgw*s'
 
-import sys
-
 DEBUG = True
 
 if 'USER' in os.environ:
@@ -34,10 +32,8 @@ if 'USER' in os.environ:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ADMINS = (('John', 'chharry@gmail.com'),)
-ALLOWED_HOSTS = [u'.dev.hoodpub.com',
-'.hoodpub.com',
-'hoodpub.com',
-]
+ALLOWED_HOSTS = [u'.dev.hoodpub.com', '.hoodpub.com',
+                 'hoodpub.com']
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = True
 
@@ -124,7 +120,8 @@ MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 STATIC_ROOT = os.path.join(DATA_DIR, 'static')
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
+TEMPLATED_EMAIL_BACKEND =\
+    'templated_email.backends.vanilla_django.TemplateBackend'
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookAppOAuth2',
@@ -137,7 +134,7 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_EXPIRATION_DELTA': timedelta(seconds=2592000),
-    }
+}
 
 PROPRIETARY_BACKEND_NAME = 'Facebook'
 

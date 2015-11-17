@@ -26,7 +26,7 @@ def register_by_access_token(request, backend):
         'client_secret': settings.SOCIAL_AUTH_FACEBOOK_SECRET,
         'redirect_uri': settings.SOCIAL_AUTH_FACEBOOK_REDIRECT,
         'code': request.GET.get('code')
-        }
+    }
     url = 'https://graph.facebook.com/oauth/access_token'
     res = requests.get(url, params=get_code_payload)
 
