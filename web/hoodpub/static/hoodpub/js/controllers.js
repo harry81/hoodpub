@@ -167,15 +167,13 @@ angular.module('hoodpubControllers', []).
             }
 
             $scope.go_back = function(){
-                prev = $window.history.get_length > 1
-                if ($window.history.get_length > 1){
+                if ($window.history.length > 1){
                     $window.history.back(-1);
                 }
                 else{
                     $scope.goto_list();
                 }
 
-                console.log('history.splice(-2)', $window.history.get_length, $window.history.length, $window.history);
             }
 
             if ($window.location.hash.indexOf('book') > -1){
