@@ -29,14 +29,15 @@ def register_by_access_token(request, backend):
     }
     url = 'https://graph.facebook.com/oauth/access_token'
     res = requests.get(url, params=get_code_payload)
-
     token = urlparse.parse_qs(res.content)['access_token'][0]
     user = request.backend.do_auth(token)
 
+    profile = user.userprofile_set.all()[0]
+    profile.set_facebook_profile(request, token=token)
+
     if user:
         login(request, user)
-        profile = user.userprofile_set.all()[0]
-        profile.set_facebook_profile(request, token=token)
+
         if User.objects.filter(email=user.email).count() > 1:
             social = UserSocialAuth.objects.get(uid=profile.sns_id)
             social.user = User.objects.filter(

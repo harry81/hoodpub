@@ -51,10 +51,9 @@ def move_read_new_book(old_book):
     return new_book, created
 
 
-def facebook_set_profile(request, *args, **kwargs):
+def facebook_set_profile(userprofile, *args, **kwargs):
 
     access_token = kwargs['token']
-    userprofile = request.user.userprofile_set.all()[0]
 
     url_dict = {
         'access_token': access_token,

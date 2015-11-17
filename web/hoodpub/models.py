@@ -42,7 +42,7 @@ class UserProfile(models.Model):
         return u'Profile of user: %s' % self.user.username
 
     def set_facebook_profile(self, request, *args, **kwargs):
-        facebook_set_profile(request, *args, **kwargs)
+        facebook_set_profile(self, *args, **kwargs)
 
     def set_read(self, request=None, *args, **kwargs):
         if request is not None:
