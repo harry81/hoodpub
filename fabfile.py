@@ -27,13 +27,18 @@ def db_recreate():
     local('psql postgres -h postgres -U mycms_user -c "create database hoodpub"')
     local('psql hoodpub -U mycms_user  -h postgres < ../db/hoodpub_db_2015-11-13.sql')
 
-def host_restart():
+def host_app_restart():
     run('/etc/init.d/hoodpub2-uwsgi stop')
     run('rm /home/hoodpub/work/hoodpub/run/uwsgi*')
-    host_start()
+    host_app_start()
 
-def host_start():
+def host_app_start():
     run('/etc/init.d/hoodpub2-uwsgi start')
+
+def host_celery_restart():
+    with prefix('source /home/hoodpub/.virt_env/hoodpub2/bin/activate'):
+        with cd('/home/hoodpub/work/hoodpub/web'):
+            run('newrelic-admin run-program python manage.py celery worker --loglevel=INFO')
 
 def tag_newrelic():
     sha1 = local('git rev-parse --short HEAD', capture=True)
@@ -77,4 +82,5 @@ def deploy():
                 run('rm -rf ../run/*')
                 run('/etc/init.d/hoodpub2-uwsgi start')
     run('curl http://www.hoodpub.com/ -H \"Host: www.hoodpub.com\"> /dev/null')
+    host_celery_restart()
     tag_newrelic()

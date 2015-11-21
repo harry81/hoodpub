@@ -10,6 +10,15 @@ from book.models import Book
 from hoodpub.models import User
 
 
+class FacebookException(Exception):
+
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return repr(self.message)
+
+
 def _send_email_after_read(user, book):
     send_templated_mail(
         template_name='read_action_happen',
@@ -88,7 +97,6 @@ def facebook_set_profile(userprofile, *args, **kwargs):
 def facebook_action_read(sns_id, isbn):
     user = User.objects.filter(userprofile__sns_id=sns_id).order_by('id')[0]
     book = Book.objects.get(isbn=isbn)
-
     url_dict = {
         'access_token': '%s' %
         user.userprofile_set.all()[0].facebook_access_token,
@@ -98,8 +106,12 @@ def facebook_action_read(sns_id, isbn):
 
     url = 'https://graph.facebook.com/'
     action = 'me/hoodpub:read'
+
     url = urljoin(url, action)
+
     res = requests.post(url, params=url_dict)
+    res.raise_for_status()
+
     _send_email_after_read(user, book)
 
     return res

@@ -60,10 +60,11 @@ class HoodpubTestCase(TestCase):
                                {'isbn': self.book2.isbn}, format='json')
         self.assertFalse(res.data['hoodpub']['success'])
 
-    @patch('requests.get')
+    @patch('requests.post')
     def test_facebook_read_action(self, mock_requests):
-        mock_requests.return_value = '{"id":"641729025968976"}'
+        mock_requests.method.return_value = '{"id":"641729025968976"}'
         mock_requests.status_code = 200
+        mock_requests.raise_for_status.return_value = 'ok'
 
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book1.isbn}, format='json')
