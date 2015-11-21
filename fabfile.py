@@ -41,7 +41,7 @@ def tag_newrelic():
         'app_name': 'hoodpub',
         'description': '%s' % sha1,
         }
-    
+
     local('curl -H "x-api-key:{key}" -d "deployment[app_name]={app_name}"\
     -d "deployment[description]={description}"\
     https://api.newrelic.com/deployments.xml'.format(**dict_obj))
