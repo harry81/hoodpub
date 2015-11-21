@@ -18,9 +18,12 @@ from book.models import Book
 
 def index(request):
     template = loader.get_template('hoodpub/index.html')
+    current_site = request.build_absolute_uri()
+
     objects = None
     context = RequestContext(request, {
         'objects': objects,
+        'current_site': current_site,
     })
     return HttpResponse(template.render(context))
 
