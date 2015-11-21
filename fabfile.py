@@ -26,6 +26,15 @@ def db_recreate():
     local('psql postgres -h postgres -U mycms_user -c "create database hoodpub"')
     local('psql hoodpub -U mycms_user  -h postgres < ../db/hoodpub_db_2015-11-13.sql')
 
+def host_restart():
+    run('/etc/init.d/hoodpub2-uwsgi stop')
+    run('rm /home/hoodpub/work/hoodpub/run/uwsgi*')
+    run('/etc/init.d/hoodpub2-uwsgi start')
+
+def host_start():
+    run('/etc/init.d/hoodpub2-uwsgi start')
+
+
 def deploy():
 
     flake8()
