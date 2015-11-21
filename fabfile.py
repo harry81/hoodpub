@@ -1,4 +1,5 @@
 from fabric.api import *
+from fabric.contrib.console import confirm
 import time
 
 env.user = 'hoodpub'
@@ -46,9 +47,16 @@ def tag_newrelic():
     -d "deployment[description]={description}"\
     https://api.newrelic.com/deployments.xml'.format(**dict_obj))
 
+def git_diff():
+    res = local("git fetch origin; git diff origin/master", capture=True)
+    if res:
+        return confirm('You have unmerged changes. Do you want to keep going?', default=True)
+    return True
+
 
 def deploy():
-
+    if not git_diff():
+        return
     flake8()
     tests()
 

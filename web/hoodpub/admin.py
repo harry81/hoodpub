@@ -38,11 +38,24 @@ admin.site.register(Read, ReadAdmin)
 class CustomUserSocialAuthOption(UserSocialAuthOption):
     def uid_picture(self, instance):
         return '<a href="https://www.facebook.com/{0}" target="_new">\
-        <img src="https://graph.facebook.com/{0}/picture/"></a>'.format(
-            instance.uid)
+        <img src="https://graph.facebook.com/{0}/picture/"></a>'\
+        .format(instance.uid)
     uid_picture.allow_tags = True
 
+    def url_facebook_get(self, instance):
+        return "https://graph.facebook.com/me/hoodpub:read?\
+        access_token=%s&method=POST&book=%s" % (
+            instance.user.userprofile_set.all()[0].facebook_access_token,
+            'https://www.hoodpub.com/book/8954608647/')
+
+    def url_facebook_post(self, instance):
+        return "https://graph.facebook.com/me/hoodpub:read?\
+        access_token=%s&method=GET" %\
+            instance.user.userprofile_set.all()[0]\
+                                         .facebook_access_token
+
     list_display = ('id', 'uid_picture', 'user', 'provider', 'uid')
+    readonly_fields = ('url_facebook_get', 'url_facebook_post')
 
 admin.site.unregister(UserSocialAuth)
 admin.site.register(UserSocialAuth, CustomUserSocialAuthOption)
