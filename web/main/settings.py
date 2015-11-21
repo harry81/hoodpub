@@ -140,6 +140,7 @@ PROPRIETARY_BACKEND_NAME = 'Facebook'
 
 BROKER_URL = 'amqp://guest:guest@berlin-dev.hoodpub.com:5672//'
 CELERY_RESULT_BACKEND = "amqp"
+CELERY_SEND_TASK_ERROR_EMAILS = True
 
 import djcelery
 djcelery.setup_loader()
