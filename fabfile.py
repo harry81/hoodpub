@@ -29,10 +29,22 @@ def db_recreate():
 def host_restart():
     run('/etc/init.d/hoodpub2-uwsgi stop')
     run('rm /home/hoodpub/work/hoodpub/run/uwsgi*')
-    run('/etc/init.d/hoodpub2-uwsgi start')
+    host_start()
 
 def host_start():
     run('/etc/init.d/hoodpub2-uwsgi start')
+
+def tag_newrelic():
+    sha1 = local('git rev-parse --short HEAD', capture=True)
+    dict_obj = {
+        'key': 'a8a9c629f2f123adbb9855a7d82e33918e92b5447712c07',
+        'app_name': 'hoodpub',
+        'description': '%s' % sha1,
+        }
+    
+    local('curl -H "x-api-key:{key}" -d "deployment[app_name]={app_name}"\
+    -d "deployment[description]={description}"\
+    https://api.newrelic.com/deployments.xml'.format(**dict_obj))
 
 
 def deploy():
@@ -57,3 +69,4 @@ def deploy():
                 run('rm -rf ../run/*')
                 run('/etc/init.d/hoodpub2-uwsgi start')
     run('curl http://www.hoodpub.com/ -H \"Host: www.hoodpub.com\"> /dev/null')
+    tag_newrelic()
