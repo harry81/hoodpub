@@ -47,7 +47,7 @@
       <div class="col-xs-12 col-md-9">
         <hr/>
         {% autoescape off  %}
-        {{ book.description }}
+        {{ book.description|linebreaks}}
         {% endautoescape %}
       </div>
 
@@ -66,7 +66,7 @@
             <td>
               {{ userprofile.user.username }}
             </td>
-            <td>{{ read.created_at |date:"Y-M-d" }}
+            <td>{{ read.created_at |date:"SHORT_DATE_FORMAT"}}
             </td>
             {% endfor%}
           </tr>

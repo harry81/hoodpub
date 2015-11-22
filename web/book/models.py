@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import requests
 from lxml import html
 from requests import exceptions
@@ -45,15 +46,17 @@ class Book(models.Model):
     def get_description(self):
         descs = self._get_description_from_url()
         if descs:
-            self.description = descs[0]
-            self.save()
+            if len(descs[0]) > 50:
+                self.description = descs[0]
+                self.save()
 
     def _get_description_from_url(self):
         rlt = []
         page = requests.get(self.link)
         tree = html.fromstring(page.content)
-        tree.xpath('//div[@class="rightCont"]')[1].text_content()
 
         for ele in tree.xpath('//div[@class="rightCont"]'):
             rlt.append(ele.text_content().strip())
         return rlt
+
+
