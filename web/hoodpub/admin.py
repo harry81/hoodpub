@@ -25,6 +25,7 @@ admin.site.register(User, UserAdmin)
 
 class ReadAdmin(admin.ModelAdmin):
     raw_id_fields = ('book',)
+
     def userprofile(self, obj):
         if obj.userprofile_set.all().exists():
             return obj.userprofile_set.all()[0]
@@ -35,7 +36,8 @@ class ReadAdmin(admin.ModelAdmin):
     def update_description(self, request, queryset):
         for ele in queryset:
             ele.book.get_description()
-    update_description.short_description = "Update the descriptioin of each book"
+    update_description.short_description = "Update the descriptioin"\
+                                           " of each book"
 
     actions = ['update_description']
 

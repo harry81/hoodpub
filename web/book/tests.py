@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework import status
-from .models import Book
+from .models import Book, Introduction
 from .utils import search_via_book_api
 
 
@@ -143,11 +143,9 @@ class BookTestCase(TestCase):
                              'rt').read()
         mock_requests.return_value = HttpResponse(book_response)
         mock_requests.status_code = 200
-        descs = self.book1._get_description_from_url()
-
-        self.assertIn('때문입니다.', descs[0].encode('utf-8'))
-        self.assertIn('반증이기도', descs[1].encode('utf-8'))
-
+        self.assertTrue(Introduction.objects.count() == 0)
+        self.book1._get_description_from_url()
+        self.assertTrue(Introduction.objects.count() == 8)
 
     @patch('requests.get')
     def test_get_description(self, mock_requests):
@@ -157,8 +155,7 @@ class BookTestCase(TestCase):
         mock_requests.return_value = HttpResponse(book_response)
         mock_requests.status_code = 200
         self.assertIn('기발한', self.book1.description.encode('utf-8'))
-        descs = self.book1.get_description()
+
+        self.book1.get_description()
         self.assertNotIn('기발한', self.book1.description.encode('utf-8'))
-        self.assertIn('무조건', self.book1.description.encode('utf-8'))
-        
-        
+        self.assertIn('모르게', self.book1.description.encode('utf-8'))

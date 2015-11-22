@@ -5,6 +5,13 @@ from requests import exceptions
 from datetime import datetime
 from django.db import models
 
+PUBLISHER_CHOICE = (
+    ('KY', u'교보'),
+    ('YE', u'YES24'),
+    ('IN', u'인터파크'),
+    ('BA', u'반디엔루니스'),
+)
+
 
 class Book(models.Model):
     category = models.CharField(max_length=168)
@@ -44,19 +51,51 @@ class Book(models.Model):
         return False
 
     def get_description(self):
-        descs = self._get_description_from_url()
-        if descs:
-            if len(descs[0]) > 50:
-                self.description = descs[0]
-                self.save()
+        if self.introduction_set.count() == 0:
+            self._get_description_from_url()
+
+        if self.introduction_set.count() == 0:
+            return None
+
+        intro = self.introduction_set.extra(
+            select={'length': 'Length(content)'}).order_by('-length')
+
+        if intro:
+            self.description = intro[0].content
+            self.save()
 
     def _get_description_from_url(self):
-        rlt = []
-        page = requests.get(self.link)
-        tree = html.fromstring(page.content)
+        for pub in PUBLISHER_CHOICE:
 
-        for ele in tree.xpath('//div[@class="rightCont"]'):
-            rlt.append(ele.text_content().strip())
-        return rlt
+            page = requests.get(self.link, params={'introCpID': pub})
+            if page.status_code == 200:
+                tree = html.fromstring(page.content)
+
+                for ele in tree.xpath(
+                        '//meta[@property="og:description"]/@content'):
+                    cnt = 1
+                    content = ele.strip()
+                    if len(content) < 30:
+                        continue
+
+                    intro_dict = {
+                        'content': content
+                    }
+                    new_intro, created = Introduction.objects.get_or_create(
+                        book=self, publisher=pub[0],
+                        cnt=cnt, defaults=intro_dict)
+
+                    cnt += 1
 
 
+class Introduction(models.Model):
+
+    book = models.ForeignKey(Book)
+    content = models.TextField()
+    publisher = models.CharField(max_length=3, choices=PUBLISHER_CHOICE)
+    cnt = models.IntegerField(blank=True, default=0)
+    created_at = models.DateTimeField(default=datetime.now, blank=True)
+    updated_at = models.DateTimeField(default=datetime.now, blank=True)
+
+    class Meta:
+        unique_together = ("book", "publisher", "cnt")

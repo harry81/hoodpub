@@ -37,9 +37,10 @@ class BookAdmin(admin.ModelAdmin):
     def update_description(self, request, queryset):
         for ele in queryset:
             ele.get_description()
-    update_description.short_description = "Update the descriptioin of each book"
+    update_description.short_description = "Update the "\
+        "descriptioin of each book"
 
     def get_ordering(self, request):
-            return ['pub_nm','-cover_l_url', '-author']
+            return ['pub_nm', '-cover_l_url', '-author']
 
 admin.site.register(Book, BookAdmin)
