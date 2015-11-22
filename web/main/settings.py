@@ -35,7 +35,6 @@ ADMINS = (('John', 'chharry@gmail.com'),)
 ALLOWED_HOSTS = [u'.dev.hoodpub.com', '.hoodpub.com',
                  'hoodpub.com']
 
-DEBUG_TOOLBAR_PATCH_SETTINGS = True
 
 TEMPLATE_DEBUG = True
 # Application definition
@@ -55,7 +54,7 @@ INSTALLED_APPS = (
     'rest_framework_social_oauth2',
     'django_extensions',
     'rest_framework',
-    'debug_toolbar',
+    'constance',
     'djcelery',
     'book',
     'hoodpub',
@@ -153,6 +152,12 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
+}
+
+CONSTANCE_REDIS_CONNECTION = {
+    'host': 'redis',
+    'port': 6379,
+    'db': 0,
 }
 
 try:
