@@ -145,7 +145,7 @@ class BookTestCase(TestCase):
         mock_requests.status_code = 200
         self.assertTrue(Introduction.objects.count() == 0)
         self.book1._get_description_from_url()
-        self.assertTrue(Introduction.objects.count() == 8)
+        self.assertTrue(Introduction.objects.count() == 4)
 
     @patch('requests.get')
     def test_get_description(self, mock_requests):
@@ -157,5 +157,5 @@ class BookTestCase(TestCase):
         self.assertIn('기발한', self.book1.description.encode('utf-8'))
 
         self.book1.get_description()
+        self.assertNotIn('그레그에게도', self.book1.description.encode('utf-8'))
         self.assertNotIn('기발한', self.book1.description.encode('utf-8'))
-        self.assertIn('모르게', self.book1.description.encode('utf-8'))
