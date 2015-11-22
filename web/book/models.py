@@ -99,3 +99,8 @@ class Introduction(models.Model):
 
     class Meta:
         unique_together = ("book", "publisher", "cnt")
+        ordering = ('-book',)
+
+    def __unicode__(self):
+        return u'%s %s ' % (
+            self.book.title, self.publisher,)

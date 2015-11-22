@@ -17,6 +17,10 @@ def tests():
     local('cd web; REUSE_DB=1 python manage.py test -v3 book hoodpub')
 
 
+def diff_pip():
+    local("cd web; diff requirements.txt <(pip freeze)", shell='/bin/bash')
+
+
 def db_backup():
     name = 'hoodpub_db_%s.sql' % time.strftime("%Y-%m-%d")
     run('pg_dump hoodpub  -h localhost -U mycms_user  > /tmp/%s' % name)
@@ -29,13 +33,14 @@ def db_recreate():
 
 def host_app_restart():
     run('/etc/init.d/hoodpub2-uwsgi stop')
-    run('rm /home/hoodpub/work/hoodpub/run/uwsgi*')
     host_app_start()
 
 def host_app_start():
+    run('rm /home/hoodpub/work/hoodpub/run/uwsgi*')
     run('/etc/init.d/hoodpub2-uwsgi start')
 
 def host_celery_restart():
+    run("ps -ef | grep celery | awk '{print $2}' | xargs -I {} -n1 kill -9 {}")
     with prefix('source /home/hoodpub/.virt_env/hoodpub2/bin/activate'):
         with cd('/home/hoodpub/work/hoodpub/web'):
             with shell_env(DB_NAME='hoodpub',
@@ -65,6 +70,7 @@ def git_diff():
 
 
 def deploy():
+    diff_pip()
     if not git_diff():
         return
     flake8()
@@ -87,5 +93,4 @@ def deploy():
                 run('rm -rf ../run/*')
                 run('/etc/init.d/hoodpub2-uwsgi start')
     run('curl http://www.hoodpub.com/ -H \"Host: www.hoodpub.com\"> /dev/null')
-    host_celery_restart()
     tag_newrelic()

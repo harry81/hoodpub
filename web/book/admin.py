@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book
+from .models import Book, Introduction
 
 
 class BookAdmin(admin.ModelAdmin):
@@ -44,3 +44,11 @@ class BookAdmin(admin.ModelAdmin):
             return ['pub_nm', '-cover_l_url', '-author']
 
 admin.site.register(Book, BookAdmin)
+
+
+class IntroductionAdmin(admin.ModelAdmin):
+    raw_id_fields = ('book',)
+    list_display = ('book', 'publisher', 'cnt',)
+
+
+admin.site.register(Introduction, IntroductionAdmin)
