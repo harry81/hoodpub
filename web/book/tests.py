@@ -41,7 +41,7 @@ class BookTestCase(TestCase):
         token = json.loads(res.content)['token']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
 
-        self.book1 = Book.objects.exclude(cover_s_url__exact='')[1]
+        self.book1 = Book.objects.get(isbn='0141344989')
         self.book2 = Book.objects.all()[2]
 
     @patch('requests.get')
@@ -135,3 +135,30 @@ class BookTestCase(TestCase):
         data2 = json.loads(res2.content)
 
         self.assertTrue(data1, data2)
+
+    @patch('requests.get')
+    def test_get_description_from_url(self, mock_requests):
+        book_response = open('book/fixtures/'
+                             'book_detail_from_daum.mock',
+                             'rt').read()
+        mock_requests.return_value = HttpResponse(book_response)
+        mock_requests.status_code = 200
+        descs = self.book1._get_description_from_url()
+
+        self.assertIn('때문입니다.', descs[0].encode('utf-8'))
+        self.assertIn('반증이기도', descs[1].encode('utf-8'))
+
+
+    @patch('requests.get')
+    def test_get_description(self, mock_requests):
+        book_response = open('book/fixtures/'
+                             'book_detail_from_daum.mock',
+                             'rt').read()
+        mock_requests.return_value = HttpResponse(book_response)
+        mock_requests.status_code = 200
+        self.assertIn('기발한', self.book1.description.encode('utf-8'))
+        descs = self.book1.get_description()
+        self.assertNotIn('기발한', self.book1.description.encode('utf-8'))
+        self.assertIn('무조건', self.book1.description.encode('utf-8'))
+        
+        

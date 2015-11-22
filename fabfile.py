@@ -38,7 +38,12 @@ def host_app_start():
 def host_celery_restart():
     with prefix('source /home/hoodpub/.virt_env/hoodpub2/bin/activate'):
         with cd('/home/hoodpub/work/hoodpub/web'):
-            run('newrelic-admin run-program python manage.py celery worker --loglevel=INFO')
+            with shell_env(DB_NAME='hoodpub',
+                           DB_USER='mycms_user',
+                           DB_PASS='mycms_pass',
+                           DB_SERVICE='postgres',
+                           DB_PORT='5432'):
+                run('newrelic-admin run-program python manage.py celery worker --loglevel=INFO')
 
 def tag_newrelic():
     sha1 = local('git rev-parse --short HEAD', capture=True)
