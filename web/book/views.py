@@ -21,7 +21,7 @@ from .tasks import async_search_via_book_api
 class BookAPIView(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    search_fields = ('title', 'description', 'author', 'pub_nm')
+    search_fields = ('title', 'author', 'pub_nm')
     filter_backends = (filters.SearchFilter,)
 
     @list_route(methods=['get'])

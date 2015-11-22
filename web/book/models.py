@@ -27,7 +27,7 @@ class Book(models.Model):
     translator = models.CharField(max_length=168)
     link = models.CharField(max_length=168)
     etc_author = models.CharField(max_length=128)
-    pub_nm = models.CharField(max_length=128)
+    pub_nm = models.CharField(max_length=128, db_index=True)
     list_price = models.CharField(max_length=168)
     ebook_barcode = models.CharField(max_length=168)
     cover_l_url = models.CharField(max_length=512)
