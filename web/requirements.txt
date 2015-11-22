@@ -12,6 +12,7 @@ dj-database-url==0.3.0
 Django==1.7.8
 django-braces==1.8.1
 django-celery==3.1.17
+django-constance==1.1.1
 django-debug-toolbar==1.4
 django-extensions==1.5.7
 django-nose==1.4.2
