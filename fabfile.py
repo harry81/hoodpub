@@ -18,7 +18,7 @@ def tests():
 
 
 def diff_pip():
-    local("cd web; diff requirements.txt <(pip freeze)", shell='/bin/bash')
+    local("cd web; diff <(cat requirements.txt | sort) <(pip freeze | sort)", shell='/bin/bash')
 
 
 def db_backup():
