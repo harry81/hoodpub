@@ -64,13 +64,16 @@ controller('userControllers', [
 
   }])
   .controller('hoodpubControllers', [
-    '$rootScope', '$scope', '$window', '$routeParams' ,'$http', 'Books', 'UserBooks', 'Analytics', '$uibModal', '$location', 
-    function($rootScope, $scope, $window, $routeParams, $http, Books, UserBooks, Analytics, $uibModal, $location){
+    '$rootScope', '$scope', '$window', '$routeParams' ,'$http',
+    'Books', 'UserBooks', 'Analytics', '$uibModal', '$location', 'usSpinnerService',
+    function($rootScope, $scope, $window, $routeParams, $http,
+             Books, UserBooks, Analytics, $uibModal, $location, usSpinnerService){
       // scope functions
 
       $scope.search = function(keyword) {
         if ($scope.keyword)
           keyword = $scope.keyword;
+        usSpinnerService.spin('spinner');
         Books.query({'search': keyword }).$promise.then(function(res) {
           console.log(res);
           delete $scope.items;
@@ -78,10 +81,12 @@ controller('userControllers', [
           next = res['next'];
 
           Analytics.trackEvent('search', 'keyword', $scope.keyword);
+          usSpinnerService.stop('spinner');
         });
       }
 
       $scope.search_users = function(sns_id) {
+        usSpinnerService.spin('spinner');
         UserBooks.query({'sns_id': sns_id }).$promise.then(function(res) {
           delete $scope.items;
           $scope.items = res.results;
@@ -89,6 +94,8 @@ controller('userControllers', [
           console.log('user api', $scope.items);
           $location.path('/user/'+ sns_id, false);
           Analytics.trackEvent('user', 'sns_id', sns_id);
+          usSpinnerService.stop('spinner');
+
         });
       }
 
@@ -97,6 +104,7 @@ controller('userControllers', [
       }
 
       $scope.get_book = function(id){
+        usSpinnerService.spin('spinner');
         Analytics.trackEvent('book', 'isbn', id);
         Books.get({'id': id}).$promise.then(function(res){
           console.log('detail in get_book: ',  res);
@@ -104,6 +112,7 @@ controller('userControllers', [
           $scope.item = res;
           $location.path('/book/'+ id);
         });
+        usSpinnerService.stop('spinner');
       }
 
       $scope.read_book = function(item){

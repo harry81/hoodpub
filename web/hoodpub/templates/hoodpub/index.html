@@ -54,7 +54,7 @@
         </ul>
       </div>
     </nav>
-
+    <span us-spinner="{radius:20, width:8, length: 8}" spinner-on="showSpinner" spinner-key="spinner"></span>
     <div class="view-animate-container">
       <div ng-view class="view-animate"></div>
     </div>
@@ -67,7 +67,8 @@
     <script src="{% static 'hoodpub/js/bower_components/angular-route/angular-route.js' %}"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.js"></script>
     <script src="{% static 'hoodpub/js/bower_components/angular-google-analytics/dist/angular-google-analytics.js' %}"></script>
-    <script src="{% static 'hoodpub/js/bower_components/angular-spinners/dist/angular-spinners.min.js' %}"></script>
+    <script src="{% static 'hoodpub/js/bower_components/spin.js/spin.js' %}"></script>
+    <script src="{% static 'hoodpub/js/bower_components/angular-spinner/angular-spinner.js' %}"></script>
     <script src="{% static 'hoodpub/js/ng-infinite-scroll.js' %}"></script>
     <script src="{% static 'hoodpub/js/angular-relative-date.js' %}"></script>
     <script src="{% static 'hoodpub/js/ui-bootstrap-custom-build/ui-bootstrap-custom-tpls-0.14.3.js' %}"></script>
