@@ -52,12 +52,12 @@ def host_celery_restart():
 
 def tag_newrelic():
     sha1 = local('git rev-parse --short HEAD', capture=True)
+    msg = local('git log -1 --pretty=%B', capture=True)
     dict_obj = {
         'key': 'a8a9c629f2f123adbb9855a7d82e33918e92b5447712c07',
         'app_name': 'hoodpub',
-        'description': '%s' % sha1,
+        'description': '%s[%s-%s]' % (msg, sha1, time.strftime("%Y-%m-%d")),
         }
-
     local('curl -H "x-api-key:{key}" -d "deployment[app_name]={app_name}"\
     -d "deployment[description]={description}"\
     https://api.newrelic.com/deployments.xml'.format(**dict_obj))
