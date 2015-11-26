@@ -26,7 +26,6 @@
 <title>{% block title %}{{ book.title }}{% endblock %}</title>
 
 {% block content %}
-
 <div class="col-xs-12 col-md-4 col-md-offset-4" ng-controller="hoodpubControllers">
   <div class="panel panel-warning">
     <div class="panel-heading">
@@ -44,15 +43,19 @@
         <p class="">{{ book.pub_date |date:"Y-M-d"}}</p>
 
       </div>
-      <div class="col-xs-12 col-md-9">
+      <div class="col-xs-12 col-md-9 ">
         <hr/>
-        {% autoescape off  %}
-        {{ book.description|linebreaks}}
-        {% endautoescape %}
+
+        <section id="description">
+          {{ book.description|linebreaks}}
+        </section>
+
       </div>
 
       <div class="col-xs-12 cols-md-12">
         <hr/>
+        <section id="users">
+
         <table class="table table-condensed">
           {% for read in book.read_set.all %}
           <tr>
@@ -72,6 +75,7 @@
           </tr>
           {% endfor%}
         </table>
+        </section>
       </div>
     </div>
 

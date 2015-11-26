@@ -97,3 +97,10 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
   }])
 ;
 
+setTimeout(function(){
+    $('#description').readmore({speed: 770});
+    $('#users').readmore({
+        speed: 770,
+        moreLink: '<center><a href="#">Read more</a></center>',
+        lessLink: '<center><a href="#">Close</a></center>'});
+}, 300);
