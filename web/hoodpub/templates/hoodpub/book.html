@@ -45,10 +45,11 @@
       </div>
       <div class="col-xs-12 col-md-9 ">
         <hr/>
-
+        {% autoescape off  %}
         <section id="description">
           {{ book.description|linebreaks}}
         </section>
+        {% endautoescape %}
 
       </div>
 

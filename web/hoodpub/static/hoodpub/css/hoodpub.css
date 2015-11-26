@@ -26,3 +26,8 @@ a {
 .toggle-link-grey {
 	color: darkgrey;
 }
+
+.col-xs-12 {
+    padding-right: 0px;
+    padding-left: 0px;
+}
