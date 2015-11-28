@@ -39,6 +39,10 @@ ALLOWED_HOSTS = [u'.dev.hoodpub.com', '.hoodpub.com',
 TEMPLATE_DEBUG = True
 # Application definition
 
+TEMPLATE_DIRS = (
+    "%s/templates" % BASE_DIR,
+)
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,6 +57,9 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'rest_framework_social_oauth2',
     'django_extensions',
+    'threadedcomments',
+    'django_comments',
+    'django.contrib.sites',
     'rest_framework',
     'constance',
     'djcelery',
@@ -117,6 +124,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 STATIC_ROOT = os.path.join(DATA_DIR, 'static')
+
+COMMENTS_APP = 'threadedcomments'
+SITE_ID = 1
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 TEMPLATED_EMAIL_BACKEND =\

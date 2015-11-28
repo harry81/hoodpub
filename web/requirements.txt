@@ -13,6 +13,7 @@ Django==1.7.8
 django-braces==1.8.1
 django-celery==3.1.17
 django-constance==1.1.1
+django-contrib-comments==1.6.1
 django-debug-toolbar==1.4
 django-extensions==1.5.7
 django-nose==1.4.2
@@ -22,6 +23,7 @@ django-rest-framework-social-oauth2==1.0.2
 django-rest-swagger==0.3.4
 django-social-auth==0.7.28
 django-templated-email==0.4.9
+django-threadedcomments==1.0.1
 djangorestframework==3.1.3
 djangorestframework-jwt==1.7.2
 ecdsa==0.13

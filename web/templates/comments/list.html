@@ -1,0 +1,11 @@
+{% load threadedcomments_tags %}
+<div id="comments">
+  {% for comment in comment_list|fill_tree|annotate_tree %}
+  <span id="c{{ comment.id }}">{# c## is used by the absolute URL of the Comment model, so keep that as it is. #}
+    {% for userprofile in comment.user.userprofile_set.all %}
+    {{ comment.comment}} <a href="/#/user/{{ userprofile.sns_id }}"> - {{comment.name }}</a> 
+    {% endfor %}
+
+  </span>  
+  {% endfor %}
+</div>

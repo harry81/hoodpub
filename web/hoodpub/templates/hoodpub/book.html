@@ -1,5 +1,6 @@
 {% extends "hoodpub/index.html" %}
 {% load static %}
+{% load threadedcomments_tags %}
 
 {% block meta %}
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# hoodpub: http://ogp.me/ns/fb/hoodpub#">
@@ -50,9 +51,12 @@
           {{ book.description|linebreaks}}
         </section>
         {% endautoescape %}
-
       </div>
-
+      <div class="col-xs-12 cols-md-12">
+        {% for read in book.read_set.all %}
+          {% render_comment_list for read %}
+        {% endfor%}
+      </div>
       <div class="col-xs-12 cols-md-12">
         <hr/>
         <section id="users">
