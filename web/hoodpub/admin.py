@@ -51,17 +51,17 @@ class CustomUserSocialAuthOption(UserSocialAuthOption):
         .format(instance.uid)
     uid_picture.allow_tags = True
 
-    def url_facebook_post(self, instance):
-        return "curl https://graph.facebook.com/me/hoodpub:read?access_token=%s" \
-               "&method=POST&book=%s" % (
-                   instance.user.userprofile_set.all()[0].facebook_access_token,
-                   'https://www.hoodpub.com/book/8954608647/')
 
     def url_facebook_get(self, instance):
         return "curl https://graph.facebook.com/me/hoodpub:read?access_token=%s"\
                "&method=GET | python -m json.tool" %\
-               instance.user.userprofile_set.all()[0]\
-               .facebook_access_token
+               instance.access_token
+
+    def url_facebook_post(self, instance):
+        return "curl https://graph.facebook.com/me/hoodpub:read?access_token=%s" \
+               "&method=POST&book=%s" % (
+                   instance.access_token,
+                   'https://www.hoodpub.com/book/8954608647/')
 
     list_display = ('id', 'uid_picture', 'user', 'provider', 'uid')
     readonly_fields = ('url_facebook_get', 'url_facebook_post')
