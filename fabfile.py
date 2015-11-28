@@ -10,11 +10,17 @@ env.use_ssh_config = True
 def host_type():
     run('uname -s')
 
+
 def flake8():
     local('cd web; flake8 hoodpub book')
 
+
 def tests():
     local('cd web; REUSE_DB=1 python manage.py test -v3 book hoodpub')
+
+
+def tests_facebook_read():
+    local('cd web; python manage.py check_facebook_read')
 
 
 def diff_pip():
@@ -31,13 +37,16 @@ def db_recreate():
     local('psql postgres -h postgres -U mycms_user -c "create database hoodpub"')
     local('psql hoodpub -U mycms_user  -h postgres < ../db/hoodpub_db_2015-11-13.sql')
 
+
 def host_app_restart():
     run('/etc/init.d/hoodpub2-uwsgi stop')
     host_app_start()
 
+
 def host_app_start():
     run('rm /home/hoodpub/work/hoodpub/run/uwsgi*')
     run('/etc/init.d/hoodpub2-uwsgi start')
+
 
 def host_celery_restart():
     run("ps -ef | grep celery | awk '{print $2}' | xargs -I {} -n1 kill -9 {}")
@@ -50,6 +59,7 @@ def host_celery_restart():
                            DB_PORT='5432'):
                 run('newrelic-admin run-program python manage.py celery worker --loglevel=INFO')
 
+
 def tag_newrelic():
     sha1 = local('git rev-parse --short HEAD', capture=True)
     msg = local('git log -1 --pretty=%B', capture=True)
@@ -61,6 +71,7 @@ def tag_newrelic():
     local('curl -H "x-api-key:{key}" -d "deployment[app_name]={app_name}"\
     -d "deployment[description]={description}"\
     https://api.newrelic.com/deployments.xml'.format(**dict_obj))
+
 
 def git_diff():
     res = local("git fetch origin; git diff origin/master", capture=True)
@@ -75,6 +86,7 @@ def deploy():
         return
     flake8()
     tests()
+    tests_facebook_read()
 
     put('web/main/settings_local.py',
         'work/hoodpub/web/main/')
