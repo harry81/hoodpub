@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from .serializers import UserProfileSerializer
 from .tasks import async_facebook_action_read
 
-from book.serializers import BookSerializer
+from book.serializers import BookListSerializer
 from book.models import Book
 
 
@@ -40,7 +40,7 @@ class UserProfileAPIView(viewsets.ModelViewSet):
 
 
 class HoodpubAPIView(viewsets.ModelViewSet):
-    serializer_class = BookSerializer
+    serializer_class = BookListSerializer
     queryset = Book.objects.all()
 
     @permission_classes((AllowAny, ))

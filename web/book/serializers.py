@@ -20,13 +20,10 @@ class ReadSerializer(serializers.ModelSerializer):
         fields = ('user', )
 
 
-class BookSerializer(serializers.ModelSerializer):
+class BookListSerializer(serializers.ModelSerializer):
     reads = ReadSerializer(many=True,
                            source='read_set',
                            read_only=True)
-    total_read = serializers.IntegerField(
-        source='read_set.count',
-        read_only=True)
 
     is_read = serializers.SerializerMethodField('is_read_by_user')
 
@@ -42,3 +39,5 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
+        fields = ('isbn', 'reads', 'category', 'cover_s_url', 'author',
+                  'link', 'cover_l_url', 'is_read', 'title', 'pub_nm')

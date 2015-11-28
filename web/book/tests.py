@@ -89,12 +89,15 @@ class BookTestCase(TestCase):
     def test_api_list(self):
         res = self.client.get('/api-book/',
                               {'search': self.book1.title}, format='json')
-        data = json.loads(res.content)
 
-        self.assertIn('total_read',
-                      data['results'][0].keys())
         self.assertTrue(Book.objects.all().count() > 4)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_api_list_show_necessary_fields(self):
+        res = self.client.get('/api-book/',
+                              {'search': self.book1.title}, format='json')
+        data = json.loads(res.content)
+        self.assertTrue(len(data['results'][0].keys()) < 12)
 
     def test_sns_id_exist(self):
         self.client.post('/api-hoodpub/read/',

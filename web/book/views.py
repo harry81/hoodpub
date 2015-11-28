@@ -11,7 +11,7 @@ from rest_framework import filters
 from rest_framework.decorators import list_route, permission_classes
 from rest_framework.permissions import AllowAny
 
-from .serializers import BookSerializer
+from .serializers import BookListSerializer
 from .models import Book
 from hoodpub.models import Read
 from .utils import search_via_book_api
@@ -20,7 +20,7 @@ from .tasks import async_search_via_book_api
 
 class BookAPIView(viewsets.ModelViewSet):
     queryset = Book.objects.all()
-    serializer_class = BookSerializer
+    serializer_class = BookListSerializer
     search_fields = ('title', 'author', 'pub_nm')
     filter_backends = (filters.SearchFilter,)
 
