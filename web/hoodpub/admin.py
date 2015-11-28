@@ -51,7 +51,6 @@ class CustomUserSocialAuthOption(UserSocialAuthOption):
         .format(instance.uid)
     uid_picture.allow_tags = True
 
-
     def url_facebook_get(self, instance):
         return "curl https://graph.facebook.com/me/hoodpub:read?access_token=%s"\
                "&method=GET | python -m json.tool" %\
