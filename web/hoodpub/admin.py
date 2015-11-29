@@ -18,6 +18,8 @@ class UserProfileInline(admin.StackedInline):
 
 class UserAdmin(UserAdmin):
     inlines = (UserProfileInline, )
+    ordering = ('-date_joined',)
+    search_fields = ['username', ]
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
@@ -32,6 +34,7 @@ class ReadAdmin(admin.ModelAdmin):
         return ''
 
     list_display = ('book', 'userprofile', 'created_at')
+    search_fields = ['book__title', 'userprofile__user__username']
 
     def update_description(self, request, queryset):
         for ele in queryset:
@@ -62,7 +65,7 @@ class CustomUserSocialAuthOption(UserSocialAuthOption):
                    instance.access_token,
                    'https://www.hoodpub.com/book/8954608647/')
 
-    list_display = ('id', 'uid_picture', 'user', 'provider', 'uid')
+    list_display = ('id', 'uid_picture', 'user', 'provider', 'uid',)
     readonly_fields = ('url_facebook_get', 'url_facebook_post')
 
 admin.site.unregister(UserSocialAuth)

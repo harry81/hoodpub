@@ -82,11 +82,11 @@ def git_diff():
 
 def deploy():
     diff_pip()
-    if not git_diff():
-        return
     flake8()
     tests()
     tests_facebook_read()
+    if not git_diff():
+        return
 
     put('web/main/settings_local.py',
         'work/hoodpub/web/main/')
