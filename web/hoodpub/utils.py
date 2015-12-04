@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import requests
+import time
 import json
 from urlparse import urljoin
 from django.utils.html import strip_tags
 import HTMLParser
 from templated_email import send_templated_mail
-
 from book.models import Book
 from hoodpub.models import User
 
@@ -97,19 +97,23 @@ def facebook_set_profile(userprofile, *args, **kwargs):
 def facebook_action_read(sns_id, isbn):
     user = User.objects.filter(userprofile__sns_id=sns_id).order_by('id')[0]
     book = Book.objects.get(isbn=isbn)
-    url_dict = {
-        'access_token': '%s' %
-        user.userprofile_set.all()[0].facebook_access_token,
-        'mothod': 'POST',
+    data_dict = {
+        'progress:timestamp': int(time.time()),
+        'progress:percent_complete': 100,
         'book': 'https://hoodpub.com/book/%s/' % isbn
     }
 
+    params_dict = {
+        'access_token': '%s' %
+        user.userprofile_set.all()[0].facebook_access_token,
+    }
+
     url = 'https://graph.facebook.com/'
-    action = 'me/hoodpub:read'
+    action = 'v2.5/me/books.reads'
 
     url = urljoin(url, action)
 
-    res = requests.post(url, params=url_dict)
+    res = requests.post(url, params=params_dict, data=data_dict)
     res.raise_for_status()
 
     _send_email_after_read(user, book)
