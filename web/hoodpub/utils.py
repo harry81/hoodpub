@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import requests
-from requests import exceptions
+import time
 import json
+from requests import exceptions
 from urlparse import urljoin
 from django.utils.html import strip_tags
 import HTMLParser
@@ -106,8 +107,8 @@ def facebook_action_books_read(sns_id, isbn):
         'access_token': '%s' % user.access_token,
         'mothod': 'POST',
         'book': 'https://hoodpub.com/book/%s/' % isbn,
-        'progress:timestamp': 1449324898,
-        'progress:percent_complete': 3.1415926535
+        'progress:timestamp': int(time.time()),
+        'progress:percent_complete': 100
     }
 
     url = 'https://graph.facebook.com/'
