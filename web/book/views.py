@@ -10,6 +10,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.decorators import list_route, permission_classes
 from rest_framework.permissions import AllowAny
+from constance import config
 
 from .serializers import BookListSerializer
 from .models import Book
@@ -71,5 +72,6 @@ def book(request, book_id):
         book = None
     context = RequestContext(request, {
         'book': book,
+        'og_type': config.OG_TYPE
     })
     return HttpResponse(template.render(context))
