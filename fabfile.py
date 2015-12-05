@@ -19,8 +19,8 @@ def tests():
     local('cd web; REUSE_DB=1 python manage.py test -v3 book hoodpub')
 
 
-def tests_facebook_read(read_check):
-    if not read_check:
+def tests_facebook_read(read_check=True):
+    if read_check == 'no':
         return
     local('cd web; python manage.py check_facebook_read')
 
@@ -82,7 +82,7 @@ def git_diff():
     return True
 
 
-def deploy(sha=None, read_check=None):
+def deploy(sha=None, read_check=True):
     diff_pip()
     flake8()
     tests()

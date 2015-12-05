@@ -12,7 +12,7 @@ PUBLISHER_CHOICE = (
     ('BA', u'반디엔루니스'),
 )
 
-OG_TYPE = (u'hoodpub.book', u'books.book')
+OG_TYPE = (u'hoodpub:book', u'books.book')
 
 
 class Book(models.Model):
