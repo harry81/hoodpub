@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import requests
-import re
 import json
 from urlparse import urljoin
+from constance import config
 from django.core.management.base import BaseCommand
-from hoodpub.utils import facebook_action_hoodpub_read
+from hoodpub.utils import facebook_action_books_read
 from social.apps.django_app.default.models import UserSocialAuth
 
 
@@ -12,6 +12,20 @@ class Command(BaseCommand):
     help = "Command to see if the read action works"
 
     def handle(self, *args, **options):
+        if config.CONF_OG_TYPE == 0:
+            self.hoodpub_books_read()
+        elif config.CONF_OG_TYPE == 1:
+            self.facebook_books_read()
+
+    def facebook_books_read(self):
+        res = facebook_action_books_read('100003956532232',
+                                         '8992647913')
+        data = json.loads(res.content)
+
+        assert 'id' in data, 'Books:Read object is not created.'
+        print "New hoodpub:read was created. [%s]" % (data['id'])
+
+    def hoodpub_books_read(self):
         # get read id
         user = UserSocialAuth.objects.get(user__username=u'HarryAdaum')
         print "Getting reads of %s" % user.user.username
@@ -48,8 +62,9 @@ class Command(BaseCommand):
         assert res.content == 'true', 'Read object is not deleted.'
 
         # create book
-        res = facebook_action_hoodpub_read(sns_id,
-                                           re.findall(r'[0-9]+', book_url)[0])
+        facebook_action_books_read(sns_id,
+                                   '8992647913',
+                                   action='me/hoodpub:read')
         data = json.loads(res.content)
 
         assert 'id' in data, 'Read object is not created.'

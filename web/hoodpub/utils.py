@@ -95,17 +95,18 @@ def facebook_set_profile(userprofile, *args, **kwargs):
         update_fields=fb_fields)
 
 
-def facebook_action_hoodpub_read(sns_id, isbn):
+def facebook_action_books_read(sns_id, isbn, action='me/books.reads'):
     user = UserSocialAuth.objects.get(uid=sns_id)
     book = Book.objects.get(isbn=isbn)
     url_dict = {
         'access_token': '%s' % user.access_token,
         'mothod': 'POST',
-        'book': 'https://hoodpub.com/book/%s/' % isbn
+        'book': 'https://hoodpub.com/book/%s/' % isbn,
+        'progress:timestamp': 1449324898,
+        'progress:percent_complete': 3.1415926535
     }
 
     url = 'https://graph.facebook.com/'
-    action = 'me/hoodpub:read'
 
     url = urljoin(url, action)
 
