@@ -6,6 +6,7 @@ from urlparse import urljoin
 from django.utils.html import strip_tags
 import HTMLParser
 from templated_email import send_templated_mail
+from constance import config
 
 from book.models import Book
 from social.apps.django_app.default.models import UserSocialAuth
@@ -95,7 +96,10 @@ def facebook_set_profile(userprofile, *args, **kwargs):
         update_fields=fb_fields)
 
 
-def facebook_action_books_read(sns_id, isbn, action='me/books.reads'):
+def facebook_action_books_read(sns_id, isbn):
+
+    action = 'me/hoodpub:read' if config.CONF_OG_TYPE == 0 else 'me/books.reads'
+
     user = UserSocialAuth.objects.get(uid=sns_id)
     book = Book.objects.get(isbn=isbn)
     url_dict = {
