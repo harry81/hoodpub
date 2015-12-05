@@ -51,15 +51,13 @@ def host_app_start():
 
 
 def host_celery_restart():
-    run("ps -ef | grep celery | awk '{print $2}' | xargs -I {} -n1 kill -9 {}")
     with prefix('source /home/hoodpub/.virt_env/hoodpub2/bin/activate'):
-        with cd('/home/hoodpub/work/hoodpub/web'):
-            with shell_env(DB_NAME='hoodpub',
-                           DB_USER='mycms_user',
-                           DB_PASS='mycms_pass',
-                           DB_SERVICE='postgres',
-                           DB_PORT='5432'):
-                run('newrelic-admin run-program python manage.py celery worker --loglevel=INFO')
+        with shell_env(DB_NAME='hoodpub',
+                       DB_USER='mycms_user',
+                       DB_PASS='mycms_pass',
+                       DB_SERVICE='postgres',
+                       DB_PORT='5432'):
+            run('/etc/init.d/celeryd restart')
 
 
 def tag_newrelic():
