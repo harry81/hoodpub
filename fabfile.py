@@ -80,7 +80,7 @@ def git_diff():
     return True
 
 
-def deploy(sha):
+def deploy(sha=None):
     diff_pip()
     flake8()
     tests()
@@ -102,7 +102,7 @@ def deploy(sha):
                            DB_SERVICE='postgres',
                            DB_PORT='5432'):
                 run('python manage.py migrate')
-                run('python manage.py collectstatic   --noinput')
+                run('python manage.py collectstatic --noinput')
                 run('/etc/init.d/hoodpub2-uwsgi stop')
                 run('rm -rf ../run/*')
                 run('/etc/init.d/hoodpub2-uwsgi start')
