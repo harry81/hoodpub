@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny
 from constance import config
 
 from .serializers import BookListSerializer
-from .models import Book
+from .models import Book, OG_TYPE
 from hoodpub.models import Read
 from .utils import search_via_book_api
 from .tasks import async_search_via_book_api
@@ -72,6 +72,6 @@ def book(request, book_id):
         book = None
     context = RequestContext(request, {
         'book': book,
-        'og_type': config.OG_TYPE
+        'og_type': OG_TYPE[config.CONF_OG_TYPE]
     })
     return HttpResponse(template.render(context))
