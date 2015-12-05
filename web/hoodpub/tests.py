@@ -4,6 +4,7 @@ from mock import patch
 
 from django.test import TestCase
 from django.contrib.auth.models import User
+from social.apps.django_app.default.models import UserSocialAuth
 from rest_framework.test import APIClient
 from rest_framework import status
 
@@ -66,12 +67,14 @@ class HoodpubTestCase(TestCase):
         mock_requests.status_code = 200
         mock_requests.raise_for_status.return_value = 'ok'
 
+        UserSocialAuth.objects.create(user=self.usr,
+                                      uid=self.profile.sns_id)
+
         res = self.client.post('/api-hoodpub/read/',
                                {'isbn': self.book1.isbn}, format='json')
 
         json_output = json.loads(res.content)
         self.assertIn('msg', json_output['hoodpub'].keys())
-
         from django.core.mail import outbox
         mail = outbox.pop()
         self.assertIsNotNone(mail.body)

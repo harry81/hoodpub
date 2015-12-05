@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import requests
+from requests import exceptions
 import json
 from urlparse import urljoin
 from django.utils.html import strip_tags
@@ -7,7 +8,7 @@ import HTMLParser
 from templated_email import send_templated_mail
 
 from book.models import Book
-from hoodpub.models import User
+from social.apps.django_app.default.models import UserSocialAuth
 
 
 class FacebookException(Exception):
@@ -94,12 +95,11 @@ def facebook_set_profile(userprofile, *args, **kwargs):
         update_fields=fb_fields)
 
 
-def facebook_action_read(sns_id, isbn):
-    user = User.objects.filter(userprofile__sns_id=sns_id).order_by('id')[0]
+def facebook_action_hoodpub_read(sns_id, isbn):
+    user = UserSocialAuth.objects.get(uid=sns_id)
     book = Book.objects.get(isbn=isbn)
     url_dict = {
-        'access_token': '%s' %
-        user.userprofile_set.all()[0].facebook_access_token,
+        'access_token': '%s' % user.access_token,
         'mothod': 'POST',
         'book': 'https://hoodpub.com/book/%s/' % isbn
     }
@@ -109,9 +109,13 @@ def facebook_action_read(sns_id, isbn):
 
     url = urljoin(url, action)
 
-    res = requests.post(url, params=url_dict)
-    res.raise_for_status()
+    try:
+        res = requests.post(url, params=url_dict)
+        res.raise_for_status()
+    except exceptions.HTTPError, err:
+        err.message = "%s - %s" % (err.message, res.content)
+        raise err
 
-    _send_email_after_read(user, book)
+    _send_email_after_read(user.user, book)
 
     return res

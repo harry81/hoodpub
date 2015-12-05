@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import requests
+import re
 import json
 from urlparse import urljoin
 from django.core.management.base import BaseCommand
-
+from hoodpub.utils import facebook_action_hoodpub_read
 from social.apps.django_app.default.models import UserSocialAuth
 
 
@@ -25,6 +26,7 @@ class Command(BaseCommand):
         res = requests.get(url, params=url_dict)
         data = json.loads(res.content)
 
+        sns_id = data['data'][0]['from']['id']
         obj_id = data['data'][0]['id']
         book_url = data['data'][0]['data']['book']['url']
         print "A read is found \n[%s]" % data['data'][0]
@@ -46,18 +48,9 @@ class Command(BaseCommand):
         assert res.content == 'true', 'Read object is not deleted.'
 
         # create book
-        print "Creating new read %s[%s]" % (
-            book_url, data['data'][0]['data']['book']['title'])
-        url_dict = {
-            'access_token': user.access_token,
-            'method': 'POST',
-            'book': book_url
-        }
-
-        url = 'https://graph.facebook.com'
-        action = 'me/hoodpub:read'
-        url = urljoin(url, action)
-        res = requests.get(url, params=url_dict)
+        res = facebook_action_hoodpub_read(sns_id,
+                                           re.findall(r'[0-9]+', book_url)[0])
         data = json.loads(res.content)
+
         assert 'id' in data, 'Read object is not created.'
         print "New read was created. [%s] <- %s" % (data['id'], obj_id)
