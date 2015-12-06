@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from threadedcomments.models import ThreadedComment
 from .models import UserProfile
 
 
@@ -17,3 +18,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ('id', 'profile_picture', 'user', 'sns_id',
                   'first_name', 'last_name', 'name')
+
+class ThreadedCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ThreadedComment

@@ -12,6 +12,8 @@ router.register(r'api-user', hoodpub_views.UserProfileAPIView,
                 base_name="api-user")
 router.register(r'api-hoodpub', hoodpub_views.HoodpubAPIView,
                 base_name="api-hoodpub")
+router.register(r'api-comment', hoodpub_views.CommentAPIView,
+                base_name="api-comment")
 
 
 urlpatterns = patterns('',

@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from social.apps.django_app.default.models import UserSocialAuth
 from rest_framework.test import APIClient
 from rest_framework import status
+from django.contrib.sites.models import Site
 
 from .models import Read
 from book.models import Book
@@ -97,6 +98,33 @@ class HoodpubTestCase(TestCase):
         res = self.client.get('/api-hoodpub/%s/users/' % self.profile.sns_id)
         data = json.loads(res.content)
         self.assertEqual(1, data['count'])
+
+    def test_post_onesentense(self):
+        Site.objects.create(name='hoodpub_test.com')
+        comment = 'one tense'
+
+        usp = self.usr.userprofile_set.all()[0]
+        self.assertNotIn(self.book1.isbn, usp.read.values_list(
+            'book_id', flat=True))
+        # create one sentense
+        res = self.client.post('/api-comment/onesentense/',
+                               {'isbn': self.book1.isbn,
+                                'comment': comment},
+                               format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        # check if it is searchable via comment book
+        res = self.client.get('/api-comment/%s/book/' % self.book1.isbn,
+                              format='json')
+        json_output = json.loads(res.content)
+        self.assertEqual(comment, json_output['results'][0]['comment'])
+
+        # check if it is searchable via comment user
+        res = self.client.get('/api-comment/%s/user/' % self.usr.id,
+                              format='json')
+        json_output = json.loads(res.content)
+        self.assertEqual(comment, json_output['results'][0]['comment'])
 
     def test_trim_isbn(self):
         # setup
