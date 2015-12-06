@@ -83,7 +83,8 @@ class CommentAPIView(viewsets.ModelViewSet):
     @detail_route(methods=['get'])
     def book(self, request, *args, **kwargs):
         self.queryset = self.get_queryset().filter(
-            content_type=ContentType.objects.get(app_label="book", model="book"),
+            content_type=ContentType.objects.get(
+                app_label="book", model="book"),
             object_pk=kwargs['pk'])
         return super(CommentAPIView, self).list(request, *args, **kwargs)
 
@@ -91,7 +92,8 @@ class CommentAPIView(viewsets.ModelViewSet):
     @detail_route(methods=['get'])
     def user(self, request, *args, **kwargs):
         self.queryset = self.get_queryset().filter(
-            content_type=ContentType.objects.get(app_label="book", model="book"),
+            content_type=ContentType.objects.get(
+                app_label="book", model="book"),
             user_id=kwargs['pk'])
 
         return super(CommentAPIView, self).list(request, *args, **kwargs)
@@ -100,13 +102,14 @@ class CommentAPIView(viewsets.ModelViewSet):
     @list_route(methods=['post'])
     def onesentense(self, request, *args, **kwargs):
 
-        res = ThreadedComment.objects.create(
-            content_type=ContentType.objects.get(app_label="book", model="book"),
+        ThreadedComment.objects.create(
+            content_type=ContentType.objects.get(
+                app_label="book", model="book"),
             content_object=Book.objects.get(isbn=request.data['isbn']),
             comment=request.data['comment'],
             user=self.request.user,
             site=Site.objects.all()[0],
-            )
+        )
         resp = {
             'comment': 'ok'
         }
