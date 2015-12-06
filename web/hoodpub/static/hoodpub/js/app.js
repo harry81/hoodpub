@@ -17,20 +17,8 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                 templateUrl: '/static/hoodpub/templates/my.html',
                 controller: 'myControllers'
               }).
-              when('/login', {
-                templateUrl: '/static/hoodpub/templates/login.html',
-                controller: 'userControllers'
-              }).
-              when('/books', {
-                templateUrl: '/static/hoodpub/templates/books.html',
-                controller: 'hoodpubControllers'
-              }).
               when('/', {
                 templateUrl: '/static/hoodpub/templates/book_search.html',
-                controller: 'hoodpubControllers'
-              }).
-              when('/book/:book_id', {
-                templateUrl: '/static/hoodpub/templates/book.html',
                 controller: 'hoodpubControllers'
               }).
               when('/user/:user_id', {
