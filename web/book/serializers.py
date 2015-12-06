@@ -47,7 +47,7 @@ class BookListSerializer(serializers.ModelSerializer):
             filter(
                 content_type=ContentType.objects.get(
                     app_label="book", model="book"),
-            object_pk=obj.pk)[:5]
+            object_pk=obj.pk).order_by('-submit_date')[:5]
 
         return list(comments)
 

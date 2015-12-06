@@ -183,6 +183,27 @@ controller('userControllers', [
         }
       }
 
+      $scope.postComment = function(book, comment){
+        console.log(book, comment);
+
+        isbn = book.isbn;
+        var req = {
+          method: 'POST',
+          url: '/api-comment/onesentense/',
+          data: { 'isbn': isbn,
+                  'comment': comment}
+        }
+        $http(req).then(function()
+                        {
+                          $scope.onesentense='';
+                          Analytics.trackEvent('comment', 'isbn', isbn);
+                        },
+                        function()
+                        {
+                          console.log('fail');
+                        });
+      }
+
       if ($window.location.hash.indexOf('book') > -1){
         console.log('before detail in get_book: ');
         $scope.get_book($routeParams.book_id);

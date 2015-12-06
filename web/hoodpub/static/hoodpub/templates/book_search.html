@@ -50,13 +50,7 @@
             <p>{{ item.pub_nm }} </p>
             <p>{{ item.author }} </p>
           </div>
-
-          <!-- one sentense -->
-          <div class="col-xs-12 col-md-12 form-group">
-            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="나만의 한문장">
-          </div>
         </div>
-
         <!-- users -->
         <div class="col-xs-12 col-md-3">
           <div ng-repeat="read in item.reads" class="col-md-3 col-xs-3 pull-left">
@@ -65,6 +59,18 @@
             </a>
           </div>
         </div>
+
+        <!-- <\!-- one sentense -\-> -->
+        <!-- <div class="col-xs-12 col-md-9"> -->
+        <!--   <div ng-repeat="sentense in item.onesentense" class="col-md-7"> -->
+        <!--     <p class="comment">{{sentense.comment}}</p> -->
+        <!--     <p class="user_name">- {{sentense.user_name}}</p> -->
+        <!--   </div> -->
+        <!--   <input class="comment col-xs-11" type="text" id="onesentense" -->
+        <!--          ng-model="onesentense" -->
+        <!--          my-enter="postComment(item, onesentense)" -->
+        <!--          placeholder="나만의 한문장..."> -->
+        <!-- </div> -->
 
       </div>
     </div>

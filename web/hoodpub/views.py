@@ -101,13 +101,16 @@ class CommentAPIView(viewsets.ModelViewSet):
     @permission_classes((IsAuthenticated, ))
     @list_route(methods=['post'])
     def onesentense(self, request, *args, **kwargs):
+        book = Book.objects.get(isbn=request.data['isbn'])
 
         ThreadedComment.objects.create(
             content_type=ContentType.objects.get(
                 app_label="book", model="book"),
-            content_object=Book.objects.get(isbn=request.data['isbn']),
+            content_object=book,
             comment=request.data['comment'],
             user=self.request.user,
+            user_name=self.request.user.username,
+            title=book.title,
             site=Site.objects.all()[0],
         )
         resp = {

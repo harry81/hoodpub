@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
-                       'relativeDate', 'infinite-scroll', 'hoodpubServices',
-                       'hoodpubControllers', 'angular-google-analytics', 'ui.bootstrap',
+                       'relativeDate', 'infinite-scroll',
+                       'hoodpubServices', 'hoodpubControllers', 'hoodpubDirective',
+                       'angular-google-analytics', 'ui.bootstrap',
                        'angularSpinner']).
   config(['$routeProvider', '$httpProvider', 'jwtInterceptorProvider', '$resourceProvider', 'AnalyticsProvider',
           function($routeProvider, $httpProvider, jwtInterceptorProvider, $resourceProvider, AnalyticsProvider) {

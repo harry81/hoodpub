@@ -36,3 +36,20 @@ a {
 @media only screen and (max-width: 480px){
     #description{font-size:16px !important;}
 }
+
+.user_name {
+    color: #999;
+    line-height: 16px;
+    text-align: right;
+    margin: -5px 10px 10px 0px;
+}
+.comment {
+    font-weight: 200;
+    display: inline-block;
+    margin: 0px 10px;
+    font-family: helvetica, arial, sans-serif;
+}
+
+textarea:focus, input:focus{
+    outline: 0px;
+}
