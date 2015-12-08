@@ -49,7 +49,7 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav" >
-          <li ng-show="!$root.userprofile"><a href="/hoodpub-auth/facebook">Login</a></li>
+          <li ng-show="!$root.userprofile"><a href="/hoodpub-auth/facebook"><img src="/static/hoodpub/images/facebook-login-button.png"></a></li>
           <li ng-show="$root.userprofile"><a href="javascript:void(0);" ng-click="logout()">Logout</a></li>
           <li ng-show="$root.userprofile"><a href="#">{{ $root.userprofile.user.username }}</a></li>
         </ul>
