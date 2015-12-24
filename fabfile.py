@@ -46,7 +46,7 @@ def host_app_restart():
 
 
 def host_app_start():
-    run('rm /home/hoodpub/work/hoodpub/run/uwsgi*')
+    # run('rm /home/hoodpub/work/hoodpub/run/uwsgi*')
     run('/etc/init.d/hoodpub2-uwsgi start')
 
 
@@ -79,6 +79,12 @@ def git_diff():
         return confirm('You have unmerged changes. Do you want to keep going?', default=True)
     return True
 
+def put_newrelic_config():
+    put('newrelic/newrelic-plugin.cfg',
+        'work/hoodpub/newrelic/')
+    with prefix('source /home/hoodpub/.virt_env/hoodpub2/bin/activate'):
+        with cd('/home/hoodpub/work/hoodpub/web'):
+            run('git fetch -p')
 
 def deploy(sha=None, read_check=True):
     diff_pip()
