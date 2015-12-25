@@ -5,3 +5,4 @@ project.db
 web/db*
 .DS_Store
 db
+*.log

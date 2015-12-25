@@ -51,7 +51,7 @@
         <ul class="nav navbar-nav" >
           <li ng-show="!$root.userprofile"><a href="/hoodpub-auth/facebook"><img src="/static/hoodpub/images/facebook-login-button.png"></a></li>
           <li ng-show="$root.userprofile"><a href="javascript:void(0);" ng-click="logout()">Logout</a></li>
-          <li ng-show="$root.userprofile"><a href="#"><img src="https://graph.facebook.com/{{ $root.userprofile.sns_id }}/picture?width=25&height=25" class="img-circle" ></a>
+          <li ng-show="$root.userprofile"><a href="#/user/{{ $root.userprofile.sns_id }}"><img src="https://graph.facebook.com/{{ $root.userprofile.sns_id }}/picture?width=25&height=25"></a>
           </li>
         </ul>
       </div>

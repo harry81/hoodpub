@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import requests
 from fabric.api import *
 from fabric.contrib.console import confirm
 import time
@@ -39,6 +41,10 @@ def db_recreate():
     local('psql postgres -h postgres -U mycms_user -c "create database hoodpub"')
     local('psql hoodpub -U mycms_user  -h postgres < ../db/hoodpub_db_2015-11-13.sql')
 
+def host_ping():
+    res = requests.get('https://www.hoodpub.com/book/899517045X/#/')
+    if res.status_code != 200:
+        return confirm('SERVER is NOT RESPONDING NOW! YOU\'RE AWARE OF IT?', default=True)
 
 def host_app_restart():
     run('/etc/init.d/hoodpub2-uwsgi stop')
@@ -114,3 +120,4 @@ def deploy(sha=None, read_check=True):
                 run('/etc/init.d/hoodpub2-uwsgi start')
     run('curl http://www.hoodpub.com/ -H \"Host: www.hoodpub.com\"> /dev/null')
     tag_newrelic()
+    host_ping()
