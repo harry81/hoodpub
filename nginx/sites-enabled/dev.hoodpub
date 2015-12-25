@@ -45,3 +45,4 @@ server {
                 log_not_found off;
         }
 } 
+

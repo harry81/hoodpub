@@ -3,7 +3,7 @@
 angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                        'relativeDate', 'infinite-scroll',
                        'hoodpubServices', 'hoodpubControllers', 'hoodpubDirective',
-                       'angular-google-analytics', 'ui.bootstrap',
+                       'angular-google-analytics', 'ui.bootstrap', 'ngCookies',
                        'angularSpinner']).
   config(['$routeProvider', '$httpProvider', 'jwtInterceptorProvider', '$resourceProvider', 'AnalyticsProvider',
           function($routeProvider, $httpProvider, jwtInterceptorProvider, $resourceProvider, AnalyticsProvider) {
@@ -39,14 +39,26 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
             $httpProvider.defaults.withCredentials = true;
             delete $httpProvider.defaults.headers.common["X-Requested-With"];
 
-            jwtInterceptorProvider.tokenGetter = ['jwtHelper', '$http', function(jwtHelper, $http) {
-              var idToken = localStorage.getItem('id_token');
-              if (! idToken) {
-                return ;
-              }
+            jwtInterceptorProvider.tokenGetter =
+              ['jwtHelper', '$http', '$cookies',
+               function(jwtHelper, $http, $cookies) {
 
-              return idToken;
-            }];
+                 var idToken = localStorage.getItem('id_token');
+                 if (typeof idToken == 'undefined'){
+                   idToken = $cookies.get('id_token', 1);
+                 }
+                 else{
+                   var d = new Date();
+                   d.setTime(d.getTime() + 60 * 60 * 24 * 2 * 1000);
+                   $cookies.put('id_token', idToken, {'expires': d.toGMTString()});
+                 }
+
+                 if (typeof idToken == 'undefined')
+                   return ;
+
+                 return idToken;
+               }];
+
             $httpProvider.interceptors.push('jwtInterceptor');
 
             AnalyticsProvider.setAccount('UA-35673137-1');
