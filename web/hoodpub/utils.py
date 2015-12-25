@@ -108,7 +108,8 @@ def facebook_action_books_read(sns_id, isbn):
         'mothod': 'POST',
         'book': 'https://hoodpub.com/book/%s/' % isbn,
         'progress:timestamp': int(time.time()),
-        'progress:percent_complete': 100
+        'progress:percent_complete': 100,
+        'fb:explicitly_shared': 'true'
     }
 
     url = 'https://graph.facebook.com/'
