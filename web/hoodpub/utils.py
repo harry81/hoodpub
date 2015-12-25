@@ -2,10 +2,12 @@
 import requests
 import time
 import json
+import HTMLParser
 from requests import exceptions
 from urlparse import urljoin
 from django.utils.html import strip_tags
-import HTMLParser
+from celery.utils.log import get_task_logger
+
 from templated_email import send_templated_mail
 from constance import config
 
@@ -13,6 +15,7 @@ from book.models import Book
 from social.apps.django_app.default.models import UserSocialAuth
 
 
+logger = get_task_logger(__name__)
 class FacebookException(Exception):
 
     def __init__(self, message):
@@ -115,6 +118,7 @@ def facebook_action_books_read(sns_id, isbn):
     url = 'https://graph.facebook.com/'
 
     url = urljoin(url, action)
+    logger.info('%s %s %s %s', user.user, book, url, url_dict)
 
     try:
         res = requests.post(url, params=url_dict)
