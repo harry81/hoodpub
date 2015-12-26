@@ -83,7 +83,7 @@ controller('userControllers', [
           Analytics.trackEvent('search', 'keyword', $scope.keyword);
           usSpinnerService.stop('spinner');
         });
-      }
+      };
 
       $scope.search_users = function(sns_id) {
         usSpinnerService.spin('spinner');
@@ -96,11 +96,11 @@ controller('userControllers', [
           usSpinnerService.stop('spinner');
 
         });
-      }
+      };
 
       $scope.book = function(id){
         $window.location.href = '/#/book?id='+id;
-      }
+      };
 
       $scope.get_book = function(id){
         usSpinnerService.spin('spinner');
@@ -111,7 +111,7 @@ controller('userControllers', [
           $location.path('/book/'+ id);
         });
         usSpinnerService.stop('spinner');
-      }
+      };
 
       $scope.read_book = function(item){
 
@@ -135,7 +135,7 @@ controller('userControllers', [
           method: 'POST',
           url: '/api-hoodpub/read/',
           data: { 'isbn': isbn }
-        }
+        };
         $http(req).then(function()
                         {
                           item.is_read = true;
@@ -150,7 +150,7 @@ controller('userControllers', [
                           console.log('fail');
                         });
 
-      }
+      };
 
       $scope.get_next = function(){
         if (typeof next == 'undefined'){
@@ -166,11 +166,11 @@ controller('userControllers', [
             next = res['next'];
           }
                   );
-      }
+      };
 
       $scope.goto_list = function(id){
         $window.location.href = '/#/';
-      }
+      };
 
       $scope.go_back = function(){
         if ($window.history.length > 1){
@@ -179,7 +179,7 @@ controller('userControllers', [
         else{
           $scope.goto_list();
         }
-      }
+      };
 
       $scope.postComment = function(book, comment){
         console.log(book, comment);
@@ -190,7 +190,7 @@ controller('userControllers', [
           url: '/api-comment/onesentense/',
           data: { 'isbn': isbn,
                   'comment': comment}
-        }
+        };
         $http(req).then(function()
                         {
                           $scope.onesentense='';
@@ -200,7 +200,7 @@ controller('userControllers', [
                         {
                           console.log('fail');
                         });
-      }
+      };
 
       if ($window.location.hash.indexOf('book') > -1){
         console.log('before detail in get_book: ');
