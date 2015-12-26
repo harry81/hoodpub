@@ -21,10 +21,12 @@ controller('userControllers', [
   function($rootScope, $scope, $http, $window){
 
     function init(){
+      if (localStorage.getItem('id_token') == null)
+        return ;
+
       $http.get('/api-user/').
         then(function(res) {
           $rootScope.userprofile = res.data;
-          console.log('$rootScope is set', $rootScope.userprofile);
         }, function(res) {
           if (res.status == 401){
             console.log('api-user fail', res.status, res.data);
@@ -58,7 +60,6 @@ controller('userControllers', [
       localStorage.removeItem('id_token');
       delete $rootScope.userprofile;
       $window.location.href = '/#/';
-      console.log('logout');
     }
     init();
 
@@ -75,7 +76,6 @@ controller('userControllers', [
           keyword = $scope.keyword;
         usSpinnerService.spin('spinner');
         Books.query({'search': keyword }).$promise.then(function(res) {
-          console.log(res);
           delete $scope.items;
           $scope.items = res.results;
           next = res['next'];
@@ -91,7 +91,6 @@ controller('userControllers', [
           delete $scope.items;
           $scope.items = res.results;
           next = res['next'];
-          console.log('user api', $scope.items);
           $location.path('/user/'+ sns_id, false);
           Analytics.trackEvent('user', 'sns_id', sns_id);
           usSpinnerService.stop('spinner');
@@ -107,7 +106,6 @@ controller('userControllers', [
         usSpinnerService.spin('spinner');
         Analytics.trackEvent('book', 'isbn', id);
         Books.get({'id': id}).$promise.then(function(res){
-          console.log('detail in get_book: ',  res);
           delete $scope.item;
           $scope.item = res;
           $location.path('/book/'+ id);
