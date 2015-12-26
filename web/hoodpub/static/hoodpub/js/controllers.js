@@ -1,4 +1,113 @@
 angular.module('hoodpubControllers', []).
+  controller('graphControllers', [
+    '$scope', '$http', '$window', 'UserBooks', '$routeParams',
+    function ($scope, $http, $window, UserBooks, $routeParams) {
+
+      $scope.get_graph_user = function(user_id){
+        console.log('in graph');
+        // Step 1. We create a graph object.
+        var graph = Viva.Graph.graph();
+
+        // Step 2. We add nodes and edges to the graph:
+        console.log('sns_id', user_id );
+
+        UserBooks.query({'sns_id': user_id }).$promise.then(function(res) {
+          books = res.results;
+          next = res['next'];
+          console.log('items : ', books);
+
+          for (var i = 0, book_len = books.length; i < book_len; i++) {
+            graph.addNode(books[i].isbn, {url: books[i].cover_s_url,
+                                          label: books[i].title,
+                                          size: 70});
+
+            reads = books[i].reads;
+            for (var j = 0, user_len = reads.length; j < user_len; j++) {
+              console.log('reads', reads[j]);
+              pic_url = 'https://graph.facebook.com/'.concat(reads[j].user[0].sns_id).concat('/picture');
+              graph.addNode(reads[j].user[0].sns_id, {url: pic_url,
+                                                      label: reads[j].user[0].sns_id,
+                                                      size: 40});
+
+              graph.addLink(books[i].isbn, reads[j].user[0].sns_id);
+
+              console.log('pair', books[i].isbn, reads[j].user[0].sns_id);
+
+            }
+
+          }
+
+        });
+
+        var graphics = Viva.Graph.View.svgGraphics();
+        nodeSize = 35;
+        highlightRelatedNodes = function(nodeId, isOn) {
+          // just enumerate all realted nodes and update link color:
+          graph.forEachLinkedNode(nodeId, function(node, link){
+            var linkUI = graphics.getLinkUI(link.id);
+            if (linkUI) {
+              // linkUI is a UI object created by graphics below
+              linkUI.attr('stroke', isOn ? 'red' : 'gray');
+            }
+          });
+        };
+        var layout = Viva.Graph.Layout.forceDirected(graph, {
+          springLength : 50,
+          springCoeff : 0.000008,
+          dragCoeff : 0.008,
+          gravity : -1.2
+        });
+
+        graphics.node(function(node) {
+          var ui = Viva.Graph.svg('g'),
+              svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.data.label),
+              img = Viva.Graph.svg('image')
+                .attr('width', node.data.size)
+                .attr('height', node.data.size)
+                .link(node.data.url);
+
+          $(ui).hover(function() { // mouse over
+            highlightRelatedNodes(node.id, true);
+          }, function() { // mouse out
+            highlightRelatedNodes(node.id, false);
+          }).click(function() {
+            console.log('click', node);
+          });
+
+          ui.append(svgText);
+          ui.append(img);
+          return ui;
+        })
+          .placeNode(function(nodeUI, pos){
+            // Shift image to let links go to the center:
+            nodeUI.attr('transform',
+                        'translate(' +
+                        (pos.x - nodeSize/2) + ',' + (pos.y - nodeSize/2) +
+                        ')');
+          });
+
+        var renderer = Viva.Graph.View.renderer(
+          graph,
+          {
+            graphics : graphics,
+            layout : layout
+          });
+        console.log('graph :', renderer);
+        renderer.run();
+
+
+        graph.forEachLink(function(link) {
+          console.dir(link);
+        });
+      };
+
+      if ($window.location.hash.indexOf('graph') > -1){
+        $scope.get_graph_user($routeParams.user_id);
+      }
+
+
+    }]).
+
   controller('authControllers', [
     '$scope', '$http', '$window', 'Users',
     function ($scope, $http, $window, Users) {
@@ -54,13 +163,13 @@ controller('userControllers', [
           console.log('fail');
 
         });
-    }
+    };
 
     $scope.logout = function (){
       localStorage.removeItem('id_token');
       delete $rootScope.userprofile;
       $window.location.href = '/#/';
-    }
+    };
     init();
 
   }])
