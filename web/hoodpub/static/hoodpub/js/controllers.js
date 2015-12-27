@@ -262,6 +262,18 @@ var HoodpubGraph = function () {
     gravity : -1.2
   });
 
+  var highlightRelatedNodes = function(nodeId, isOn) {
+    // just enumerate all realted nodes and update link color:
+    this.graph.forEachLinkedNode(nodeId, function(node, link){
+      var linkUI = this.graphics.getLinkUI(link.id);
+      if (linkUI) {
+        // linkUI is a UI object created by graphics below
+        linkUI.attr('stroke', isOn ? 'red' : 'gray');
+      }
+    });
+  };
+
+
   this.graphics.node(function(node) {
     var ui = Viva.Graph.svg('g'),
         svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.data.label),
@@ -278,13 +290,13 @@ var HoodpubGraph = function () {
     }, function() { // mouse out
     }).click(function() {
       if (node.data.type == 'book'){
-        window.open('https://hoodpub.com/book/'.concat(node.id), '_blank');
+        window.open('/book/'.concat(node.id), '_blank');
       }
       else if (node.data.type == 'user'){
         console.log('node.data.type :', 'user');
 
         $.ajax({
-          url: 'https://www.hoodpub.com/api-hoodpub/'.concat(node.id).concat('/users/'),
+          url: '/api-hoodpub/'.concat(node.id).concat('/users/'),
           data: {
             format: 'json'
           },
@@ -331,31 +343,48 @@ HoodpubGraph.prototype.run = function() {
 
 HoodpubGraph.prototype.AddLinkNode = function(res) {
   console.log('res:', res );
-    books = res.results;
-    next = res['next'];
+  var self = this;
+  books = res.results;
+  next = res['next'];
 
-    for (var cnt_book = 0, book_len = books.length;
-         cnt_book < book_len; cnt_book++) {
-      this.graph.addNode(books[cnt_book].isbn, {
-        type: 'book',
-        url: books[cnt_book].cover_s_url,
-        label: books[cnt_book].title,
-        size: 70
+  for (var cnt_book = 0, book_len = books.length;
+       cnt_book < book_len; cnt_book++) {
+    this.graph.addNode(books[cnt_book].isbn, {
+      type: 'book',
+      url: books[cnt_book].cover_s_url,
+      label: books[cnt_book].title,
+      size: 70
+    });
+
+    reads = books[cnt_book].reads;
+    for (var cnt_user = 0, user_len = reads.length;
+         cnt_user < user_len; cnt_user++) {
+      pic_url = 'https://graph.facebook.com/'.concat(reads[cnt_user].user[0].sns_id).concat('/picture');
+      this.graph.addNode(reads[cnt_user].user[0].sns_id, {
+        type: 'user',
+        url: pic_url,
+        label: reads[cnt_user].user[0].sns_id,
+        size: 40
       });
 
-      reads = books[cnt_book].reads;
-      for (var cnt_user = 0, user_len = reads.length;
-           cnt_user < user_len; cnt_user++) {
-        pic_url = 'https://graph.facebook.com/'.concat(reads[cnt_user].user[0].sns_id).concat('/picture');
-        this.graph.addNode(reads[cnt_user].user[0].sns_id, {
-          type: 'user',
-          url: pic_url,
-          label: reads[cnt_user].user[0].sns_id,
-          size: 40
-        });
-
-        this.graph.addLink(books[cnt_book].isbn, reads[cnt_user].user[0].sns_id);
-      }
+      this.graph.addLink(books[cnt_book].isbn, reads[cnt_user].user[0].sns_id);
     }
+  }
+  console.log('next:', next);
 
+  if (next != null){
+    $.ajax({
+      url: next,
+      error: function() {
+        console.error('error');
+      },
+      success: function(data) {
+        console.log('good');
+        self.AddLinkNode(data);
+
+      },
+      type: 'GET'
+    });
   };
+
+};
