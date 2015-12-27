@@ -285,8 +285,8 @@ var HoodpubGraph = function () {
     $(ui).hover(function() { // mouse over
       $('#sidebar').show();
       console.log('node :', node.id);
-      $('#sidebar>img').attr('src', node.data.url);
-      $('span.title').text(node.data.label);
+      $('#sidebar img').attr('src', node.data.url);
+      $('#sidebar .title').text(node.data.label);
     }, function() { // mouse out
     }).click(function() {
       if (node.data.type == 'book'){
@@ -363,7 +363,7 @@ HoodpubGraph.prototype.AddLinkNode = function(res) {
       this.graph.addNode(reads[cnt_user].user[0].sns_id, {
         type: 'user',
         url: pic_url,
-        label: reads[cnt_user].user[0].sns_id,
+        label: reads[cnt_user].user[0].last_name.concat(reads[cnt_user].user[0].first_name),
         size: 40
       });
 
