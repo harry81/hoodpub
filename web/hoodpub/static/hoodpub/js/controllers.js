@@ -284,7 +284,7 @@ var HoodpubGraph = function () {
         console.log('node.data.type :', 'user');
 
         $.ajax({
-          url: 'http://localhost:8000/api-hoodpub/'.concat(node.id).concat('/users/'),
+          url: 'https://www.hoodpub.com/api-hoodpub/'.concat(node.id).concat('/users/'),
           data: {
             format: 'json'
           },
