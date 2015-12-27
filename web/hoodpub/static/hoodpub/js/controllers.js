@@ -4,6 +4,7 @@ angular.module('hoodpubControllers', []).
     function ($scope, $http, $window, UserBooks, $routeParams) {
       // Step 1. We create a graph object.
       var hoodpub = new HoodpubGraph();
+      console.log('hoodpub obj', hoodpub);
 
       $scope.get_graph_user = function(user_id){
         UserBooks.query({'sns_id': user_id }).$promise.then(function(res) {
@@ -244,14 +245,15 @@ controller('userControllers', [
 ;
 
 var HoodpubGraph = function () {
-  this.graph = Viva.Graph.graph();
-  this.graphics = Viva.Graph.View.svgGraphics();
-
   var nodeSize = 35,
       book_height = 60,
       book_width = 40,
       user_height = 35,
-      user_width = 35;
+      user_width = 35,
+      self = this;
+
+  this.graph = Viva.Graph.graph();
+  this.graphics = Viva.Graph.View.svgGraphics();
 
   this.layout = Viva.Graph.Layout.forceDirected(this.graph, {
     springLength : 50,
@@ -261,7 +263,6 @@ var HoodpubGraph = function () {
   });
 
   this.graphics.node(function(node) {
-
     var ui = Viva.Graph.svg('g'),
         svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.data.label),
         img = Viva.Graph.svg('image')
@@ -283,7 +284,7 @@ var HoodpubGraph = function () {
         console.log('node.data.type :', 'user');
 
         $.ajax({
-          url: 'http://localhost:8000/api-hoodpub/100001440849313/users/',
+          url: 'http://localhost:8000/api-hoodpub/'.concat(node.id).concat('/users/'),
           data: {
             format: 'json'
           },
@@ -291,8 +292,8 @@ var HoodpubGraph = function () {
             console.error('error');
           },
           success: function(data) {
-            console.log('good', data);
-            this.AddLinkNode(data.results);
+            console.log('good');
+            self.AddLinkNode(data);
 
           },
           type: 'GET'
