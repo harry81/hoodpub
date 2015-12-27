@@ -4,43 +4,48 @@ angular.module('hoodpubControllers', []).
     function ($scope, $http, $window, UserBooks, $routeParams) {
 
       $scope.get_graph_user = function(user_id){
-        console.log('in graph');
         // Step 1. We create a graph object.
         var graph = Viva.Graph.graph();
 
         // Step 2. We add nodes and edges to the graph:
-        console.log('sns_id', user_id );
 
         UserBooks.query({'sns_id': user_id }).$promise.then(function(res) {
           books = res.results;
           next = res['next'];
-          console.log('items : ', books);
 
-          for (var i = 0, book_len = books.length; i < book_len; i++) {
-            graph.addNode(books[i].isbn, {url: books[i].cover_s_url,
-                                          label: books[i].title,
-                                          size: 70});
+          for (var cnt_book = 0, book_len = books.length;
+               cnt_book < book_len; cnt_book++) {
+            graph.addNode(books[cnt_book].isbn, {
+              type: 'book',
+              url: books[cnt_book].cover_s_url,
+              label: books[cnt_book].title,
+              size: 70
+            });
 
-            reads = books[i].reads;
-            for (var j = 0, user_len = reads.length; j < user_len; j++) {
-              console.log('reads', reads[j]);
-              pic_url = 'https://graph.facebook.com/'.concat(reads[j].user[0].sns_id).concat('/picture');
-              graph.addNode(reads[j].user[0].sns_id, {url: pic_url,
-                                                      label: reads[j].user[0].sns_id,
-                                                      size: 40});
+            reads = books[cnt_book].reads;
+            for (var cnt_user = 0, user_len = reads.length;
+                 cnt_user < user_len; cnt_user++) {
+              pic_url = 'https://graph.facebook.com/'.concat(reads[cnt_user].user[0].sns_id).concat('/picture');
+              graph.addNode(reads[cnt_user].user[0].sns_id, {
+                type: 'user',
+                url: pic_url,
+                label: reads[cnt_user].user[0].sns_id,
+                size: 40
+              });
 
-              graph.addLink(books[i].isbn, reads[j].user[0].sns_id);
-
-              console.log('pair', books[i].isbn, reads[j].user[0].sns_id);
-
+              graph.addLink(books[cnt_book].isbn, reads[cnt_user].user[0].sns_id);
+              console.info('pair', books[cnt_book].isbn, reads[cnt_user]);
             }
-
           }
-
         });
 
         var graphics = Viva.Graph.View.svgGraphics();
         nodeSize = 35;
+        book_height = 60;
+        book_width = 40;
+        user_height = 35;
+        user_width = 35;
+
         highlightRelatedNodes = function(nodeId, isOn) {
           // just enumerate all realted nodes and update link color:
           graph.forEachLinkedNode(nodeId, function(node, link){
@@ -62,19 +67,33 @@ angular.module('hoodpubControllers', []).
           var ui = Viva.Graph.svg('g'),
               svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.data.label),
               img = Viva.Graph.svg('image')
-                .attr('width', node.data.size)
-                .attr('height', node.data.size)
+                .attr('width', node.data.type == 'book' ? book_width : user_width)
+                .attr('height', node.data.type == 'book' ? book_height : user_height)
                 .link(node.data.url);
 
           $(ui).hover(function() { // mouse over
             highlightRelatedNodes(node.id, true);
+            $('#sidebar').show();
+            console.log('node :', node.id);
+            $('#sidebar>img').attr('src', node.data.url);
+            $('span.title').text(node.data.label);
           }, function() { // mouse out
             highlightRelatedNodes(node.id, false);
           }).click(function() {
             console.log('click', node);
+            graph.addNode('hi', {
+              type: 'book',
+              url: 'url',
+              label: 'label',
+              size: 70
+            });
+
+
+            graph.addLink(node.id, 'hi');
+
           });
 
-          ui.append(svgText);
+          // ui.append(svgText);
           ui.append(img);
           return ui;
         })
@@ -90,24 +109,19 @@ angular.module('hoodpubControllers', []).
           graph,
           {
             graphics : graphics,
-            layout : layout
+            layout : layout,
+            prerender: 20,
+            container : document.getElementById('graphDiv')
           });
         console.log('graph :', renderer);
         renderer.run();
-
-
-        graph.forEachLink(function(link) {
-          console.dir(link);
-        });
       };
 
       if ($window.location.hash.indexOf('graph') > -1){
         $scope.get_graph_user($routeParams.user_id);
       }
 
-
     }]).
-
   controller('authControllers', [
     '$scope', '$http', '$window', 'Users',
     function ($scope, $http, $window, Users) {
