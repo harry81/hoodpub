@@ -2,119 +2,24 @@ angular.module('hoodpubControllers', []).
   controller('graphControllers', [
     '$scope', '$http', '$window', 'UserBooks', '$routeParams',
     function ($scope, $http, $window, UserBooks, $routeParams) {
+      // Step 1. We create a graph object.
+      var hoodpub = new HoodpubGraph();
 
       $scope.get_graph_user = function(user_id){
-        // Step 1. We create a graph object.
-        var graph = Viva.Graph.graph();
-
-        // Step 2. We add nodes and edges to the graph:
-
         UserBooks.query({'sns_id': user_id }).$promise.then(function(res) {
-          books = res.results;
+          hoodpub.AddLinkNode(res);
+          hoodpub.run();
           next = res['next'];
 
-          for (var cnt_book = 0, book_len = books.length;
-               cnt_book < book_len; cnt_book++) {
-            graph.addNode(books[cnt_book].isbn, {
-              type: 'book',
-              url: books[cnt_book].cover_s_url,
-              label: books[cnt_book].title,
-              size: 70
-            });
-
-            reads = books[cnt_book].reads;
-            for (var cnt_user = 0, user_len = reads.length;
-                 cnt_user < user_len; cnt_user++) {
-              pic_url = 'https://graph.facebook.com/'.concat(reads[cnt_user].user[0].sns_id).concat('/picture');
-              graph.addNode(reads[cnt_user].user[0].sns_id, {
-                type: 'user',
-                url: pic_url,
-                label: reads[cnt_user].user[0].sns_id,
-                size: 40
+          if (next != null){
+            $http.get(next).
+              then(function(res) {
+                hoodpub.AddLinkNode(res.data);
+              }, function(res) {
+                console.error('error');
               });
-
-              graph.addLink(books[cnt_book].isbn, reads[cnt_user].user[0].sns_id);
-              console.info('pair', books[cnt_book].isbn, reads[cnt_user]);
-            }
           }
         });
-
-        var graphics = Viva.Graph.View.svgGraphics();
-        nodeSize = 35;
-        book_height = 60;
-        book_width = 40;
-        user_height = 35;
-        user_width = 35;
-
-        highlightRelatedNodes = function(nodeId, isOn) {
-          // just enumerate all realted nodes and update link color:
-          graph.forEachLinkedNode(nodeId, function(node, link){
-            var linkUI = graphics.getLinkUI(link.id);
-            if (linkUI) {
-              // linkUI is a UI object created by graphics below
-              linkUI.attr('stroke', isOn ? 'red' : 'gray');
-            }
-          });
-        };
-        var layout = Viva.Graph.Layout.forceDirected(graph, {
-          springLength : 50,
-          springCoeff : 0.000008,
-          dragCoeff : 0.008,
-          gravity : -1.2
-        });
-
-        graphics.node(function(node) {
-          var ui = Viva.Graph.svg('g'),
-              svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.data.label),
-              img = Viva.Graph.svg('image')
-                .attr('width', node.data.type == 'book' ? book_width : user_width)
-                .attr('height', node.data.type == 'book' ? book_height : user_height)
-                .link(node.data.url);
-
-          $(ui).hover(function() { // mouse over
-            highlightRelatedNodes(node.id, true);
-            $('#sidebar').show();
-            console.log('node :', node.id);
-            $('#sidebar>img').attr('src', node.data.url);
-            $('span.title').text(node.data.label);
-          }, function() { // mouse out
-            highlightRelatedNodes(node.id, false);
-          }).click(function() {
-            console.log('click', node);
-            graph.addNode('hi', {
-              type: 'book',
-              url: 'url',
-              label: 'label',
-              size: 70
-            });
-
-
-            graph.addLink(node.id, 'hi');
-
-          });
-
-          // ui.append(svgText);
-          ui.append(img);
-          return ui;
-        })
-          .placeNode(function(nodeUI, pos){
-            // Shift image to let links go to the center:
-            nodeUI.attr('transform',
-                        'translate(' +
-                        (pos.x - nodeSize/2) + ',' + (pos.y - nodeSize/2) +
-                        ')');
-          });
-
-        var renderer = Viva.Graph.View.renderer(
-          graph,
-          {
-            graphics : graphics,
-            layout : layout,
-            prerender: 20,
-            container : document.getElementById('graphDiv')
-          });
-        console.log('graph :', renderer);
-        renderer.run();
       };
 
       if ($window.location.hash.indexOf('graph') > -1){
@@ -337,3 +242,119 @@ controller('userControllers', [
       }
     }])
 ;
+
+var HoodpubGraph = function () {
+  this.graph = Viva.Graph.graph();
+  this.graphics = Viva.Graph.View.svgGraphics();
+
+  var nodeSize = 35,
+      book_height = 60,
+      book_width = 40,
+      user_height = 35,
+      user_width = 35;
+
+  this.layout = Viva.Graph.Layout.forceDirected(this.graph, {
+    springLength : 50,
+    springCoeff : 0.000008,
+    dragCoeff : 0.008,
+    gravity : -1.2
+  });
+
+  this.graphics.node(function(node) {
+
+    var ui = Viva.Graph.svg('g'),
+        svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.data.label),
+        img = Viva.Graph.svg('image')
+          .attr('width', node.data.type == 'book' ? book_width : user_width)
+          .attr('height', node.data.type == 'book' ? book_height : user_height)
+          .link(node.data.url);
+
+    $(ui).hover(function() { // mouse over
+      $('#sidebar').show();
+      console.log('node :', node.id);
+      $('#sidebar>img').attr('src', node.data.url);
+      $('span.title').text(node.data.label);
+    }, function() { // mouse out
+    }).click(function() {
+      if (node.data.type == 'book'){
+        window.open('https://hoodpub.com/book/'.concat(node.id), '_blank');
+      }
+      else if (node.data.type == 'user'){
+        console.log('node.data.type :', 'user');
+
+        $.ajax({
+          url: 'http://localhost:8000/api-hoodpub/100001440849313/users/',
+          data: {
+            format: 'json'
+          },
+          error: function() {
+            console.error('error');
+          },
+          success: function(data) {
+            console.log('good', data);
+            this.AddLinkNode(data.results);
+
+          },
+          type: 'GET'
+        });
+
+      }
+    });
+
+    // ui.append(svgText);
+    ui.append(img);
+    return ui;
+  })
+    .placeNode(function(nodeUI, pos){
+      // Shift image to let links go to the center:
+      nodeUI.attr('transform',
+                  'translate(' +
+                  (pos.x - nodeSize/2) + ',' + (pos.y - nodeSize/2) +
+                  ')');
+    });
+
+  this.renderer = Viva.Graph.View.renderer(
+    this.graph,
+    {
+      graphics : this.graphics,
+      layout : this.layout,
+      prerender: 20,
+      container : document.getElementById('graphDiv')
+    });
+
+};
+
+HoodpubGraph.prototype.run = function() {
+  this.renderer.run();
+};
+
+HoodpubGraph.prototype.AddLinkNode = function(res) {
+  console.log('res:', res );
+    books = res.results;
+    next = res['next'];
+
+    for (var cnt_book = 0, book_len = books.length;
+         cnt_book < book_len; cnt_book++) {
+      this.graph.addNode(books[cnt_book].isbn, {
+        type: 'book',
+        url: books[cnt_book].cover_s_url,
+        label: books[cnt_book].title,
+        size: 70
+      });
+
+      reads = books[cnt_book].reads;
+      for (var cnt_user = 0, user_len = reads.length;
+           cnt_user < user_len; cnt_user++) {
+        pic_url = 'https://graph.facebook.com/'.concat(reads[cnt_user].user[0].sns_id).concat('/picture');
+        this.graph.addNode(reads[cnt_user].user[0].sns_id, {
+          type: 'user',
+          url: pic_url,
+          label: reads[cnt_user].user[0].sns_id,
+          size: 40
+        });
+
+        this.graph.addLink(books[cnt_book].isbn, reads[cnt_user].user[0].sns_id);
+      }
+    }
+
+  };
