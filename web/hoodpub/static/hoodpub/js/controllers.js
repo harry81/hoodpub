@@ -221,6 +221,10 @@ controller('userControllers', [
         $window.location.href = '/#/';
       };
 
+      $scope.goto_graph = function(id){
+        $window.location.href = '/#/graph/';
+      };
+
       $scope.go_back = function(){
         if ($window.history.length > 1){
           $window.history.back(-1);
