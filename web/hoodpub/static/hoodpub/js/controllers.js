@@ -304,8 +304,8 @@ var HoodpubGraph = function () {
 
     $(ui).hover(function() { // mouse over
       $('#sidebar').show();
-      // $('#sidebar img').attr('src', node.data.url);
-      // $('#sidebar .title').text(node.data.label);
+      $('#sidebar img').attr('src', node.data.url);
+      $('#sidebar .title').text(node.data.label);
     }, function() { // mouse out
     }).click(function() {
       if (node.data.type == 'book'){
