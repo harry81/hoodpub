@@ -49,9 +49,11 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav" >
-          <li ng-show="!$root.userprofile"><a href="/hoodpub-auth/facebook"><img src="/static/hoodpub/images/facebook-login-button.png"></a></li>
-          <li ng-show="$root.userprofile"><a href="javascript:void(0);" ng-click="logout()">Logout</a></li>
-          <li ng-if="$root.userprofile"><a href="#/graph/{{$root.userprofile.sns_id}}"><img ng-src="https://graph.facebook.com/{{$root.userprofile.sns_id}}/picture?width=25&height=25" class="img-circle"></a>
+          <li><input type="button" ng-click="go_graph()" class="btn btn-default" value="그래프" style="margin:10px auto;"></li>
+          <li ng-show="!$root.userprofile"><a ng-click="go_login()"><img src="/static/hoodpub/images/facebook-login-button.png"></a></li>
+          <li ng-show="$root.userprofile"><input type="button" ng-click="logout()" class="btn btn-default" value="로그아웃" style="margin:10px auto;">
+          </li>
+          <li ng-if="$root.userprofile"><a href="#/user/{{$root.userprofile.sns_id}}"><img ng-src="https://graph.facebook.com/{{$root.userprofile.sns_id}}/picture?width=25&height=25" class="img-circle"></a>
           </li>
         </ul>
       </div>

@@ -26,9 +26,9 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
                 templateUrl: '/static/hoodpub/templates/book_search.html',
                 controller: 'hoodpubControllers'
               }).
-              when('/graph/:user_id', {
+              when('/graph/:user_id?', {
                 templateUrl: '/static/hoodpub/templates/book_graph.html',
-                controller: 'hoodpubControllers'
+                controller: 'graphControllers'
               }).
               otherwise({redirectTo: '/'});
 

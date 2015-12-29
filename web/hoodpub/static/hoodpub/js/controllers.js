@@ -1,28 +1,39 @@
 angular.module('hoodpubControllers', []).
   controller('graphControllers', [
-    '$scope', '$http', '$window', 'UserBooks', '$routeParams',
-    function ($scope, $http, $window, UserBooks, $routeParams) {
+    '$scope', '$rootScope','$http', '$window', 'Books', 'UserBooks', '$routeParams',
+    function ($scope, $rootScope, $http, $window, Books, UserBooks, $routeParams) {
       // Step 1. We create a graph object.
       var hoodpub = new HoodpubGraph();
-      console.log('hoodpub obj', hoodpub);
 
       $scope.get_graph_user = function(user_id){
-        UserBooks.query({'sns_id': user_id }).$promise.then(function(res) {
-          hoodpub.AddLinkNode(res);
-          hoodpub.run();
-          next = res['next'];
 
-          if (next != null){
-            $http.get(next).
-              then(function(res) {
-                hoodpub.AddLinkNode(res.data);
-              }, function(res) {
-                console.error('error');
-              });
-          }
-        });
+        if (typeof user_id == 'undefined' &&  ('userprofile' in $rootScope)){
+          console.log('$rootScope.userprofile', $rootScope);
+          user_id = $rootScope.userprofile.sns_id;
+        }
+
+
+        if (typeof user_id != 'undefined'){
+          console.log('user_id :', user_id);
+
+          UserBooks.query({'sns_id': user_id }).$promise.then(function(res) {
+            console.log('user_id yes');
+            hoodpub.AddLinkNode(res, true);
+            hoodpub.run();
+          });
+
+        } else {
+          Books.query().$promise.then(function(res){
+            console.log('user_id no');
+            hoodpub.AddLinkNode(res, false);
+            hoodpub.run();
+          });
+
+        }
+
       };
 
+      console.log('happen');
       if ($window.location.hash.indexOf('graph') > -1){
         $scope.get_graph_user($routeParams.user_id);
       }
@@ -90,6 +101,15 @@ controller('userControllers', [
       delete $rootScope.userprofile;
       $window.location.href = '/#/';
     };
+
+    $scope.go_graph = function (){
+      $window.location.href = '/#/graph/';
+    };
+
+    $scope.go_login = function (){
+      $window.location.href = '/hoodpub-auth/facebook';
+    };
+
     init();
 
   }])
@@ -182,7 +202,7 @@ controller('userControllers', [
       };
 
       $scope.get_next = function(){
-        if (typeof next == 'undefined'){
+        if (typeof next == 'undefined' || typeof $scope.items == 'undefined'){
           return ;
         }
         $http.get(next)
@@ -284,9 +304,8 @@ var HoodpubGraph = function () {
 
     $(ui).hover(function() { // mouse over
       $('#sidebar').show();
-      console.log('node :', node.id);
-      $('#sidebar img').attr('src', node.data.url);
-      $('#sidebar .title').text(node.data.label);
+      // $('#sidebar img').attr('src', node.data.url);
+      // $('#sidebar .title').text(node.data.label);
     }, function() { // mouse out
     }).click(function() {
       if (node.data.type == 'book'){
@@ -304,8 +323,7 @@ var HoodpubGraph = function () {
             console.error('error');
           },
           success: function(data) {
-            console.log('good');
-            self.AddLinkNode(data);
+            self.AddLinkNode(data, true);
 
           },
           type: 'GET'
@@ -341,8 +359,7 @@ HoodpubGraph.prototype.run = function() {
   this.renderer.run();
 };
 
-HoodpubGraph.prototype.AddLinkNode = function(res) {
-  console.log('res:', res );
+HoodpubGraph.prototype.AddLinkNode = function(res, recursive) {
   var self = this;
   books = res.results;
   next = res['next'];
@@ -370,17 +387,15 @@ HoodpubGraph.prototype.AddLinkNode = function(res) {
       this.graph.addLink(books[cnt_book].isbn, reads[cnt_user].user[0].sns_id);
     }
   }
-  console.log('next:', next);
 
-  if (next != null){
+  if (next != null && recursive == true){
     $.ajax({
       url: next,
       error: function() {
         console.error('error');
       },
       success: function(data) {
-        console.log('good');
-        self.AddLinkNode(data);
+        self.AddLinkNode(data, recursive);
 
       },
       type: 'GET'
