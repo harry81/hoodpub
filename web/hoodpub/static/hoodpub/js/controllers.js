@@ -1,9 +1,9 @@
 angular.module('hoodpubControllers', []).
   controller('graphControllers', [
-    '$scope', '$rootScope','$http', '$window', 'Books', 'UserBooks', '$routeParams',
-    function ($scope, $rootScope, $http, $window, Books, UserBooks, $routeParams) {
+    '$scope', '$rootScope','$http', '$window', 'Analytics', 'Books', 'UserBooks', '$routeParams',
+    function ($scope, $rootScope, $http, $window, Analytics, Books, UserBooks, $routeParams) {
       // Step 1. We create a graph object.
-      var hoodpub = new HoodpubGraph();
+      var hoodpub = new HoodpubGraph(Analytics);
 
       $scope.get_graph_user = function(user_id){
 
@@ -30,7 +30,7 @@ angular.module('hoodpubControllers', []).
           });
 
         }
-
+        Analytics.trackEvent('graph', 'graph button', user_id);
       };
 
       console.log('happen');
@@ -40,11 +40,12 @@ angular.module('hoodpubControllers', []).
 
     }]).
   controller('authControllers', [
-    '$scope', '$http', '$window', 'Users',
-    function ($scope, $http, $window, Users) {
+    '$scope', 'Analytics', '$http', '$window', 'Users',
+    function ($scope, Analytics, $http, $window, Users) {
 
       function try_facebook_auth() {
         localStorage.setItem('id_token', $scope.token_objects.access_token);
+        Analytics.trackEvent('auth', 'login', $scope.token_objects);
 
         Users.query().$promise.then(function(res) {
           $window.location.href = '/#';
@@ -268,13 +269,15 @@ controller('userControllers', [
     }])
 ;
 
-var HoodpubGraph = function () {
+var HoodpubGraph = function (ga) {
   var nodeSize = 35,
       book_height = 60,
       book_width = 40,
       user_height = 35,
       user_width = 35,
       self = this;
+
+  var analytics = ga;
 
   this.graph = Viva.Graph.graph();
   this.graphics = Viva.Graph.View.svgGraphics();
@@ -297,7 +300,6 @@ var HoodpubGraph = function () {
     });
   };
 
-
   this.graphics.node(function(node) {
     var ui = Viva.Graph.svg('g'),
         svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.data.label),
@@ -317,7 +319,7 @@ var HoodpubGraph = function () {
       }
       else if (node.data.type == 'user'){
         console.log('node.data.type :', 'user');
-
+        ga.trackEvent('graph', 'in image', node.id);
         $.ajax({
           url: '/api-hoodpub/'.concat(node.id).concat('/users/'),
           data: {
