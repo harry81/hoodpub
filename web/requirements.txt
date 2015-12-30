@@ -10,8 +10,10 @@ cssselect==0.9.1
 decorator==4.0.4
 dj-database-url==0.3.0
 Django==1.7.8
+django-appconf==1.0.1
 django-braces==1.8.1
 django-celery==3.1.17
+django-compressor==1.6
 django-constance==1.1.1
 django-contrib-comments==1.6.1
 django-debug-toolbar==1.4

@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'django_comments',
     'django.contrib.sites',
     'rest_framework',
+    "compressor",
     'constance',
     'djcelery',
     'book',
@@ -82,6 +83,13 @@ ROOT_URLCONF = 'main.urls'
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
