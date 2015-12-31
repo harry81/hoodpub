@@ -18,6 +18,7 @@ angular.module('hoodpubControllers', []).
 
           UserBooks.query({'sns_id': user_id }).$promise.then(function(res) {
             console.log('user_id yes');
+
             hoodpub.AddLinkNode(res, true);
             hoodpub.run();
           });
@@ -289,17 +290,6 @@ var HoodpubGraph = function (ga) {
     gravity : -1.2
   });
 
-  var highlightRelatedNodes = function(nodeId, isOn) {
-    // just enumerate all realted nodes and update link color:
-    this.graph.forEachLinkedNode(nodeId, function(node, link){
-      var linkUI = this.graphics.getLinkUI(link.id);
-      if (linkUI) {
-        // linkUI is a UI object created by graphics below
-        linkUI.attr('stroke', isOn ? 'red' : 'gray');
-      }
-    });
-  };
-
   this.graphics.node(function(node) {
     var ui = Viva.Graph.svg('g'),
         svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.data.label),
@@ -318,7 +308,8 @@ var HoodpubGraph = function (ga) {
         window.open('/book/'.concat(node.id), '_blank');
       }
       else if (node.data.type == 'user'){
-        console.log('node.data.type :', 'user');
+        self.layout.pinNode(node, true);
+
         ga.trackEvent('graph', 'in image', node.id);
         $.ajax({
           url: '/api-hoodpub/'.concat(node.id).concat('/users/'),
@@ -336,6 +327,10 @@ var HoodpubGraph = function (ga) {
         });
 
       }
+    }).mouseover(function() {
+      self.highlightRelatedNodes(node, 'blue');
+    }).mouseout(function(){
+      self.highlightRelatedNodes(node, 'gray');
     });
 
     // ui.append(svgText);
@@ -363,6 +358,15 @@ var HoodpubGraph = function (ga) {
 
 HoodpubGraph.prototype.run = function() {
   this.renderer.run();
+};
+
+HoodpubGraph.prototype.highlightRelatedNodes = function(node, color) {
+  links = node.links;
+  for (var cnt_link = 0, cnt_links = links.length;
+       cnt_link < cnt_links; cnt_link++) {
+    link = this.graphics.getLinkUI(links[cnt_link].id);
+    link.attr('stroke', color);
+  };
 };
 
 HoodpubGraph.prototype.AddLinkNode = function(res, recursive) {
