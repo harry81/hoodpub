@@ -32,6 +32,7 @@ angular.module('hoodpubControllers', []).
 
         }
         Analytics.trackEvent('graph', 'graph button', user_id);
+
       };
 
       console.log('happen');
@@ -284,10 +285,10 @@ var HoodpubGraph = function (ga) {
   this.graphics = Viva.Graph.View.svgGraphics();
 
   this.layout = Viva.Graph.Layout.forceDirected(this.graph, {
-    springLength : 50,
+    springLength : 30,
     springCoeff : 0.000008,
     dragCoeff : 0.008,
-    gravity : -1.2
+    gravity : -2.2
   });
 
   this.graphics.node(function(node) {
