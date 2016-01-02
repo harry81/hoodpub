@@ -50,6 +50,11 @@ a {
     font-family: helvetica, arial, sans-serif;
 }
 
+.light_text {
+    color: #999;
+    line-height: 16px;
+}
+
 textarea:focus, input:focus{
     outline: 0px;
 }

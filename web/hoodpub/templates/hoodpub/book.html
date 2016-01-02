@@ -40,8 +40,8 @@
       </div>
       <div class="col-xs-6 col-md-9">
         <p >{{ book.category }} </p>
-        <p >{{ book.author }}</p>
         <p >{{ book.pub_nm }}</p>
+        <p class="light_text">{{ book.author }}</p>
         <p class="">{{ book.list_price }}</p>
         <p class="">{{ book.pub_date |date:"Y-M-d"}}</p>
 
@@ -76,7 +76,7 @@
             <td>
               {{ userprofile.user.username }}
             </td>
-            <td>{{ read.created_at |date:"SHORT_DATE_FORMAT"}}
+            <td>{{ read.created_at |date:"Y-M-d"}}
             </td>
             {% endfor%}
           </tr>
