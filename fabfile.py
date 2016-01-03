@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 import requests
+import time
 from fabric.api import *
 from fabric.contrib.console import confirm
-import time
+from sys import platform as _platform
+
+
 
 env.user = 'hoodpub'
 env.hosts = ['www.hoodpub.com']
@@ -28,8 +31,8 @@ def tests_facebook_read(read_check=True):
 
 
 def diff_pip():
-    local("cd web; diff <(cat requirements.txt | sort) <(pip freeze | sort)", shell='/bin/bash')
-
+    if _platform == "darwin":
+        local("cd web; diff <(cat requirements.txt | sort) <(pip freeze | sort)", shell='/bin/bash')
 
 def db_backup():
     name = 'hoodpub_db_%s.sql' % time.strftime("%Y-%m-%d")
