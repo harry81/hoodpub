@@ -47,7 +47,6 @@ angular.module('hoodpubControllers', []).
 
       function try_facebook_auth() {
         localStorage.setItem('id_token', $scope.token_objects.access_token);
-        Analytics.trackEvent('auth', 'login', $scope.token_objects);
 
         Users.query().$promise.then(function(res) {
           $window.location.href = '/#';
