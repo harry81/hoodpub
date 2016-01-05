@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt',
+angular.module('app', ['ngRoute', 'ngResource', 'angular-jwt', 'ngCookies',
                        'relativeDate', 'infinite-scroll',
                        'hoodpubServices', 'hoodpubControllers', 'hoodpubDirective',
-                       'angular-google-analytics', 'ui.bootstrap', 'ngCookies',
+                       'angular-google-analytics', 'ui.bootstrap',
                        'angularSpinner']).
   config(['$routeProvider', '$httpProvider', 'jwtInterceptorProvider', '$resourceProvider', 'AnalyticsProvider',
           function($routeProvider, $httpProvider, jwtInterceptorProvider, $resourceProvider, AnalyticsProvider) {

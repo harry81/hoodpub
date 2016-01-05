@@ -15,9 +15,27 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'js/bower_components/angular/angular.js',
-        'js/*.js',
-        'test/spec/*.js',
+      'hoodpub/static/hoodpub/js/bower_components/jquery/dist/jquery.min.js',
+      'hoodpub/static/hoodpub/js/bower_components/bootstrap/dist/js/bootstrap.min.js',
+      'hoodpub/static/hoodpub/js/bower_components/angular/angular.js',
+      'hoodpub/static/hoodpub/js/bower_components/angular-cookies/angular-cookies.js',
+      'hoodpub/static/hoodpub/js/bower_components/angular-resource/angular-resource.js',
+      'hoodpub/static/hoodpub/js/bower_components/angular-route/angular-route.js',
+      'hoodpub/static/hoodpub/js/bower_components/angular-jwt/dist/angular-jwt.min.js',
+      'hoodpub/static/hoodpub/js/bower_components/spin.js/spin.js',
+      'hoodpub/static/hoodpub/js/bower_components/angular-google-analytics/dist/angular-google-analytics.js',
+      'hoodpub/static/hoodpub/js/bower_components/angular-spinner/angular-spinner.js',
+      'hoodpub/static/hoodpub/js/bower_components/angular-mocks/angular-mocks.js',
+      'hoodpub/static/hoodpub/js/bower_components/readmore-js/readmore.js',
+      'hoodpub/js/graph/vivagraph.js',
+      'hoodpub/static/hoodpub/js/ng-infinite-scroll.js',
+      'hoodpub/static/hoodpub/js/angular-relative-date.js',
+      'hoodpub/static/hoodpub/js/ui-bootstrap-custom-build/ui-bootstrap-custom-tpls-0.14.3.js',
+      'hoodpub/static/hoodpub/js/services.js',
+      'hoodpub/static/hoodpub/js/controllers.js',
+      'hoodpub/static/hoodpub/js/app.js',
+      'hoodpub/static/hoodpub/js/*.js',
+      'hoodpub/static/hoodpub/test/spec/*.js',
     ],
 
 
@@ -48,7 +66,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
 
     // enable / disable watching file and executing tests whenever any file changes
