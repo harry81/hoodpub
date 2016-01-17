@@ -30,15 +30,19 @@
     <div class="panel-body" >
       <div class="row">
         <!-- cover -->
-        <div class="col-xs-3 col-md-3">
+        <div class="col-md-3">
+          <div class="col-md-12">
           <a href="/book/{{item.isbn}}">
             <img ng-src={{item.cover_l_url}} class="img-rounded img-responsive center-block">
           </a>
-          <br>
-          <p>
-            <button type="button" class="btn btn-success center-block" ng-show="!item.is_read" ng-click="read_book(item)">
+          </div>
+          <div class="col-md-12">
+            <center>
+            <button type="button" class="btn btn-default" ng-show="!item.is_read" ng-click="read_book(item)">
               읽기</button>
-          </p>
+            </center>
+          </div>
+
         </div>
 
         <div class="row col-xs-9 col-md-6">
