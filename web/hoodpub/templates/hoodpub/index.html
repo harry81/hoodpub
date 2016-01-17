@@ -61,7 +61,7 @@
         <ul class="nav navbar-nav col-xs-10 col-md-10" >
           <li><a ng-click="go_graph()" >그래프</a></li>
           <li ng-show="!$root.userprofile"><a ng-click="go_login()" ga-track-event="['auth', 'click', 'top']">로그인</a></li>
-          <li ng-show="$root.userprofile"><a ng-click="logout()" class="btn"> 로그아웃</a></li>
+          <li ng-show="$root.userprofile"><a ng-click="logout()"> 로그아웃</a></li>
           <li ng-if="$root.userprofile"><a href="#/user/{{$root.userprofile.sns_id}}"><img ng-src="https://graph.facebook.com/{{$root.userprofile.sns_id}}/picture?width=25&height=25" class="img-circle"></a>
           </li>
         </ul>
