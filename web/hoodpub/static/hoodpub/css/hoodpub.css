@@ -58,3 +58,8 @@ a {
 textarea:focus, input:focus{
     outline: 0px;
 }
+
+.form-group {
+    padding-bottom: 0;
+    margin: 0;
+}
