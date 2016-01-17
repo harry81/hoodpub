@@ -30,7 +30,7 @@
     <div class="panel-body" >
       <div class="row">
         <!-- cover -->
-        <div class="col-md-3">
+        <div class="col-xs-5 col-md-3">
           <div class="col-md-12">
           <a href="/book/{{item.isbn}}">
             <img ng-src={{item.cover_l_url}} class="img-rounded img-responsive center-block">
@@ -39,16 +39,15 @@
           <div class="col-md-12">
             <center>
             <button type="button" class="btn btn-default" ng-show="!item.is_read" ng-click="read_book(item)">
-              읽기</button>
+              <i class="material-icons">book</i>읽기</button>
             </center>
           </div>
 
         </div>
 
-        <div class="row col-xs-9 col-md-6">
-
+        <div class="row col-xs-7 col-md-6">
           <!-- book info -->
-          <div class="col-md-12">
+          <div class="col-xs-12 col-md-12">
             <p><b>{{ item.title }}</b>  </p>
             <p>{{ item.pub_nm }} / <span>{{ item.category }}</span> </p>
             <p class="light_text">{{ item.author }} </p>
