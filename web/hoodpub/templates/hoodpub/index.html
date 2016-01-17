@@ -13,7 +13,16 @@
     <meta property="og:image" content="{{ current_site }}{% static 'hoodpub/images/icon_128x128.png' %}" />
     {% endblock %}
     <title>{% block title %}Hoodpub{% endblock %}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="{% static 'hoodpub/js/bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Material Design -->
+    <link href="{% static 'hoodpub/js/bower_components/bootstrap-material-design/dist/css/bootstrap-material-design.css' %}" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'hoodpub/css/hoodpub.css' %}">
     <script>
   window.fbAsyncInit = function() {
@@ -49,7 +58,7 @@
       </div>
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav" >
+        <ul class="nav navbar-nav col-xs-3 col-md-10" >
           <li class="col-xs-3"><a ng-click="go_graph()" class="btn">그래프</a></li>
           <li class="col-xs-3" ng-show="!$root.userprofile"><a ng-click="go_login()" ga-track-event="['auth', 'click', 'top']"><img src="/static/hoodpub/images/sign-in-facebook.png" style="height:28px" align="middle"></a></li>
           <li class="col-xs-3" ng-show="$root.userprofile"><a ng-click="logout()" class="btn"> 로그아웃</a></li>
