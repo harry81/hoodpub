@@ -154,7 +154,7 @@ JWT_AUTH = {
 
 PROPRIETARY_BACKEND_NAME = 'Facebook'
 
-BROKER_URL = 'amqp://guest:guest@www.hoodpub.com:5672//'
+BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
 CELERY_RESULT_BACKEND = "amqp"
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
