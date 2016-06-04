@@ -26,7 +26,7 @@ SECRET_KEY = '5na+q+@*3v8^8&vm1iv=z^vod=1+=dz_ntrnk74x^b8vktgw*s'
 
 DEBUG = True
 
-if 'USER' in os.environ:
+if os.path.isdir('/home/deploy/'):
     if os.environ['USER'] == 'deploy':
         DEBUG = False
 
