@@ -31,9 +31,10 @@ if os.path.isdir('/home/deploy/'):
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ADMINS = (('John', 'chharry@gmail.com'),)
-ALLOWED_HOSTS = [u'.dev.hoodpub.com', '.hoodpub.com',
-                 'hoodpub.com']
-
+ALLOWED_HOSTS = [u'.dev.hoodpub.com',
+                 u'.hoodpub.com',
+                 u'52.58.183.144',
+                 u'hoodpub.com']
 
 TEMPLATE_DEBUG = True
 # Application definition
